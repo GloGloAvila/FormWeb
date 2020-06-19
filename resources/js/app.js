@@ -19,7 +19,20 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+import 'core-js/stable'
+import Vue from 'vue'
+import App from './Main'
+import router from './router'
+import CoreuiVue from '@coreui/vue'
+import { iconsSet as icons } from './assets/icons/icons.js'
+import store from './store'
+
+Vue.config.performance = true
+Vue.use(CoreuiVue)
+Vue.prototype.$log = console.log.bind(console)
+
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('app', require('./AppComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -29,4 +42,11 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+    router,
+    store,
+    icons,
+    template: '<App/>',
+    components: {
+        App
+    }
 });
