@@ -19,25 +19,34 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 </head>
 
 <body>
-    <div class="flex-center" style="position: relative; height: 5vh; align-items: center; display: flex; justify-content: space-around;">
-        @auth
-            {{ Auth::user()->name }}
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                Cerrar sesión
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        @endauth
-
-    </div>
+    @auth
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+    @endauth
 
     <div>
         @yield('content')
     </div>
+
+    <script type="text/javascript">
+
+        window.user=@json(
+            [
+                'user'=> auth()->user()
+            ]
+        );
+
+        window.Laravel = {
+            csrfToken: "{{ csrf_token() }}",
+            jsPermissions: {!! auth()->check()?auth()->user()->jsPermissions():null !!}
+        };
+
+    </script> 
 
 </body>
 

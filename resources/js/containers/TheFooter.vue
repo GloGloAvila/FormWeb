@@ -1,12 +1,11 @@
 <template>
   <CFooter :fixed="false">
     <div>
-      <a href="https://coreui.io" target="_blank">CoreUI</a>
-      <span class="ml-1">&copy; {{new Date().getFullYear()}} creativeLabs.</span>
+      <span class="mr-1">Sistema de Información Comunidad Virtual</span>
+      <span class="ml-1">&copy; {{new Date().getFullYear()}}</span>
     </div>
     <div class="ml-auto">
-      <span class="mr-1">Powered by</span>
-      <a href="https://coreui.io/vue" target="_blank">CoreUI for Vue</a>
+      <span class="mr-1">Resolución 293 de 2017</span>
     </div>
   </CFooter>
 </template>

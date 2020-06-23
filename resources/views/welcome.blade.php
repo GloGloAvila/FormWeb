@@ -119,7 +119,7 @@
 
         <div class="content">
 
-            <img src="/logo-spe-footer.png" alt="">
+            <img src="/img/logo-spe-footer.png" alt="">
 
             <div class="title m-b-md">
                 Resolución 293 de 2017
@@ -136,13 +136,13 @@
         </div>
 
         <div class="bottom-left" style="align-items: center;">
-            <img src="/logo-spe.png" alt="" width="200px" height="83px">
+            <img src="/img/logo-spe.png" alt="" width="200px" height="83px">
         </div>
         <div class="bottom-center">
             @ 2020
         </div>
         <div class="bottom-right">
-            <img src="/logo-mintrabajo.png" width="340px" height="66px" alt="">
+            <img src="/img/logo-mintrabajo.png" width="340px" height="66px" alt="">
         </div>
 
     </div>

@@ -26,13 +26,14 @@ import router from './router'
 import CoreuiVue from '@coreui/vue'
 import { iconsSet as icons } from './assets/icons/icons.js'
 import store from './store'
+import Vuetify from 'vuetify'
+import LaravelPermissionToVueJS from 'laravel-permission-to-vuejs';
 
 Vue.config.performance = true
 Vue.use(CoreuiVue)
 Vue.prototype.$log = console.log.bind(console)
-
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-// Vue.component('app', require('./AppComponent.vue').default);
+Vue.use(Vuetify)
+Vue.use(LaravelPermissionToVueJS)
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -46,6 +47,7 @@ const app = new Vue({
     store,
     icons,
     template: '<App/>',
+    // vuetify: new Vuetify(),
     components: {
         App
     }
