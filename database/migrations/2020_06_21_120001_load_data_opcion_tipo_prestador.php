@@ -25,7 +25,7 @@ class LoadDataOpcionTipoPrestador extends Migration
       $opcion->dominio_id = $dominio_id;
       $opcion->tiene_subopciones = Opcion::TIENE_SUBOPCIONES_FALSE;
       $opcion->valor_texto = 'Agencia privada';
-      $opcion->valor_numerico = 0;
+      $opcion->valor_numerico = 1;
       $opcion->valor_booleano = Opcion::VALOR_BOOLEANO_FALSE;
       $opcion->descripcion = 'Agencia privada';
       $opcion->abreviatura = 'AP';
@@ -38,7 +38,7 @@ class LoadDataOpcionTipoPrestador extends Migration
       $opcion->dominio_id = $dominio_id;
       $opcion->tiene_subopciones = Opcion::TIENE_SUBOPCIONES_FALSE;
       $opcion->valor_texto = 'Bolsa de Empleo';
-      $opcion->valor_numerico = 0;
+      $opcion->valor_numerico = 2;
       $opcion->valor_booleano = Opcion::VALOR_BOOLEANO_FALSE;
       $opcion->descripcion = 'Bolsa de Empleo';
       $opcion->abreviatura = 'BE';
@@ -51,7 +51,7 @@ class LoadDataOpcionTipoPrestador extends Migration
       $opcion->dominio_id = $dominio_id;
       $opcion->tiene_subopciones = Opcion::TIENE_SUBOPCIONES_FALSE;
       $opcion->valor_texto = 'Otras Bolsas';
-      $opcion->valor_numerico = 0;
+      $opcion->valor_numerico = 3;
       $opcion->valor_booleano = Opcion::VALOR_BOOLEANO_FALSE;
       $opcion->descripcion = 'Otras Bolsas';
       $opcion->abreviatura = 'OB';
@@ -64,7 +64,7 @@ class LoadDataOpcionTipoPrestador extends Migration
       $opcion->dominio_id = $dominio_id;
       $opcion->tiene_subopciones = Opcion::TIENE_SUBOPCIONES_FALSE;
       $opcion->valor_texto = 'Agencia Pública de Empleo de Ente Territorial';
-      $opcion->valor_numerico = 0;
+      $opcion->valor_numerico = 4;
       $opcion->valor_booleano = Opcion::VALOR_BOOLEANO_FALSE;
       $opcion->descripcion = 'Agencia Pública de Empleo de Ente Territorial';
       $opcion->abreviatura = 'APEET';
@@ -77,7 +77,7 @@ class LoadDataOpcionTipoPrestador extends Migration
       $opcion->dominio_id = $dominio_id;
       $opcion->tiene_subopciones = Opcion::TIENE_SUBOPCIONES_FALSE;
       $opcion->valor_texto = 'Agencia de Gestión y Colocación de Empleo de Caja de Compensación Familiar';
-      $opcion->valor_numerico = 0;
+      $opcion->valor_numerico = 5;
       $opcion->valor_booleano = Opcion::VALOR_BOOLEANO_FALSE;
       $opcion->descripcion = 'Agencia de Gestión y Colocación de Empleo de Caja de Compensación Familiar';
       $opcion->abreviatura = 'AGCECCF';

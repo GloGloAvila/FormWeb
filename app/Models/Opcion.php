@@ -95,9 +95,20 @@ class Opcion extends Model
 
   static public function getOpcionXGrupoXAbreviatura($grupo, $abreviatura)
   {
-   // LOG::info($grupo.' '.$abreviatura);
     $dominio = new Dominio();
     return $dominio->getDominioXGrupo($grupo)->opciones()->where('abreviatura', $abreviatura)->where('activo', Opcion::REGISTRO_ACTIVO)->first();
+  }
+
+  static public function getOpcionXGrupoXValorTexto($grupo, $valorTexto)
+  {
+    $dominio = new Dominio();
+    return $dominio->getDominioXGrupo($grupo)->opciones()->where('valor_texto', $valorTexto)->where('activo', Opcion::REGISTRO_ACTIVO)->first();
+  }
+
+  static public function getOpcionXGrupoXValorNumerico($grupo, $valorNumerico)
+  {
+    $dominio = new Dominio();
+    return $dominio->getDominioXGrupo($grupo)->opciones()->where('valor_numerico', $valorNumerico)->where('activo', Opcion::REGISTRO_ACTIVO)->first();
   }
 
   public function getOpcionXID($id)
