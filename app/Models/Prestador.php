@@ -26,8 +26,8 @@ class Prestador extends Model
    * @var array
    */
   protected $fillable = [
-    'nombre',
     'migracion_id',
+    'nombre',
     'tipo_prestador_id',
     'activo'
   ];
@@ -48,6 +48,11 @@ class Prestador extends Model
   public function estaActivo()
   {
     return $this->activo == Prestador::REGISTRO_ACTIVO;
+  }
+
+  static public function getPrestadorXMigracionId($migracionId)
+  {
+    return Prestador::where('migracion_id', $migracionId)->where('activo', Opcion::REGISTRO_ACTIVO)->first();
   }
 
   public function tiposPrestador()

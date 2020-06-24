@@ -5,6 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Prestador;
+
 class CreatePrestadoresTable extends Migration
 {
     /**
@@ -19,6 +21,8 @@ class CreatePrestadoresTable extends Migration
           $table->unsignedInteger('migracion_id')->nullable();
           $table->unsignedInteger('tipo_prestador_id');
           $table->string('nombre');
+          $table->boolean('activo')->default(Prestador::REGISTRO_ACTIVO);
+
           $table->timestamps();
           $table->softDeletes()->nullable();
 
