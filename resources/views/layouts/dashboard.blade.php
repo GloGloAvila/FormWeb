@@ -20,6 +20,18 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
+    <style>
+        .theme--light.v-application {
+  background: none !important;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+#inspire div.v-application--wrap {
+  min-height: 60vh !important;
+}
+
+    </style>
+
 </head>
 
 <body>
@@ -30,7 +42,7 @@
     @endauth
 
     <div>
-        @yield('content')
+            @yield('content')
     </div>
 
     <script type="text/javascript">

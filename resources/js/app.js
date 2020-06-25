@@ -47,7 +47,7 @@ const app = new Vue({
     store,
     icons,
     template: '<App/>',
-    // vuetify: new Vuetify(),
+    vuetify: new Vuetify(),
     components: {
         App
     }
