@@ -1,7 +1,7 @@
 <template>
   <CFooter :fixed="false">
     <div>
-      <span class="mr-1">Sistema de Información Comunidad Virtual</span>
+      <span class="mr-1">Sistema de Información Formulario WEB</span>
       <span class="ml-1">&copy; {{new Date().getFullYear()}}</span>
     </div>
     <div class="ml-auto">
