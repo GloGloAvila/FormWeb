@@ -24,23 +24,10 @@ class CreatePuntosAtencionTable extends Migration
           $table->string('departamento_id')->nullable();
           $table->string('municipio_id')->nullable();
           $table->string('nombre');
-          $table->string('correo')->nullable();
+          $table->string('sitio_web')->nullable();
+          $table->string('correo_electronico')->nullable();
           $table->string('direccion')->nullable();
-          $table->string('nombre_contacto')->nullable();
-          $table->string('apellido_contacto')->nullable();
-          $table->string('correo_contacto')->nullable();
-          $table->string('telefono_contacto')->nullable();
-          $table->string('celular_contacto')->nullable();
-          $table->string('autorizacion')->nullable();
-          $table->string('pagina_web')->nullable();
           $table->string('fecha_registro')->nullable();
-          $table->string('observaciones')->nullable();
-          $table->string('nombre_representante')->nullable();
-          $table->string('apellido_representante')->nullable();
-          $table->string('correo_representante')->nullable();
-          $table->string('telefono_representante')->nullable();
-          $table->string('celular_representante')->nullable();
-          $table->string('palabra_clave')->nullable();
 
           $table->boolean('activo')->default(PuntoAtencion::REGISTRO_ACTIVO);
 
