@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
+use App\Models\PuntoAtencion;
 use App\Models\Opcion;
 
 class Prestador extends Model
@@ -55,9 +56,14 @@ class Prestador extends Model
     return Prestador::where('migracion_id', $migracionId)->where('activo', Opcion::REGISTRO_ACTIVO)->first();
   }
 
-  public function tiposPrestador()
+  public function tipoPrestador()
   {
-    return $this->hasMany(Opcion::class);
+    return $this->belongsTo(Opcion::class);
+  }
+
+  public function puntosAtencion()
+  {
+    return $this->hasMany(PuntoAtencion::class);
   }
 
 }

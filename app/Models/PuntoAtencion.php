@@ -61,7 +61,7 @@ class PuntoAtencion extends Model
 
   public function prestador()
   {
-    return $this->hasMany(Prestador::class);
+    return $this->belongsTo(Prestador::class);
   }
 
 }
