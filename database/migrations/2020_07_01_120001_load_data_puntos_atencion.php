@@ -16,10 +16,7 @@ class LoadDataPuntosAtencion extends Migration
      */
     public function up()
     {
-
       $cargarFuente=new CargarFuentePuntosAtencionController();
-      $cargarFuente->cargarFuente('puntos_atencion.csv');
+      $cargarFuente->cargarFuente('2020-06-21-puntos_atencion.csv');
     }
-
-   
 }

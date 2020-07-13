@@ -24,9 +24,9 @@ class Departamento extends Model
    * @var array
    */
   protected $fillable = [
-    'nombre',
     'codigo',
     'divipola',
+    'nombre',
     'activo'
   ];
 
@@ -52,5 +52,18 @@ class Departamento extends Model
   {
     return $this->hasMany(Municipio::class);
   }
+
+  //Función para obtener el departamento por código
+  public static function obtenerDepartamentoXCodigo ($codigo) {
+
+    $departamento = Departamento::where(
+      [
+        'codigo' => $codigo
+      ]
+    )->first();
+
+    return isset($departamento) ? $departamento : null;
+  }
+
 
 }

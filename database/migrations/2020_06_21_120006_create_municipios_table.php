@@ -19,9 +19,9 @@ class CreateMunicipiosTable extends Migration
         Schema::create('municipios', function (Blueprint $table) {
           $table->increments('id');
           $table->unsignedInteger('departamento_id');
-          $table->string('nombre');
-          $table->string('codigo');
+          $table->string('codigo_departamento');
           $table->string('divipola');
+          $table->string('nombre');
           $table->boolean('activo')->default(Municipio::REGISTRO_ACTIVO);
 
           $table->timestamps();

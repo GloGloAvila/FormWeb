@@ -17,6 +17,9 @@ class PuntoAtencion extends Model
   const REGISTRO_ACTIVO = '1';
   const REGISTRO_INACTIVO = '0';
 
+  const AUTORIZADO = '1';
+  const NO_AUTORIZADO = '0';
+
   protected $table = 'puntos_atencion';
   protected $dates = ['deleted_at'];
 
@@ -27,17 +30,19 @@ class PuntoAtencion extends Model
    */
   //ID, Nombre, ID_Prestador, ID_Departamento, ID_Municipio, Mail_Punto_Atencion, Direccion_Punto_Atencion,
   //pagina_web, fecha_registro
-  
+
   protected $fillable = [
     'migracion_id',
     'prestador_id',
     'departamento_id',
     'municipio_id',
+    'migracion_id',
     'nombre',
     'sitio_web',
     'correo_electronico',
     'direccion',
     'fecha_registro',
+    'autorizado',
     'activo'
   ];
 
@@ -52,16 +57,21 @@ class PuntoAtencion extends Model
     'deleted_at'
   ];
 
-  
+
   // Función para saber si un registro está activo
   public function estaActivo()
   {
     return $this->activo == PuntoAtencion::REGISTRO_ACTIVO;
   }
 
+  // Función para saber si un punto de atención está autorizado
+  public function estaAutorizado()
+  {
+    return $this->autorizado == PuntoAtencion::AUTORIZADO;
+  }
+
   public function prestador()
   {
     return $this->belongsTo(Prestador::class);
   }
-
 }

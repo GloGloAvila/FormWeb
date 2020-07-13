@@ -25,9 +25,9 @@ class Municipio extends Model
    */
   protected $fillable = [
     'departamento_id',
-    'nombre',
-    'codigo',
+    'codigo_departamento',
     'divipola',
+    'nombre',
     'activo'
   ];
 
@@ -42,7 +42,7 @@ class Municipio extends Model
     'deleted_at'
   ];
 
-  
+
   // Función para saber si un registro está activo
   public function estaActivo()
   {
@@ -54,4 +54,16 @@ class Municipio extends Model
     return $this->belongsTo(Departamento::class);
   }
 
+  //Función para obtener el municipio por código
+  public static function obtenerMunicipioXCodigo($codigo)
+  {
+
+    $municipio = Municipio::where(
+      [
+        'divipola' => $codigo
+      ]
+    )->first();
+
+    return isset($municipio) ? $municipio : null;
+  }
 }

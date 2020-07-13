@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\CargaFuentes;
 
 use App\Http\Controllers\Controller;
+use App\Models\Departamento;
+use App\Models\Municipio;
 use Illuminate\Http\Request;
 use Log;
 
@@ -23,10 +25,23 @@ class CargarFuentePuntosAtencionController extends RutaFuenteController
 
       while ( ($data = fgetcsv ( $handle, 5000, ',')) !== FALSE ) {
 
+        $codigoDepartamento = iconv("Windows-1252", "UTF-8", $data[3]);
+        $departamento = Departamento::obtenerDepartamentoXCodigo($codigoDepartamento);
+
+        $codigoMunicipio = iconv("Windows-1252", "UTF-8", $data[4]);
+        $municipio = Municipio::obtenerMunicipioXCodigo($codigoMunicipio);
+
+
         $puntoAtencion = new PuntoAtencion();
         $puntoAtencion->migracion_id = iconv("Windows-1252", "UTF-8", $data[0]);
         $puntoAtencion->prestador_id = $this->obtenerPrestadorId($data[2]);
+        $puntoAtencion->departamento_id = isset($departamento->id) ? $departamento->id : null;
+        $puntoAtencion->municipio_id = isset($municipio->id) ? $municipio->id : null;
         $puntoAtencion->nombre = iconv("Windows-1252", "UTF-8", $data[1]);
+        $puntoAtencion->sitio_web = iconv("Windows-1252", "UTF-8", $data[8]);
+        $puntoAtencion->correo_electronico = iconv("Windows-1252", "UTF-8", $data[5]);
+        $puntoAtencion->direccion = iconv("Windows-1252", "UTF-8", $data[6]);
+        $puntoAtencion->fecha_registro = iconv("Windows-1252", "UTF-8", $data[9]);
 
         // 'migracion_id',
         // 'prestador_id',

@@ -5,9 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-use App\Http\Controllers\CargaFuentes\CargarFuentePrestadoresController;
+use App\Http\Controllers\CargaFuentes\CargarFuenteMunicipiosController;
 
-class LoadDataPrestadores extends Migration
+class LoadDataMunicipios extends Migration
 {
     /**
      * Run the migrations.
@@ -17,8 +17,8 @@ class LoadDataPrestadores extends Migration
     public function up()
     {
 
-      $cargarFuente=new CargarFuentePrestadoresController();
-      $cargarFuente->cargarFuente('2020-06-21-prestadores.csv');
+      $cargarFuente=new CargarFuenteMunicipiosController();
+      $cargarFuente->cargarFuente('2020-06-21-municipios.csv');
     }
 
    

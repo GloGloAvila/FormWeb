@@ -18,9 +18,8 @@ class CreatePuntosAtencionTable extends Migration
     {
         Schema::create('puntos_atencion', function (Blueprint $table) {
           $table->increments('id');
-          $table->unsignedInteger('migracion_id')->nullable();
+          $table->string('migracion_id')->nullable();
           $table->unsignedInteger('prestador_id');
-
           $table->string('departamento_id')->nullable();
           $table->string('municipio_id')->nullable();
           $table->string('nombre');
@@ -28,7 +27,7 @@ class CreatePuntosAtencionTable extends Migration
           $table->string('correo_electronico')->nullable();
           $table->string('direccion')->nullable();
           $table->string('fecha_registro')->nullable();
-
+          $table->boolean('autorizado')->default(PuntoAtencion::AUTORIZADO);
           $table->boolean('activo')->default(PuntoAtencion::REGISTRO_ACTIVO);
 
           $table->timestamps();
