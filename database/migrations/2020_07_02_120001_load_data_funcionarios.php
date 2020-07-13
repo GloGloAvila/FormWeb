@@ -5,9 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
-use App\Http\Controllers\CargaFuentes\CargarFuentePuntosAtencionController;
+use App\Http\Controllers\CargaFuentes\CargarFuenteFuncionariosController;
 
-class LoadDataPuntosAtencion extends Migration
+class LoadDataFuncionarios extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class LoadDataPuntosAtencion extends Migration
      */
     public function up()
     {
-      $cargarFuente=new CargarFuentePuntosAtencionController();
-      $cargarFuente->cargarFuente('2020-07-01-puntos_atencion.csv');
+      $cargarFuente=new CargarFuenteFuncionariosController();
+      $cargarFuente->cargarFuente('2020-07-02-funcionarios.csv');
     }
 }

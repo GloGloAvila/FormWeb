@@ -6,10 +6,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
-use App\Models\PuntoAtencion;
 use App\Models\Opcion;
 
-class Prestador extends Model
+class Funcionario extends Model
 {
 
   use SoftDeletes;
@@ -18,7 +17,7 @@ class Prestador extends Model
   const REGISTRO_ACTIVO = '1';
   const REGISTRO_INACTIVO = '0';
 
-  protected $table = 'prestadores';
+  protected $table = 'funcionarios';
   protected $dates = ['deleted_at'];
 
   /**
@@ -27,9 +26,13 @@ class Prestador extends Model
    * @var array
    */
   protected $fillable = [
-    'migracion_id',
+    'tipo_funcionario_id',
     'nombre',
-    'tipo_prestador_id',
+    'apellido',
+    'correo_electronico',
+    'password',
+    'telefono',
+    'celular',
     'activo'
   ];
 
@@ -48,22 +51,18 @@ class Prestador extends Model
   // Función para saber si un registro está activo
   public function estaActivo()
   {
-    return $this->activo == Prestador::REGISTRO_ACTIVO;
+    return $this->activo == Funcionario::REGISTRO_ACTIVO;
   }
 
-  static public function obtenerPrestadorXMigracionId($migracionId)
+  // Función para saber si un registro está activo
+  public static function correoExistente($correo)
   {
-    return Prestador::where('migracion_id', $migracionId)->first();
+    return Funcionario::where('email', $correo)->count() > 0;
   }
 
-  public function tipoPrestador()
+  public function tipoFuncionario()
   {
-    return $this->belongsTo(Opcion::class, 'tipo_prestador_id');
-  }
-
-  public function puntosAtencion()
-  {
-    return $this->hasMany(PuntoAtencion::class);
+    return $this->belongsTo(Opcion::class, 'tipo_funcionario_id');
   }
 
 }
