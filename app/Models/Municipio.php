@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
-class Departamento extends Model
+class Municipio extends Model
 {
 
   use SoftDeletes;
@@ -15,7 +15,7 @@ class Departamento extends Model
   const REGISTRO_ACTIVO = '1';
   const REGISTRO_INACTIVO = '0';
 
-  protected $table = 'departamentos';
+  protected $table = 'municipios';
   protected $dates = ['deleted_at'];
 
   /**
@@ -24,6 +24,7 @@ class Departamento extends Model
    * @var array
    */
   protected $fillable = [
+    'departamento_id',
     'nombre',
     'codigo',
     'divipola',
@@ -45,12 +46,12 @@ class Departamento extends Model
   // Función para saber si un registro está activo
   public function estaActivo()
   {
-    return $this->activo == Departamento::REGISTRO_ACTIVO;
+    return $this->activo == Municipio::REGISTRO_ACTIVO;
   }
 
-  public function municipios()
+  public function departamento()
   {
-    return $this->hasMany(Municipio::class);
+    return $this->belongsTo(Departamento::class);
   }
 
 }
