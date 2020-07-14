@@ -4,13 +4,14 @@ namespace App\Http\Controllers\CargaFuentes;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 
+use App\Models\PuntoAtencionFuncionario;
 use App\Models\PuntoAtencion;
 use App\Models\Funcionario;
 use App\Models\Prestador;
 use App\Models\Opcion;
-use App\Models\PuntoAtencionFuncionario;
 
 class CargarFuenteFuncionariosController extends RutaFuenteController
 {
@@ -53,6 +54,9 @@ class CargarFuenteFuncionariosController extends RutaFuenteController
             $funcionario->celular = iconv("Windows-1252", "UTF-8", $data[12]);
 
             $funcionario->save();
+
+            $funcionario->syncRoles(Role::findByName('ROLE_PRESTADOR', 'funcionario'));
+
           }
 
           if (isset($puntoAtencion->id) && isset($correoFuncionario) && $correoFuncionario !== 'NULL') {
@@ -83,8 +87,10 @@ class CargarFuenteFuncionariosController extends RutaFuenteController
             $funcionario->celular = iconv("Windows-1252", "UTF-8", $data[17]);
 
             $funcionario->save();
-          } else {
-          }
+
+            $funcionario->syncRoles(Role::findByName('ROLE_PRESTADOR', 'funcionario'));
+
+          } 
 
           if (isset($puntoAtencion->id) && isset($correoFuncionario) && $correoFuncionario !== 'NULL') {
             PuntoAtencionFuncionario::firstOrCreate(

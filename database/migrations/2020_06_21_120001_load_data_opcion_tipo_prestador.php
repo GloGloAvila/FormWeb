@@ -100,6 +100,5 @@ class LoadDataOpcionTipoPrestador extends Migration
 
       $opciones = Opcion::where('dominio_id', $dominio_id);
       $opciones->delete();
-
     }
 }
