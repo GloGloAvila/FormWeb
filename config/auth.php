@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Funcionario;
+use App\User;
+
 return [
 
     /*
@@ -40,7 +43,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-
+        'funcionario' => [
+            'driver' => 'session',
+            'provider' => 'funcionarios',
+        ],
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
@@ -68,7 +74,11 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => User::class,
+        ],
+        'funcionarios' => [
+            'driver' => 'eloquent',
+            'model' => Funcionario::class,
         ],
 
         // 'users' => [
@@ -95,6 +105,12 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'funcionarios' => [
+            'provider' => 'funcionarios',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

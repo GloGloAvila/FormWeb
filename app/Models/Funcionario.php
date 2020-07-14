@@ -4,19 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
+use Spatie\Permission\Traits\HasRoles;
 
 use App\Models\Opcion;
 
-class Funcionario extends Model
+class Funcionario extends Authenticatable
 {
 
+  use Notifiable;
+  use LaravelPermissionToVueJS;
+  use HasRoles;
   use SoftDeletes;
 
   // Constantes para saber si el registro está activo
   const REGISTRO_ACTIVO = '1';
   const REGISTRO_INACTIVO = '0';
 
+  protected $guard = 'funcionario';
   protected $table = 'funcionarios';
   protected $dates = ['deleted_at'];
 
@@ -42,12 +49,22 @@ class Funcionario extends Model
    * @var array
    */
   protected $hidden = [
+    'password', 
+    'remember_token',
     'created_at',
     'updated_at',
     'deleted_at'
   ];
 
-  
+  /**
+   * The attributes that should be cast to native types.
+   *
+   * @var array
+   */
+  protected $casts = [
+    'email_verified_at' => 'datetime',
+  ];
+
   // Función para saber si un registro está activo
   public function estaActivo()
   {

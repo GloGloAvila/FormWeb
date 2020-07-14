@@ -2,11 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
-use Closure;
-use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Exceptions\UnauthorizedException;
-use Log;
+use Illuminate\Support\Facades\Auth;
+use Closure;
+
+use App\Models\Funcionario;
+use App\User;
 
 class RoleOrPermissionMiddleware
 {
@@ -22,7 +23,12 @@ class RoleOrPermissionMiddleware
 
         // Se agrega este ciclo para validar el tema de los permisos
         foreach ($rolesOrPermissions as $permission) {
-            if (User::find(app('auth')->user()->id)->permissions()->where('name', $permission)->count()) {
+
+            if (User::find(app('auth:web')->user()->id)->permissions()->where('name', $permission)->count()) {
+                return $next($request);
+            }
+
+            if (Funcionario::find(app('auth:web')->user()->id)->permissions()->where('name', $permission)->count()) {
                 return $next($request);
             }
         }
@@ -30,7 +36,6 @@ class RoleOrPermissionMiddleware
         if (!Auth::user()->hasAnyRole($rolesOrPermissions) && !Auth::user()->hasAnyPermission($rolesOrPermissions)) {
             throw UnauthorizedException::forRolesOrPermissions($rolesOrPermissions);
         }
-
 
         return $next($request);
     }

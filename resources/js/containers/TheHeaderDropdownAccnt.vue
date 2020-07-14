@@ -7,7 +7,7 @@
   >
     <template #toggler>
       <CHeaderNavLink>        
-        {{user.name}}   
+        {{user.name ? user.name : `${user.nombre} ${user.apellido}` | capitalizeEveryWord }}
         <CIcon name="cil-user" /> 
       </CHeaderNavLink>
     </template>
@@ -32,6 +32,15 @@ export default {
   mounted () {
     console.log(window)
     this.user = window.user.user
+  },
+  filters: {
+    capitalizeEveryWord: function (value) {
+      if (!value) return ''
+      value = value.toString()
+      value = value.toLowerCase()
+      value = value.replace(/(^\w|\s\w)/g, m => m.toUpperCase())
+      return value
+    }
   },
   methods: {
     cerrarSesion () {
