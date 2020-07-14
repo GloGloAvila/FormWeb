@@ -37,6 +37,7 @@ class PuntoAtencion extends Model
     'departamento_id',
     'municipio_id',
     'migracion_id',
+    'codigo',
     'nombre',
     'sitio_web',
     'correo_electronico',
@@ -68,6 +69,11 @@ class PuntoAtencion extends Model
   public function estaAutorizado()
   {
     return $this->autorizado == PuntoAtencion::AUTORIZADO;
+  }
+
+  static public function obtenerPuntoAtencionXMigracionId($migracionId)
+  {
+    return PuntoAtencion::where('migracion_id', $migracionId)->first();
   }
 
   public function prestador()

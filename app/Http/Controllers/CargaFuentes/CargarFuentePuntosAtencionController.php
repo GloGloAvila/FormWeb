@@ -32,10 +32,11 @@ class CargarFuentePuntosAtencionController extends RutaFuenteController
         $municipio = Municipio::obtenerMunicipioXCodigo($codigoMunicipio);
 
         $puntoAtencion = new PuntoAtencion();
-        $puntoAtencion->migracion_id = iconv("Windows-1252", "UTF-8", $data[0]);
+        $puntoAtencion->migracion_id = iconv("Windows-1252", "UTF-8", $data[2]) . iconv("Windows-1252", "UTF-8", $data[0]);
         $puntoAtencion->prestador_id = $this->obtenerPrestadorId($data[2]);
         $puntoAtencion->departamento_id = isset($departamento->id) ? $departamento->id : null;
         $puntoAtencion->municipio_id = isset($municipio->id) ? $municipio->id : null;
+        $puntoAtencion->codigo = iconv("Windows-1252", "UTF-8", $data[0]);
         $puntoAtencion->nombre = iconv("Windows-1252", "UTF-8", $data[1]);
         $puntoAtencion->sitio_web = iconv("Windows-1252", "UTF-8", $data[8]);
         $puntoAtencion->correo_electronico = iconv("Windows-1252", "UTF-8", $data[5]);

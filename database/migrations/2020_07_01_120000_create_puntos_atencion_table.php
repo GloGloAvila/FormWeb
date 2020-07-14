@@ -22,6 +22,7 @@ class CreatePuntosAtencionTable extends Migration
           $table->unsignedInteger('prestador_id');
           $table->string('departamento_id')->nullable();
           $table->string('municipio_id')->nullable();
+          $table->string('codigo');
           $table->string('nombre');
           $table->string('sitio_web')->nullable();
           $table->string('correo_electronico')->nullable();
