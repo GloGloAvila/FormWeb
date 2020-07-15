@@ -7,6 +7,7 @@ const TheSimpleContainer = () => import('../containers/TheSimpleContainer')
 
 // Views
 const PuntosAtencion = () => import('../components/PuntosAtencion')
+const Prestadores = () => import('../components/Prestadores')
 const Vigencias = () => import('../components/Vigencias')
 
 Vue.use(Router)
@@ -18,7 +19,7 @@ export default new Router({
   routes: configRoutes()
 })
 
-function configRoutes () {
+function configRoutes() {
   return [
     {
       path: '/',
@@ -34,23 +35,42 @@ function configRoutes () {
           },
           redirect: '/vigencias/listado',
           component: TheSimpleContainer,
-          children : [
+          children: [
             {
               path: 'listado',
               name: 'gestion-vigencias-listado-vigencias',
               meta: {
                 label: 'Listado'
-              },    
+              },
               component: Vigencias
-            },    
+            },
             {
-              path: 'puntos-atencion',
-              name: 'gestion-vigencias-listado-puntos-atencion',
+              path: 'prestadores',
+              name: 'gestion-vigencias-prestadores',
               meta: {
-                label: 'Puntos de atención'
-              },    
-              component: PuntosAtencion
-            },    
+                label: 'Prestadores'
+              },
+              redirect: '/vigencias/prestadores/listado',
+              component: TheSimpleContainer,
+              children: [
+                {
+                  path: 'listado',
+                  name: 'gestion-vigencias-listado-prestadores',
+                  meta: {
+                    label: 'Listado'
+                  },
+                  component: Prestadores
+                },
+                {
+                  path: 'puntos-atencion',
+                  name: 'gestion-vigencias-prestadores-listado-puntos-atencion',
+                  meta: {
+                    label: 'Puntos de atención'
+                  },
+                  component: PuntosAtencion
+                },
+              ]
+            },
           ]
         },
       ]

@@ -587,7 +587,7 @@
                   <br />No tiene información registrada.
                   <br />
                   <br />
-                  <v-btn color="warning" @click="cargarListadoPuntosAtencion()">Recargar</v-btn>
+                  <v-btn color="warning" @click="cargarListado()">Recargar</v-btn>
                   <br />
                   <br />
                 </template>
@@ -605,7 +605,7 @@ export default {
   name: "PuntosAtencion",
   components: {},
   mounted() {
-    this.cargarListadoPuntosAtencion();
+    this.cargarListado();
   },
   data() {
     return {
@@ -675,7 +675,7 @@ export default {
     }
   },
   methods: {
-    cargarListadoPuntosAtencion() {
+    cargarListado() {
       this.puntosAtencion = [
         {
           id: "001",

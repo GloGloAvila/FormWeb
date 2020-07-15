@@ -118,7 +118,7 @@
                                       <v-list-item @click="editItem(vigencia, periodo)">
                                         <v-list-item-title>Control de Fechas</v-list-item-title>
                                       </v-list-item>
-                                      <v-list-item @click="listadoPuntosAtencion()">
+                                      <v-list-item @click="irListadoPrestadores()">
                                         <v-list-item-title>Reporte Mensual</v-list-item-title>
                                       </v-list-item>
                                     </v-list>
@@ -478,9 +478,9 @@ export default {
         this.editedIndex = -1;
       });
     },
-    listadoPuntosAtencion() {
+    irListadoPrestadores() {
       router.push({
-        name: "gestion-vigencias-listado-puntos-atencion"
+        name: "gestion-vigencias-prestadores"
       });
     }
   }
