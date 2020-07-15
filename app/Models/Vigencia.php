@@ -44,7 +44,7 @@ class Vigencia extends Model
   // Función para saber si un registro está activo
   public function estaActivo()
   {
-    return $this->activo == Dominio::REGISTRO_ACTIVO;
+    return $this->activo == Vigencia::REGISTRO_ACTIVO;
   }
 
   public function periodos()

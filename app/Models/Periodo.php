@@ -26,6 +26,7 @@ class Periodo extends Model
    * @var array
    */
   protected $fillable = [
+    'vigencia_id',
     'mes_id',
     'estado_reporte_id',
     'nombre',
@@ -48,12 +49,17 @@ class Periodo extends Model
   // Función para saber si un registro está activo
   public function estaActivo()
   {
-    return $this->activo == Dominio::REGISTRO_ACTIVO;
+    return $this->activo == Periodo::REGISTRO_ACTIVO;
   }
 
-  public function periodos()
+  public function vigencia()
   {
-    return $this->hasMany(Periodo::class);
+    return $this->belongsTo(Vigencia::class);
+  }
+
+  public function reportes()
+  {
+    return $this->hasMany(Reporte::class);
   }
 
 }

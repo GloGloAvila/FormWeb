@@ -51,11 +51,24 @@ class LoadDataOpcionEstadoReporte extends Migration
       $opcion->dominio_id = $dominio_id;
       $opcion->tiene_subopciones = Opcion::TIENE_SUBOPCIONES_FALSE;
       $opcion->valor_texto = 'Sin reporte';
-      $opcion->valor_numerico = 2;
+      $opcion->valor_numerico = 3;
       $opcion->valor_booleano = Opcion::VALOR_BOOLEANO_FALSE;
       $opcion->descripcion = 'Reporte mensual no diligenciado';
       $opcion->abreviatura = 'SR';
-      $opcion->orden = 2;
+      $opcion->orden = 3;
+      $opcion->editable = Opcion::REGISTRO_NO_EDITABLE;
+      $opcion->borrable = Opcion::REGISTRO_NO_BORRABLE;
+      $opcion->save();
+
+      $opcion = new Opcion();
+      $opcion->dominio_id = $dominio_id;
+      $opcion->tiene_subopciones = Opcion::TIENE_SUBOPCIONES_FALSE;
+      $opcion->valor_texto = 'No aplica';
+      $opcion->valor_numerico = 4;
+      $opcion->valor_booleano = Opcion::VALOR_BOOLEANO_FALSE;
+      $opcion->descripcion = 'Reporte mensual no diligenciado';
+      $opcion->abreviatura = 'NA';
+      $opcion->orden = 4;
       $opcion->editable = Opcion::REGISTRO_NO_EDITABLE;
       $opcion->borrable = Opcion::REGISTRO_NO_BORRABLE;
       $opcion->save();

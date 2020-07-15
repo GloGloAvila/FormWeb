@@ -82,4 +82,9 @@ class Funcionario extends Authenticatable
     return $this->belongsTo(Opcion::class, 'tipo_funcionario_id');
   }
 
+  public function reportes()
+  {
+    return $this->hasMany(Reporte::class);
+  }
+
 }

@@ -5,7 +5,7 @@ export default [
       {
         _name: 'CSidebarNavItem',
         name: 'Reporte mensual',
-        to: '/puntos-atencion',
+        to: '/vigencias',
         icon: 'cil-speedometer',
       },
       // {

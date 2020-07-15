@@ -3,9 +3,11 @@ import Router from 'vue-router'
 
 // Containers
 const TheContainer = () => import('../containers/TheContainer')
+const TheSimpleContainer = () => import('../containers/TheSimpleContainer')
 
 // Views
 const PuntosAtencion = () => import('../components/PuntosAtencion')
+const Vigencias = () => import('../components/Vigencias')
 
 Vue.use(Router)
 
@@ -20,14 +22,36 @@ function configRoutes () {
   return [
     {
       path: '/',
-      redirect: '/puntos-atencion',
-      name: 'Home',
+      redirect: '/vigencias',
+      name: 'home',
       component: TheContainer,
       children: [
         {
-          path: 'puntos-atencion',
-          name: 'Puntos de atención',
-          component: PuntosAtencion
+          path: 'vigencias',
+          name: 'gestion-vigencias',
+          meta: {
+            label: 'Vigencias'
+          },
+          redirect: '/vigencias/listado',
+          component: TheSimpleContainer,
+          children : [
+            {
+              path: 'listado',
+              name: 'gestion-vigencias-listado-vigencias',
+              meta: {
+                label: 'Listado'
+              },    
+              component: Vigencias
+            },    
+            {
+              path: 'puntos-atencion',
+              name: 'gestion-vigencias-listado-puntos-atencion',
+              meta: {
+                label: 'Puntos de atención'
+              },    
+              component: PuntosAtencion
+            },    
+          ]
         },
       ]
     },

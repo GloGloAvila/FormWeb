@@ -80,4 +80,10 @@ class PuntoAtencion extends Model
   {
     return $this->belongsTo(Prestador::class);
   }
+
+  public function reportes()
+  {
+    return $this->hasMany(Reporte::class, 'punto_atencion_id', 'id');
+  }
+
 }
