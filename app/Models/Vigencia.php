@@ -49,7 +49,7 @@ class Vigencia extends Model
 
   public function periodos()
   {
-    return $this->hasMany(Periodo::class);
+    return $this->hasMany(Periodo::class)->orderby('mes_id', 'asc');
   }
 
 }

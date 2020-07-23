@@ -18,3 +18,7 @@ Auth::routes();
 
 Route::get('/inicio', 'WelcomeController@index')->name('welcome');
 Route::get('/', 'HomeController@index')->name('home');
+
+Route::resource('vigencias', 'Vigencia\VigenciaController', ['except' => ['create', 'edit']]);
+Route::resource('vigencias.periodos', 'Vigencia\PeriodoController', ['only' => ['update']]);
+

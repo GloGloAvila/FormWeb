@@ -5,14 +5,82 @@
         <v-card>
           <v-card-title class="headline text-uppercase">Control de fechas</v-card-title>
 
-          <v-card-subtitle>Esta opción permite a los prestadores el reporte mensual de estadísticas en un rango de fechas determinado. A continuación puede seleccionar el rango de fechas permitido para que los prestadores realicen el repote correspondiente al mes {{editedItem.mes}} para la vigencia {{vigencia.nombre}}.</v-card-subtitle>
+          <v-card-subtitle class="text-justify">
+            <br />Esta opción permite a los prestadores realizar el diligenciamiento del reporte mensual de estadísticas en un rango de fechas determinado.
+            <br />
+            <br />A continuación puede seleccionar el rango de fechas permitido para que los prestadores realicen el reporte de información mensual correspondiente al mes
+            <strong>{{periodo.mes.valor_texto}}</strong> para la vigencia
+            <strong>{{vigencia.nombre}}</strong>.
+            <br />
+            <v-form v-model="formularioControlFechasValido">
+              <v-container>
+                <v-row>
+                  <v-col cols="12" md="6">
+                    <v-menu
+                      v-model="menuFechaInicio"
+                      :close-on-content-click="false"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="periodo.fecha_inicio"
+                          prepend-icon="mdi-calendar"
+                          label="Fecha inicio"
+                          v-on="on"
+                          v-bind="attrs"
+                          readonly
+                        ></v-text-field>
+                      </template>
+
+                      <v-date-picker
+                        v-model="periodo.fecha_inicio"
+                        @input="menuFechaInicio = false"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-col>
+
+                  <v-col cols="12" md="6">
+                    <v-menu
+                      v-model="menuFechaFin"
+                      :close-on-content-click="false"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                          v-model="periodo.fecha_fin"
+                          :rules="fechaFinRules"
+                          prepend-icon="mdi-calendar"
+                          label="Fecha fin"
+                          v-on="on"
+                          v-bind="attrs"
+                          readonly
+                        ></v-text-field>
+                      </template>
+
+                      <v-date-picker v-model="periodo.fecha_fin" @input="menuFechaFin = false"></v-date-picker>
+                    </v-menu>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+          </v-card-subtitle>
 
           <v-card-text></v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-            <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
+            <v-btn color="red darken-1" @click="close" dark>Cancelar</v-btn>
+            <v-btn
+              color="green darken-1"
+              @click="save"
+              dark
+              v-if="formularioControlFechasValido"
+            >Guardar</v-btn>
+            <v-btn color="gray darken-1" disabled v-else>Guardar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -92,7 +160,7 @@
                           <v-list-item v-for="(periodo, i) in vigencia.periodos" :key="i">
                             <v-list-item-content>
                               <v-row>
-                                <v-col cols="6">{{periodo.mes}}</v-col>
+                                <v-col cols="6">{{periodo.mes.valor_texto}}</v-col>
                                 <v-col cols="6">
                                   <v-menu
                                     bottom
@@ -101,17 +169,17 @@
                                   >
                                     <template v-slot:activator="{ on, attrs }">
                                       <v-chip
-                                        v-show="periodo.estado !== 'No aplica'"
-                                        :color="getColor(periodo.estado)"
+                                        v-show="periodo.estado_reporte.valor_texto !== 'No aplica'"
+                                        :color="getColor(periodo.estado_reporte.valor_texto)"
                                         dark
                                         v-bind="attrs"
                                         v-on="on"
-                                      >{{ periodo.estado }}</v-chip>
+                                      >{{ periodo.estado_reporte.valor_texto }}</v-chip>
                                       <v-chip
-                                        v-show="periodo.estado === 'No aplica'"
-                                        :color="getColor(periodo.estado)"
+                                        v-show="periodo.estado_reporte.valor_texto === 'No aplica'"
+                                        :color="getColor(periodo.estado_reporte.valor_texto)"
                                         dark
-                                      >{{ periodo.estado }}</v-chip>
+                                      >{{ periodo.estado_reporte.valor_texto }}</v-chip>
                                     </template>
 
                                     <v-list>
@@ -175,8 +243,9 @@
 </template>
 
 <script>
-
-import router from '../router'
+import router from "../router";
+import vigencia from "../services/vigencia.js";
+import periodo from "../services/periodo.js";
 
 export default {
   name: "Vigencias",
@@ -186,7 +255,7 @@ export default {
   },
   data() {
     return {
-      itemsPerPageArray: [4, 8],
+      itemsPerPageArray: [4, 8, 12, 16],
       search: "",
       filter: {},
       sortDesc: true,
@@ -196,21 +265,32 @@ export default {
       keys: ["Nombre"],
       modalFormulario: false,
       botonGuardar: true,
-      editedIndex: -1,
-      editedItem: {
-        name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
-      },      
-      defaultItem: {
-        name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
+      periodoIndex: -1,
+      periodo: {
+        id: 0,
+        fecha_inicio: "",
+        fecha_fin: "",
+        mes: { valor_texto: "" },
+        estado_reporte: { valor_texto: "" }
       },
+      periodoDefault: {
+        id: 0,
+        fecha_inicio: "",
+        fecha_fin: "",
+        mes: { valor_texto: "" },
+        estado_reporte: { valor_texto: "" }
+      },
+      formularioControlFechasValido: false,
+      menuFechaInicio: false,
+      fechaInicioRules: [v => !!v || "Fecha inicio es requerida"],
+      menuFechaFin: false,
+      fechaFinRules: [
+        v => !!v || "Fecha fin es requerida",
+        v =>
+          this.validarFechaFin(v) ||
+          "La fecha fin debe ser superior a la fecha inicio"
+      ],
+      vigenciaIndex: -1,
       vigencias: [],
       vigencia: {}
     };
@@ -230,206 +310,20 @@ export default {
   },
   methods: {
     cargarListado() {
-      this.vigencias = [
-        {
-          id: 3,
-          nombre: "2020",
-          periodos: [
-            {
-              id: 1,
-              mes: "Enero",
-              estado: "Pendiente"
-            },
-            {
-              id: 2,
-              mes: "Febrero",
-              estado: "Pendiente"
-            },
-            {
-              id: 3,
-              mes: "Abril",
-              estado: "Pendiente"
-            },
-            {
-              id: 4,
-              mes: "Mayo",
-              estado: "Pendiente"
-            },
-            {
-              id: 5,
-              mes: "Junio",
-              estado: "Pendiente"
-            },
-            {
-              id: 6,
-              mes: "Junio",
-              estado: "Pendiente"
-            },
-            {
-              id: 7,
-              mes: "Julio",
-              estado: "Pendiente"
-            },
-            {
-              id: 8,
-              mes: "Agosto",
-              estado: "Pendiente"
-            },
-            {
-              id: 9,
-              mes: "Septiembre",
-              estado: "Pendiente"
-            },
-            {
-              id: 10,
-              mes: "Octubre",
-              estado: "Pendiente"
-            },
-            {
-              id: 11,
-              mes: "Noviembre",
-              estado: "Pendiente"
-            },
-            {
-              id: 12,
-              mes: "Diciembre",
-              estado: "Pendiente"
-            }
-          ]
-        },
-        {
-          id: 2,
-          nombre: "2019",
-          periodos: [
-            {
-              id: 1,
-              mes: "Enero",
-              estado: "Pendiente"
-            },
-            {
-              id: 2,
-              mes: "Febrero",
-              estado: "Pendiente"
-            },
-            {
-              id: 3,
-              mes: "Abril",
-              estado: "Pendiente"
-            },
-            {
-              id: 4,
-              mes: "Mayo",
-              estado: "Pendiente"
-            },
-            {
-              id: 5,
-              mes: "Junio",
-              estado: "Pendiente"
-            },
-            {
-              id: 6,
-              mes: "Junio",
-              estado: "Pendiente"
-            },
-            {
-              id: 7,
-              mes: "Julio",
-              estado: "Pendiente"
-            },
-            {
-              id: 8,
-              mes: "Agosto",
-              estado: "Pendiente"
-            },
-            {
-              id: 9,
-              mes: "Septiembre",
-              estado: "Pendiente"
-            },
-            {
-              id: 10,
-              mes: "Octubre",
-              estado: "Pendiente"
-            },
-            {
-              id: 11,
-              mes: "Noviembre",
-              estado: "Pendiente"
-            },
-            {
-              id: 12,
-              mes: "Diciembre",
-              estado: "Pendiente"
-            }
-          ]
-        },
-        {
-          id: 1,
-          nombre: "2018",
-          periodos: [
-            {
-              id: 1,
-              mes: "Enero",
-              estado: "No aplica"
-            },
-            {
-              id: 2,
-              mes: "Febrero",
-              estado: "No aplica"
-            },
-            {
-              id: 3,
-              mes: "Abril",
-              estado: "No aplica"
-            },
-            {
-              id: 4,
-              mes: "Mayo",
-              estado: "No aplica"
-            },
-            {
-              id: 5,
-              mes: "Junio",
-              estado: "No aplica"
-            },
-            {
-              id: 6,
-              mes: "Junio",
-              estado: "No aplica"
-            },
-            {
-              id: 7,
-              mes: "Julio",
-              estado: "No aplica"
-            },
-            {
-              id: 8,
-              mes: "Agosto",
-              estado: "No aplica"
-            },
-            {
-              id: 9,
-              mes: "Septiembre",
-              estado: "No aplica"
-            },
-            {
-              id: 10,
-              mes: "Octubre",
-              estado: "No aplica"
-            },
-            {
-              id: 11,
-              mes: "Noviembre",
-              estado: "No aplica"
-            },
-            {
-              id: 12,
-              mes: "Diciembre",
-              estado: "Pendiente"
-            }
-          ]
+      vigencia.obtenerVigencias().then(response => {
+        if (response.status === "success") {
+          // this.procesando = false;
+          // this.error = false;
+          this.vigencias = response.data;
+        } else {
+          // this.procesando = false;
+          // this.error = true;
+          console.log(response);
         }
-      ];
+      });
+    },
+    validarFechaFin(fechaFin) {
+      return fechaFin >= this.periodo.fecha_inicio;
     },
     getColor(estado) {
       let color = "gray";
@@ -458,24 +352,33 @@ export default {
       this.itemsPerPage = number;
     },
     editItem(vigencia, periodo) {
-      // this.editedIndex = this.puntosAtencion.indexOf(item);
+      this.vigenciaIndex = this.vigencias.indexOf(vigencia);
+      this.periodoIndex = this.vigencias[this.vigenciaIndex].periodos.indexOf(
+        periodo
+      );
+
       this.vigencia = Object.assign({}, vigencia);
-      this.editedItem = Object.assign({}, periodo);
+      this.periodo = Object.assign({}, periodo);
       this.modalFormulario = true;
     },
     save() {
-      // if (this.editedIndex > -1) {
-      //   Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      // } else {
-      //   this.desserts.push(this.editedItem);
-      // }
+      periodo
+        .actualizarPeriodo(this.vigencia, this.periodo)
+        .then(response => {
+          this.vigencias[this.vigenciaIndex].periodos[this.periodoIndex].fecha_inicio = response.data.fecha_inicio;
+          this.vigencias[this.vigenciaIndex].periodos[this.periodoIndex].fecha_fin = response.data.fecha_fin;
+        })
+        .catch(error => {
+          console.log(error);
+        });
       this.close();
     },
     close() {
       this.modalFormulario = false;
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+        this.periodo = Object.assign({}, this.periodoDefault);
+        this.VigenciaIndex = -1;
+        this.PeriodoIndex = -1;
       });
     },
     irListadoPrestadores() {
