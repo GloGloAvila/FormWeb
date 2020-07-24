@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Vigencia;
 
 use App\Http\Controllers\Controller;
+use App\Models\Mes;
+use App\Models\Periodo;
 use Illuminate\Http\Request;
 
 use App\Models\Vigencia;
+use Illuminate\Support\Facades\Log;
 
 class VigenciaController extends Controller
 {
@@ -42,7 +45,37 @@ class VigenciaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $datos = $request['data'];
+        $vigencia = Vigencia::create($datos);
+
+        $meses = Mes::all();
+
+        foreach ($meses as $mes) {
+            $periodo = new Periodo();
+
+            $periodo->vigencia_id = $vigencia->id;
+            $periodo->mes_id = $mes->id;
+            $periodo->estado_reporte_id = 20;
+            $periodo->fecha_inicio = $vigencia->nombre . '-' . $mes->descripcion . '-' . '01';
+            $periodo->fecha_fin = $vigencia->nombre . '-' . $mes->descripcion . '-' . '15';
+
+            $periodo->save();
+        }
+
+        $vigencia = Vigencia::where('id', $vigencia->id)
+            ->with(
+                'periodos',
+                'periodos.mes',
+                'periodos.estadoReporte'
+            )->first();
+
+        return response()->json(
+            [
+                'status' => 'success',
+                'data' => $vigencia
+            ],
+            201
+        );
     }
 
     /**
@@ -65,7 +98,18 @@ class VigenciaController extends Controller
      */
     public function update(Request $request, Vigencia $vigencia)
     {
-        //
+        $data = $request['data'];
+
+        $vigencia->nombre = $data['nombre'];
+        $vigencia->save();
+
+        return response()->json(
+            [
+                'status' => 'success',
+                'data' => $vigencia
+            ],
+            200
+        );
     }
 
     /**

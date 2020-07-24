@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app id="inspire">
-      <v-dialog v-model="modalFormulario" persistent max-width="50%" style="z-index: 1040">
+      <v-dialog v-model="modalFormularioPeriodo" persistent max-width="50%" style="z-index: 1040">
         <v-card>
           <v-card-title class="headline text-uppercase">Control de fechas</v-card-title>
 
@@ -12,7 +12,7 @@
             <strong>{{periodo.mes.valor_texto}}</strong> para la vigencia
             <strong>{{vigencia.nombre}}</strong>.
             <br />
-            <v-form v-model="formularioControlFechasValido">
+            <v-form v-model="formularioPeriodoValido">
               <v-container>
                 <v-row>
                   <v-col cols="12" md="6">
@@ -73,12 +73,46 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red darken-1" @click="close" dark>Cancelar</v-btn>
+            <v-btn color="red darken-1" @click="cerrarFormularioPeriodo" dark>Cancelar</v-btn>
             <v-btn
               color="green darken-1"
-              @click="save"
+              @click="guardarPeriodo"
               dark
-              v-if="formularioControlFechasValido"
+              v-if="formularioPeriodoValido"
+            >Guardar</v-btn>
+            <v-btn color="gray darken-1" disabled v-else>Guardar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="modalFormularioVigencia" persistent max-width="50%" style="z-index: 1040">
+        <v-card>
+          <v-card-title class="headline text-uppercase">Gestión de vigencias</v-card-title>
+
+          <v-card-subtitle class="text-justify">
+            <br />
+            A continuación ingrese el año de la vigencia a {{accion.toLowerCase()}} en formato YYYY. Ejemplo: 1981
+            <br />
+            <v-form v-model="formularioVigenciaValido">
+              <v-container>
+                <v-row>
+                  <v-col cols="12" md="12">
+                    <v-text-field label="Vigencia" v-model="vigencia.nombre"></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-form>
+          </v-card-subtitle>
+
+          <v-card-text></v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red darken-1" @click="cerrarFormularioVigencia" dark>Cancelar</v-btn>
+            <v-btn
+              color="green darken-1"
+              @click="guardarVigencia"
+              dark
+              v-if="formularioVigenciaValido"
             >Guardar</v-btn>
             <v-btn color="gray darken-1" disabled v-else>Guardar</v-btn>
           </v-card-actions>
@@ -95,46 +129,56 @@
           <CRow>
             <CCol sm="12">
               <v-data-iterator
-                :items="vigencias"
+                loading
+                loading-text="Cargando... Espere por favor"
                 :items-per-page.sync="itemsPerPage"
-                :page="page"
-                :search="search"
                 :sort-by="sortBy.toLowerCase()"
                 :sort-desc="sortDesc"
                 hide-default-footer
+                :items="vigencias"
+                :search="search"
+                :page="page"
               >
                 <template v-slot:header>
-                  <v-toolbar dark color="light-blue lighten-1" class="mb-1">
+                  <v-toolbar color="blue-grey lighten-5" class="mb-1">
                     <v-text-field
-                      v-model="search"
-                      clearable
-                      flat
-                      solo-inverted
-                      hide-details
+                      prepend-inner-icon="mdi-calendar-search"
                       label="Buscar vigencia"
+                      v-model="search"
+                      hide-details
+                      clearable
+                      solo
+                      flat
                     ></v-text-field>
-                    <!-- prepend-inner-icon="search" -->
                     <template v-if="$vuetify.breakpoint.mdAndUp">
                       <v-spacer></v-spacer>
                       <v-select
-                        v-model="sortBy"
-                        flat
-                        solo-inverted
-                        hide-details
-                        :items="keys"
+                        prepend-inner-icon="mdi-sort"
                         label="Ordenar por"
-                        v-show="false"
+                        v-model="sortBy"
+                        :items="keys"
+                        hide-details
+                        solo
+                        flat
                       ></v-select>
-                      <!-- prepend-inner-icon="search" -->
                       <v-spacer></v-spacer>
                       <v-btn-toggle v-model="sortDesc" mandatory v-show="true">
-                        <v-btn large depressed color="light-blue darken-3" :value="false">
+                        <v-btn large depressed color="blue-grey lighten-1" :value="false">
                           <v-icon>mdi-arrow-up</v-icon>
                         </v-btn>
-                        <v-btn large depressed color="light-blue darken-3" :value="true">
+                        <v-btn large depressed color="blue-grey lighten-1" :value="true">
                           <v-icon>mdi-arrow-down</v-icon>
                         </v-btn>
                       </v-btn-toggle>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                        large
+                        depressed
+                        color="green lighten-1"
+                        @click="modalFormularioVigencia = true"
+                      >
+                        <v-icon>mdi-plus</v-icon>
+                      </v-btn>
                     </template>
                   </v-toolbar>
                 </template>
@@ -150,9 +194,13 @@
                       lg="3"
                     >
                       <v-card>
-                        <v-card-title
-                          class="subheading font-weight-bold justify-center"
-                        >{{ vigencia.nombre }}</v-card-title>
+                        <v-card-title class="subheading font-weight-bold justify-center">
+                          {{ vigencia.nombre }}
+                          <v-spacer></v-spacer>
+                          <v-btn icon @click="editarVigencia(vigencia)">
+                            <v-icon>mdi-pencil</v-icon>
+                          </v-btn>
+                        </v-card-title>
 
                         <v-divider></v-divider>
 
@@ -183,7 +231,7 @@
                                     </template>
 
                                     <v-list>
-                                      <v-list-item @click="editItem(vigencia, periodo)">
+                                      <v-list-item @click="editarPeriodo(vigencia, periodo)">
                                         <v-list-item-title>Control de Fechas</v-list-item-title>
                                       </v-list-item>
                                       <v-list-item @click="irListadoPrestadores()">
@@ -206,7 +254,14 @@
                     <span class="grey--text">Registros por página</span>
                     <v-menu offset-y>
                       <template v-slot:activator="{ on, attrs }">
-                        <v-btn dark text color="primary" class="ml-2" v-bind="attrs" v-on="on">
+                        <v-btn
+                          dark
+                          text
+                          color="blue-grey lighten-1"
+                          class="ml-2"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
                           {{ itemsPerPage }}
                           <v-icon>mdi-chevron-down</v-icon>
                         </v-btn>
@@ -225,10 +280,10 @@
                     <v-spacer></v-spacer>
 
                     <span class="mr-4 grey--text">Página {{ page }} de {{ numberOfPages }}</span>
-                    <v-btn fab dark color="blue darken-3" class="mr-1" @click="formerPage">
+                    <v-btn fab dark color="blue-grey lighten-1" class="mr-1" @click="formerPage">
                       <v-icon>mdi-chevron-left</v-icon>
                     </v-btn>
-                    <v-btn fab dark color="blue darken-3" class="ml-1" @click="nextPage">
+                    <v-btn fab dark color="blue-grey lighten-1" class="ml-1" @click="nextPage">
                       <v-icon>mdi-chevron-right</v-icon>
                     </v-btn>
                   </v-row>
@@ -244,6 +299,7 @@
 
 <script>
 import router from "../router";
+
 import vigencia from "../services/vigencia.js";
 import periodo from "../services/periodo.js";
 
@@ -263,8 +319,8 @@ export default {
       itemsPerPage: 4,
       sortBy: "nombre",
       keys: ["Nombre"],
-      modalFormulario: false,
-      botonGuardar: true,
+      modalFormularioPeriodo: false,
+      formularioPeriodoValido: false,
       periodoIndex: -1,
       periodo: {
         id: 0,
@@ -280,7 +336,6 @@ export default {
         mes: { valor_texto: "" },
         estado_reporte: { valor_texto: "" }
       },
-      formularioControlFechasValido: false,
       menuFechaInicio: false,
       fechaInicioRules: [v => !!v || "Fecha inicio es requerida"],
       menuFechaFin: false,
@@ -290,9 +345,18 @@ export default {
           this.validarFechaFin(v) ||
           "La fecha fin debe ser superior a la fecha inicio"
       ],
+      modalFormularioVigencia: false,
+      formularioVigenciaValido: false,
       vigenciaIndex: -1,
-      vigencias: [],
-      vigencia: {}
+      vigencia: {
+        id: 0,
+        nombre: ""
+      },
+      vigenciaDefault: {
+        id: 0,
+        nombre: ""
+      },
+      vigencias: []
     };
   },
   computed: {
@@ -301,6 +365,9 @@ export default {
     },
     filteredKeys() {
       return this.keys.filter(key => key !== `Nombre`);
+    },
+    accion() {
+      return this.vigenciaIndex === -1 ? "Crear" : "Editar";
     }
   },
   watch: {
@@ -309,6 +376,15 @@ export default {
     }
   },
   methods: {
+    nextPage() {
+      if (this.page + 1 <= this.numberOfPages) this.page += 1;
+    },
+    formerPage() {
+      if (this.page - 1 >= 1) this.page -= 1;
+    },
+    updateItemsPerPage(number) {
+      this.itemsPerPage = number;
+    },
     cargarListado() {
       vigencia.obtenerVigencias().then(response => {
         if (response.status === "success") {
@@ -342,16 +418,45 @@ export default {
 
       return color;
     },
-    nextPage() {
-      if (this.page + 1 <= this.numberOfPages) this.page += 1;
+    editarVigencia(vigencia) {
+      this.vigenciaIndex = this.vigencias.indexOf(vigencia);
+      this.vigencia = Object.assign({}, vigencia);
+      this.modalFormularioVigencia = true;
     },
-    formerPage() {
-      if (this.page - 1 >= 1) this.page -= 1;
+    guardarVigencia() {
+      if (this.vigenciaIndex > -1) {
+        // Script para editar vigencia, al ser exitoso la edición se debe asignar al arreglo de vigencias
+        vigencia
+          .actualizarVigencia(this.vigencia)
+          .then(response => {
+            Object.assign(this.vigencias[this.vigenciaIndex], response.data);
+            this.cerrarFormularioVigencia();
+          })
+          .catch(error => {
+            console.log(error);
+            this.cerrarFormularioVigencia();
+          });
+      } else {
+        // Script para crear vigencia, al ser exitosa la creación se debe agregar al arreglo de vigencias
+        vigencia
+          .crearVigencia(this.vigencia)
+          .then(response => {
+            this.vigencias.push(response.data);
+            this.cerrarFormularioVigencia();
+          })
+          .catch(error => {
+            console.log(error);
+            this.cerrarFormularioVigencia();
+          });
+      }
     },
-    updateItemsPerPage(number) {
-      this.itemsPerPage = number;
+    cerrarFormularioVigencia() {
+      this.modalFormularioVigencia = false;
+      this.$nextTick(() => {
+        this.resetearObjetos();
+      });
     },
-    editItem(vigencia, periodo) {
+    editarPeriodo(vigencia, periodo) {
       this.vigenciaIndex = this.vigencias.indexOf(vigencia);
       this.periodoIndex = this.vigencias[this.vigenciaIndex].periodos.indexOf(
         periodo
@@ -359,27 +464,36 @@ export default {
 
       this.vigencia = Object.assign({}, vigencia);
       this.periodo = Object.assign({}, periodo);
-      this.modalFormulario = true;
+      this.modalFormularioPeriodo = true;
     },
-    save() {
+    guardarPeriodo() {
       periodo
         .actualizarPeriodo(this.vigencia, this.periodo)
         .then(response => {
-          this.vigencias[this.vigenciaIndex].periodos[this.periodoIndex].fecha_inicio = response.data.fecha_inicio;
-          this.vigencias[this.vigenciaIndex].periodos[this.periodoIndex].fecha_fin = response.data.fecha_fin;
+          this.vigencias[this.vigenciaIndex].periodos[
+            this.periodoIndex
+          ].fecha_inicio = response.data.fecha_inicio;
+          this.vigencias[this.vigenciaIndex].periodos[
+            this.periodoIndex
+          ].fecha_fin = response.data.fecha_fin;
+          this.cerrarFormularioPeriodo();
         })
         .catch(error => {
           console.log(error);
+          this.cerrarFormularioPeriodo();
         });
-      this.close();
     },
-    close() {
-      this.modalFormulario = false;
+    cerrarFormularioPeriodo() {
+      this.modalFormularioPeriodo = false;
       this.$nextTick(() => {
-        this.periodo = Object.assign({}, this.periodoDefault);
-        this.VigenciaIndex = -1;
-        this.PeriodoIndex = -1;
+        this.resetearObjetos();
       });
+    },
+    resetearObjetos() {
+      this.vigencia = Object.assign({}, this.vigenciaDefault);
+      this.periodo = Object.assign({}, this.periodoDefault);
+      this.vigenciaIndex = -1;
+      this.periodoIndex = -1;
     },
     irListadoPrestadores() {
       router.push({

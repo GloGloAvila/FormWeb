@@ -24,8 +24,8 @@ class PeriodoController extends Controller
         $data = $request['data'];
 
         if($vigencia->id === $periodo->vigencia_id){
-            $periodo->fecha_inicio = $data['fecha_inicio'];;
-            $periodo->fecha_fin = $data['fecha_fin'];;
+            $periodo->fecha_inicio = $data['fecha_inicio'];
+            $periodo->fecha_fin = $data['fecha_fin'];
             $periodo->save();
         }
 
