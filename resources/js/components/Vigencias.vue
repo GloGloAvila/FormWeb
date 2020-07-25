@@ -235,7 +235,7 @@
                                         <v-list-item-title>Control de Fechas</v-list-item-title>
                                       </v-list-item>
                                       <v-list-item @click="irListadoPrestadores(vigencia, periodo)">
-                                        <v-list-item-title>Reporte Mensual</v-list-item-title>
+                                        <v-list-item-title>Gestión Prestadores</v-list-item-title>
                                       </v-list-item>
                                     </v-list>
                                   </v-menu>
@@ -262,7 +262,7 @@
                           v-bind="attrs"
                           v-on="on"
                         >
-                          {{ itemsPerPage === -1 ? 'All' : itemsPerPage }}
+                          {{ itemsPerPage === -1 ? 'Todo' : itemsPerPage }}
                           <v-icon>mdi-chevron-down</v-icon>
                         </v-btn>
                       </template>
@@ -276,6 +276,11 @@
                         </v-list-item>
                       </v-list>
                     </v-menu>
+
+                    <v-spacer></v-spacer>
+                    <span
+                      class="mr-4 grey--text"
+                    >Mostrando registros del {{ 1 + (page-1)*itemsPerPage }} al {{ itemsPerPage === -1 ? total : ( total > ((page-1)*itemsPerPage + itemsPerPage) ? ((page-1)*itemsPerPage + itemsPerPage) : total) }} de un total de {{ total }}</span>
 
                     <v-spacer></v-spacer>
 
@@ -311,7 +316,7 @@ export default {
   },
   data() {
     return {
-      itemsPerPageArray: [4, 8, 12, 16, 'All'],
+      itemsPerPageArray: [4, 8, 12, 16, "Todo"],
       search: "",
       filter: {},
       sortDesc: true,
@@ -363,6 +368,9 @@ export default {
     numberOfPages() {
       return Math.ceil(this.vigencias.length / this.itemsPerPage);
     },
+    total() {
+      return this.vigencias.length;
+    },
     filteredKeys() {
       return this.keys.filter((key) => key !== `Nombre`);
     },
@@ -383,7 +391,8 @@ export default {
       if (this.page - 1 >= 1) this.page -= 1;
     },
     updateItemsPerPage(number) {
-      this.itemsPerPage = number === 'All' ? -1 : number;
+      this.page = 1;
+      this.itemsPerPage = number === "Todo" ? -1 : number;
     },
     cargarListado() {
       vigencia.obtenerVigencias().then((response) => {
@@ -496,12 +505,11 @@ export default {
       this.periodoIndex = -1;
     },
     irListadoPrestadores(vigencia, periodo) {
-
-      sessionStorage.setItem('datosVigencia', JSON.stringify(vigencia))
-      sessionStorage.setItem('datosPeriodo', JSON.stringify(periodo))
+      sessionStorage.setItem("datosVigencia", JSON.stringify(vigencia));
+      sessionStorage.setItem("datosPeriodo", JSON.stringify(periodo));
 
       router.push({
-        name: "gestion-vigencias-prestadores"        
+        name: "gestion-vigencias-prestadores",
       });
     },
   },

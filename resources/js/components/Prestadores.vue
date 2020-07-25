@@ -70,11 +70,21 @@
                     <td>{{ item.nombre.toUpperCase() }}</td>
                     <td>{{ item.tipo_prestador.descripcion.toUpperCase() }}</td>
                     <td>
-                      <v-chip
-                        color="blue"
-                        dark
-                        @click="irListadoPuntosAtencion(item)"
-                      >Puntos de Atención</v-chip>
+                      <v-menu bottom origin="center center" transition="scale-transition">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-chip
+                            color="blue"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                          >Puntos de atención</v-chip>
+                        </template>
+                        <v-list>
+                          <v-list-item @click="irListadoPuntosAtencion(item)">
+                            <v-list-item-title>Gestión Puntos de atención</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
                     </td>
                   </tr>
                 </template>
@@ -117,9 +127,11 @@
                 </v-menu>
 
                 <v-spacer></v-spacer>
-                <span class="mr-4 grey--text">Mostrando registros del {{ 1 + (page-1)*itemsPerPage }} al {{ itemsPerPage === -1 ? total : ((page-1)*itemsPerPage + itemsPerPage) }} de un total de {{ total }}</span>
-                <v-spacer></v-spacer>
+                <span
+                  class="mr-4 grey--text"
+                >Mostrando registros del {{ 1 + (page-1)*itemsPerPage }} al {{ itemsPerPage === -1 ? total : ( total > ((page-1)*itemsPerPage + itemsPerPage) ? ((page-1)*itemsPerPage + itemsPerPage) : total) }} de un total de {{ total }}</span>
 
+                <v-spacer></v-spacer>
                 <span class="mr-4 grey--text">Página {{ page }} de {{ numberOfPages }}</span>
                 <v-btn fab dark color="blue-grey lighten-1" class="mr-1" @click="formerPage">
                   <v-icon>mdi-chevron-left</v-icon>
@@ -208,10 +220,15 @@ export default {
   },
   computed: {
     numberOfPages() {
-      return Math.ceil(this.prestadores.length / (this.itemsPerPage === -1 ? this.prestadores.length : this.itemsPerPage));
+      return Math.ceil(
+        this.prestadores.length /
+          (this.itemsPerPage === -1
+            ? this.prestadores.length
+            : this.itemsPerPage)
+      );
     },
     total() {
-      return this.prestadores.length
+      return this.prestadores.length;
     },
     filteredKeys() {
       return this.keys.filter((key) => key !== `Nombre`);
@@ -230,6 +247,7 @@ export default {
       if (this.page - 1 >= 1) this.page -= 1;
     },
     updateItemsPerPage(number) {
+      this.page = 1;
       this.itemsPerPage = number === "Todo" ? -1 : number;
     },
     cargarListado() {
@@ -245,26 +263,26 @@ export default {
         }
       });
     },
-    editItem(item) {
-      this.editedIndex = this.puntosAtencion.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.modalFormulario = true;
-    },
-    save() {
-      // if (this.editedIndex > -1) {
-      //   Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      // } else {
-      //   this.desserts.push(this.editedItem);
-      // }
-      this.close();
-    },
-    close() {
-      this.modalFormulario = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
+    // editItem(item) {
+    //   this.editedIndex = this.puntosAtencion.indexOf(item);
+    //   this.editedItem = Object.assign({}, item);
+    //   this.modalFormulario = true;
+    // },
+    // save() {
+    //   // if (this.editedIndex > -1) {
+    //   //   Object.assign(this.desserts[this.editedIndex], this.editedItem);
+    //   // } else {
+    //   //   this.desserts.push(this.editedItem);
+    //   // }
+    //   this.close();
+    // },
+    // close() {
+    //   this.modalFormulario = false;
+    //   this.$nextTick(() => {
+    //     this.editedItem = Object.assign({}, this.defaultItem);
+    //     this.editedIndex = -1;
+    //   });
+    // },
     irListadoPuntosAtencion(prestador) {
       sessionStorage.setItem("datosPrestador", JSON.stringify(prestador));
 
