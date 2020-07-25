@@ -25,6 +25,9 @@ function configRoutes() {
       path: '/',
       redirect: '/vigencias',
       name: 'home',
+      meta: {
+        label: 'Inicio'
+      },
       component: TheContainer,
       children: [
         {
@@ -59,16 +62,28 @@ function configRoutes() {
                   meta: {
                     label: 'Listado'
                   },
-                  component: Prestadores
+                  component: Prestadores,
+                  props: true
                 },
                 {
                   path: 'puntos-atencion',
-                  name: 'gestion-vigencias-prestadores-listado-puntos-atencion',
+                  name: 'gestion-vigencias-prestadores-puntos-atencion',
                   meta: {
                     label: 'Puntos de atención'
                   },
-                  component: PuntosAtencion
-                },
+                  redirect: '/vigencias/prestadores/puntos-atencion/listado',
+                  component: TheSimpleContainer,
+                  children: [    
+                    {
+                      path: 'listado',
+                      name: 'gestion-vigencias-prestadores-listado-puntos-atencion',
+                      meta: {
+                        label: 'Listado'
+                      },
+                      component: PuntosAtencion
+                    },
+                  ]
+                }
               ]
             },
           ]

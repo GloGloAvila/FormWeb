@@ -234,7 +234,7 @@
                                       <v-list-item @click="editarPeriodo(vigencia, periodo)">
                                         <v-list-item-title>Control de Fechas</v-list-item-title>
                                       </v-list-item>
-                                      <v-list-item @click="irListadoPrestadores()">
+                                      <v-list-item @click="irListadoPrestadores(vigencia, periodo)">
                                         <v-list-item-title>Reporte Mensual</v-list-item-title>
                                       </v-list-item>
                                     </v-list>
@@ -262,7 +262,7 @@
                           v-bind="attrs"
                           v-on="on"
                         >
-                          {{ itemsPerPage }}
+                          {{ itemsPerPage === -1 ? 'All' : itemsPerPage }}
                           <v-icon>mdi-chevron-down</v-icon>
                         </v-btn>
                       </template>
@@ -311,7 +311,7 @@ export default {
   },
   data() {
     return {
-      itemsPerPageArray: [4, 8, 12, 16],
+      itemsPerPageArray: [4, 8, 12, 16, 'All'],
       search: "",
       filter: {},
       sortDesc: true,
@@ -327,36 +327,36 @@ export default {
         fecha_inicio: "",
         fecha_fin: "",
         mes: { valor_texto: "" },
-        estado_reporte: { valor_texto: "" }
+        estado_reporte: { valor_texto: "" },
       },
       periodoDefault: {
         id: 0,
         fecha_inicio: "",
         fecha_fin: "",
         mes: { valor_texto: "" },
-        estado_reporte: { valor_texto: "" }
+        estado_reporte: { valor_texto: "" },
       },
       menuFechaInicio: false,
-      fechaInicioRules: [v => !!v || "Fecha inicio es requerida"],
+      fechaInicioRules: [(v) => !!v || "Fecha inicio es requerida"],
       menuFechaFin: false,
       fechaFinRules: [
-        v => !!v || "Fecha fin es requerida",
-        v =>
+        (v) => !!v || "Fecha fin es requerida",
+        (v) =>
           this.validarFechaFin(v) ||
-          "La fecha fin debe ser superior a la fecha inicio"
+          "La fecha fin debe ser superior a la fecha inicio",
       ],
       modalFormularioVigencia: false,
       formularioVigenciaValido: false,
       vigenciaIndex: -1,
       vigencia: {
         id: 0,
-        nombre: ""
+        nombre: "",
       },
       vigenciaDefault: {
         id: 0,
-        nombre: ""
+        nombre: "",
       },
-      vigencias: []
+      vigencias: [],
     };
   },
   computed: {
@@ -364,16 +364,16 @@ export default {
       return Math.ceil(this.vigencias.length / this.itemsPerPage);
     },
     filteredKeys() {
-      return this.keys.filter(key => key !== `Nombre`);
+      return this.keys.filter((key) => key !== `Nombre`);
     },
     accion() {
       return this.vigenciaIndex === -1 ? "Crear" : "Editar";
-    }
+    },
   },
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
   methods: {
     nextPage() {
@@ -383,10 +383,10 @@ export default {
       if (this.page - 1 >= 1) this.page -= 1;
     },
     updateItemsPerPage(number) {
-      this.itemsPerPage = number;
+      this.itemsPerPage = number === 'All' ? -1 : number;
     },
     cargarListado() {
-      vigencia.obtenerVigencias().then(response => {
+      vigencia.obtenerVigencias().then((response) => {
         if (response.status === "success") {
           // this.procesando = false;
           // this.error = false;
@@ -428,11 +428,11 @@ export default {
         // Script para editar vigencia, al ser exitoso la edición se debe asignar al arreglo de vigencias
         vigencia
           .actualizarVigencia(this.vigencia)
-          .then(response => {
+          .then((response) => {
             Object.assign(this.vigencias[this.vigenciaIndex], response.data);
             this.cerrarFormularioVigencia();
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
             this.cerrarFormularioVigencia();
           });
@@ -440,11 +440,11 @@ export default {
         // Script para crear vigencia, al ser exitosa la creación se debe agregar al arreglo de vigencias
         vigencia
           .crearVigencia(this.vigencia)
-          .then(response => {
+          .then((response) => {
             this.vigencias.push(response.data);
             this.cerrarFormularioVigencia();
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
             this.cerrarFormularioVigencia();
           });
@@ -469,7 +469,7 @@ export default {
     guardarPeriodo() {
       periodo
         .actualizarPeriodo(this.vigencia, this.periodo)
-        .then(response => {
+        .then((response) => {
           this.vigencias[this.vigenciaIndex].periodos[
             this.periodoIndex
           ].fecha_inicio = response.data.fecha_inicio;
@@ -478,7 +478,7 @@ export default {
           ].fecha_fin = response.data.fecha_fin;
           this.cerrarFormularioPeriodo();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.cerrarFormularioPeriodo();
         });
@@ -495,11 +495,15 @@ export default {
       this.vigenciaIndex = -1;
       this.periodoIndex = -1;
     },
-    irListadoPrestadores() {
+    irListadoPrestadores(vigencia, periodo) {
+
+      sessionStorage.setItem('datosVigencia', JSON.stringify(vigencia))
+      sessionStorage.setItem('datosPeriodo', JSON.stringify(periodo))
+
       router.push({
-        name: "gestion-vigencias-prestadores"
+        name: "gestion-vigencias-prestadores"        
       });
-    }
-  }
+    },
+  },
 };
 </script>

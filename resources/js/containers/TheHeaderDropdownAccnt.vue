@@ -30,7 +30,6 @@ export default {
     }
   },
   mounted () {
-    console.log(window)
     this.user = window.user.user
   },
   filters: {
