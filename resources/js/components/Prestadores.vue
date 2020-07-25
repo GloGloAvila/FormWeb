@@ -157,9 +157,6 @@ export default {
   name: "Prestadores",
   components: {},
   mounted() {
-    this.vigencia = JSON.parse(sessionStorage.getItem("datosVigencia"));
-    this.periodo = JSON.parse(sessionStorage.getItem("datosPeriodo"));
-
     this.cargarListado();
   },
   data() {
@@ -176,8 +173,6 @@ export default {
       modalFormulario: false,
       botonGuardar: true,
       pasoFormulario: 1,
-      vigencia: {},
-      periodo: {},
       editedIndex: -1,
       editedItem: {
         name: "",

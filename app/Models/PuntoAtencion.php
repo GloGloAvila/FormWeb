@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
+use App\Models\Departamento;
+use App\Models\Municipio;
 use App\Models\Prestador;
 
 class PuntoAtencion extends Model
@@ -74,6 +76,16 @@ class PuntoAtencion extends Model
   static public function obtenerPuntoAtencionXMigracionId($migracionId)
   {
     return PuntoAtencion::where('migracion_id', $migracionId)->first();
+  }
+
+  public function departamento()
+  {
+    return $this->belongsTo(Departamento::class);
+  }
+
+  public function Municipio()
+  {
+    return $this->belongsTo(Municipio::class);
   }
 
   public function prestador()

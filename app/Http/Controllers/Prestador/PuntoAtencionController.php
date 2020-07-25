@@ -6,26 +6,30 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
+use App\Models\PuntoAtencion;
 use App\Models\Prestador;
 
-class PrestadorController extends Controller
+class PuntoAtencionController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * 
+     *
+     * @param  \App\Models\Prestador  $prestador
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Prestador  $prestador)
     {
-        $prestadores = Prestador::where('activo', 1)            
-            ->with('tipoPrestador')
+        $puntosAtencion = $prestador->puntosAtencion()
+            ->with('departamento')
+            ->with('municipio')
+            ->with('prestador')
             ->orderBy('nombre', 'asc')
             ->get();
 
         return response()->json(
             [
                 'status' => 'success',
-                'data' => $prestadores
+                'data' => $puntosAtencion
             ],
             200
         );

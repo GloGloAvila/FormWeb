@@ -62,7 +62,8 @@ class Dominio extends Model
 
   public function getDominiosAdministrables()
   {
-    return $this->where('administrable', Dominio::REGISTRO_ADMINISTRABLE)->where('activo', Dominio::REGISTRO_ACTIVO)->get();
+    return $this->where('administrable', Dominio::REGISTRO_ADMINISTRABLE)
+    ->where('activo', Dominio::REGISTRO_ACTIVO)->get();
   }
 
   static public function getDominioXGrupo($grupo)

@@ -9,7 +9,10 @@
 
           <v-card-text>
             <v-stepper v-model="pasoFormulario" vertical>
-              <v-stepper-step :complete="pasoFormulario > 1" step="1">Número de Personas inscritas/registradas</v-stepper-step>
+              <v-stepper-step
+                :complete="pasoFormulario > 1"
+                step="1"
+              >Número de Personas inscritas/registradas</v-stepper-step>
               <v-stepper-content step="1">
                 <v-alert icon="mdi-alert-octagon-outline" prominent text type="info">
                   <small>Es el número de personas que registraron/inscribieron su hoja de vida en el sistema de información que le ha sido autorizado al prestador, de manera asistida por el Punto de Atención o autónoma (auto-registro de forma virtual), en el mes de referencia. Esta información debe presentarse desagregada por sexo: hombres y mujeres.</small>
@@ -287,10 +290,7 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="editedItem.fat"
-                            label="Técnico laboral"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.fat" label="Técnico laboral"></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -329,10 +329,7 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="editedItem.fat"
-                            label="Técnico laboral"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.fat" label="Técnico laboral"></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -417,10 +414,7 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="editedItem.fat"
-                            label="Técnico laboral"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.fat" label="Técnico laboral"></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -459,10 +453,7 @@
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="editedItem.fat"
-                            label="Técnico laboral"
-                          ></v-text-field>
+                          <v-text-field v-model="editedItem.fat" label="Técnico laboral"></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -567,21 +558,86 @@
           </CRow>
           <CRow>
             <CCol sm="12">
-              <v-data-table :headers="headers" :items="puntosAtencion" class="elevation-1">
+              <v-toolbar color="blue-grey lighten-5" class="mb-1">
+                <v-text-field
+                  prepend-inner-icon="mdi-office-building"
+                  label="Buscar punto atención"
+                  v-model="search"
+                  hide-details
+                  clearable
+                  solo
+                  flat
+                ></v-text-field>
+                <template v-if="$vuetify.breakpoint.mdAndUp">
+                  <v-spacer></v-spacer>
+                  <v-select
+                    prepend-inner-icon="mdi-sort"
+                    label="Ordenar por"
+                    v-model="sortBy"
+                    :items="keys"
+                    hide-details
+                    solo
+                    flat
+                  ></v-select>
+                  <v-spacer></v-spacer>
+                  <v-btn-toggle v-model="sortDesc" mandatory v-show="true">
+                    <v-btn large depressed color="blue-grey lighten-1" :value="false">
+                      <v-icon>mdi-arrow-up</v-icon>
+                    </v-btn>
+                    <v-btn large depressed color="blue-grey lighten-1" :value="true">
+                      <v-icon>mdi-arrow-down</v-icon>
+                    </v-btn>
+                  </v-btn-toggle>
+                </template>
+              </v-toolbar>
+
+              <br />
+              <v-data-table
+                :headers="headers"
+                :items="puntosAtencion"
+                :page.sync="page"
+                :items-per-page.sync="itemsPerPage"
+                :sort-by="ordenarPor(sortBy.toLowerCase())"
+                :sort-desc="sortDesc"
+                :search="search"
+                loading-text="Cargando... Espere por favor"
+                class="elevation-1"
+                hide-default-footer
+              >
                 <template v-slot:header.id="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.prestador="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.departamento="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.municipio="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.puntoAtencion="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:header.departamento_id="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:header.municipio_id="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:header.codigo="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:header.nombre="{ header }">{{ header.text.toUpperCase() }}</template>
                 <template v-slot:header.accion="{ header }">{{ header.text.toUpperCase() }}</template>
 
-                <template v-slot:item.accion="{ item }">
-                  <v-chip
-                    :color="getColor(item.estado)"
-                    dark
-                    @click="editItem(item)"
-                  >{{ item.estado }}</v-chip>
+                <template v-slot:item="{ item, index }">
+                  <tr>
+                    <td>{{ index + 1 + (page-1)*10}}</td>
+                    <td>{{ item.departamento.nombre.toUpperCase() }}</td>
+                    <td>{{ item.municipio.nombre.toUpperCase() }}</td>
+                    <td>{{ item.codigo.toUpperCase() }}</td>
+                    <td>{{ item.nombre.toUpperCase() }}</td>
+                    <td>
+                      <!-- <v-menu bottom origin="center center" transition="scale-transition">
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-chip
+                            color="blue"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                          >Puntos de atención</v-chip>
+                        </template>
+                        <v-list>
+                          <v-list-item @click="irListadoPuntosAtencion(item)">
+                            <v-list-item-title>Gestión Puntos de atención</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>-->
+                    </td>
+                  </tr>
                 </template>
+
                 <template v-slot:no-data>
                   <br />
                   <br />No tiene información registrada.
@@ -592,6 +648,48 @@
                   <br />
                 </template>
               </v-data-table>
+
+              <v-row class="mt-2" align="center" justify="center">
+                <span class="grey--text">Registros por página</span>
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      dark
+                      text
+                      color="blue-grey lighten-1"
+                      class="ml-2"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      {{ itemsPerPage === -1 ? 'Todo' : itemsPerPage }}
+                      <v-icon>mdi-chevron-down</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item
+                      v-for="(number, index) in itemsPerPageArray"
+                      :key="index"
+                      @click="updateItemsPerPage(number)"
+                    >
+                      <v-list-item-title>{{ number }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+
+                <v-spacer></v-spacer>
+                <span
+                  class="mr-4 grey--text"
+                >Mostrando registros del {{ 1 + (page-1)*itemsPerPage }} al {{ itemsPerPage === -1 ? total : ( total > ((page-1)*itemsPerPage + itemsPerPage) ? ((page-1)*itemsPerPage + itemsPerPage) : total) }} de un total de {{ total }}</span>
+
+                <v-spacer></v-spacer>
+                <span class="mr-4 grey--text">Página {{ page }} de {{ numberOfPages }}</span>
+                <v-btn fab dark color="blue-grey lighten-1" class="mr-1" @click="formerPage">
+                  <v-icon>mdi-chevron-left</v-icon>
+                </v-btn>
+                <v-btn fab dark color="blue-grey lighten-1" class="ml-1" @click="nextPage">
+                  <v-icon>mdi-chevron-right</v-icon>
+                </v-btn>
+              </v-row>
             </CCol>
           </CRow>
         </CCardBody>
@@ -601,14 +699,32 @@
 </template>
 
 <script>
+import puntoAtencion from "../services/puntoAtencion.js";
+
 export default {
   name: "PuntosAtencion",
   components: {},
   mounted() {
+    this.vigencia = JSON.parse(sessionStorage.getItem("datosVigencia"));
+    this.periodo = JSON.parse(sessionStorage.getItem("datosPeriodo"));
+    this.prestador = JSON.parse(sessionStorage.getItem("datosPrestador"));
+
     this.cargarListado();
   },
   data() {
     return {
+      page: 1,
+      pageCount: 0,
+      itemsPerPage: 10,
+      itemsPerPageArray: [5, 10, 15, 20, "Todo"],
+      search: "",
+      filter: {},
+      sortDesc: false,
+      sortBy: "nombre",
+      keys: ["Nombre", "Código", "Departamento", "Municipio"],
+      vigencia: {},
+      periodo: {},
+      prestador: {},
       modalFormulario: false,
       botonGuardar: true,
       pasoFormulario: 1,
@@ -618,245 +734,106 @@ export default {
         calories: 0,
         fat: 0,
         carbs: 0,
-        protein: 0
+        protein: 0,
       },
       defaultItem: {
         name: "",
         calories: 0,
         fat: 0,
         carbs: 0,
-        protein: 0
+        protein: 0,
       },
       headers: [
         {
           text: "Consecutivo",
           value: "id",
-          sortable: false
-        },
-        {
-          text: "Prestador",
-          value: "prestador",
-          sortable: false
+          sortable: false,
         },
         {
           text: "Departamento",
-          value: "departamento",
-          sortable: false
+          value: "departamento_id",
+          sortable: false,
         },
         {
           text: "Municipio",
-          value: "municipio",
-          sortable: false
+          value: "municipio_id",
+          sortable: false,
+        },
+        {
+          text: "Código",
+          value: "codigo",
+          sortable: false,
         },
         {
           text: "Punto de Atención",
-          value: "puntoAtencion",
-          sortable: false
+          value: "nombre",
+          sortable: false,
         },
         {
           text: "Estado",
           value: "accion",
-          sortable: false
-        }
+          sortable: false,
+        },
       ],
-      puntosAtencion: []
+      puntosAtencion: [],
     };
   },
   computed: {
+    numberOfPages() {
+      return Math.ceil(
+        this.puntosAtencion.length /
+          (this.itemsPerPage === -1
+            ? this.puntosAtencion.length
+            : this.itemsPerPage)
+      );
+    },
+    total() {
+      return this.puntosAtencion.length;
+    },
+    filteredKeys() {
+      return this.keys.filter((key) => key !== `Nombre`);
+    },
     formTitle() {
       return this.editedIndex === -1
         ? "Formulario de reporte mensual"
         : "Formulario de reporte mensual";
-    }
+    },
   },
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
   methods: {
+    nextPage() {
+      if (this.page + 1 <= this.numberOfPages) this.page += 1;
+    },
+    formerPage() {
+      if (this.page - 1 >= 1) this.page -= 1;
+    },
+    updateItemsPerPage(number) {
+      this.page = 1;
+      this.itemsPerPage = number === "Todo" ? -1 : number;
+    },
+    ordenarPor(campo) {
+      campo = campo === 'código' ? 'codigo' : campo;
+      campo = campo === 'departamento' ? 'departamento.nombre' : campo;
+      campo = campo === 'municipio' ? 'municipio.nombre' : campo;
+      return campo;
+    },
     cargarListado() {
-      this.puntosAtencion = [
-        {
-          id: "001",
-          prestador: "ADECCO",
-          puntoAtencion: "CARRERA 43A No 23-73 LOCAL 142",
-          departamento: "05",
-          municipio: "05001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "002",
-          prestador: "ADECCO",
-          puntoAtencion: "CARRERA 49C No 80-264 LOCAL 4",
-          departamento: "08",
-          municipio: "08001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Diligenciado"
-        },
-        {
-          id: "003",
-          prestador: "ADECCO",
-          puntoAtencion: "AVENIDA CALLE 13 No 65-78",
-          departamento: "11",
-          municipio: "11001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Sin información"
-        },
-        {
-          id: "004",
-          prestador: "ADECCO",
-          puntoAtencion: "CARRERA 7 No 55-32",
-          departamento: "11",
-          municipio: "11001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Cerrado"
-        },
-        {
-          id: "005",
-          prestador: "ADECCO",
-          puntoAtencion: "CALLE 70A No 9-46",
-          departamento: "11",
-          municipio: "11001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "006",
-          prestador: "ADECCO",
-          puntoAtencion: "PLAZUELA C.C SHOPPING CENTER II LOCAL 8",
-          departamento: "13",
-          municipio: "13001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "007",
-          prestador: "ADECCO",
-          puntoAtencion: "CARRERA 23 No 59-26 LOCAL 3",
-          departamento: "17",
-          municipio: "17001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "008",
-          prestador: "ADECCO",
-          puntoAtencion:
-            "CARRERA 7N No 6A - 09 LOC 115, CC.PLAZA DEL FERROCARRIL",
-          departamento: "19",
-          municipio: "19001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "009",
-          prestador: "ADECCO",
-          puntoAtencion:
-            "CARRERA 48 No 7-01 LOCAL 9,  CENTRO COMERCIAL LA HACIENDA",
-          departamento: "50",
-          municipio: "50001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "010",
-          prestador: "ADECCO",
-          puntoAtencion: "AVENIDA 30 DE AGOSTO No 42-01",
-          departamento: "66",
-          municipio: "66001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "011",
-          prestador: "ADECCO",
-          puntoAtencion: "CALLE 73 No 27-42  LOCAL  4",
-          departamento: "68",
-          municipio: "68081",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "012",
-          prestador: "ADECCO",
-          puntoAtencion: "CARRERA 27 No 36-38 LOCAL 125",
-          departamento: "68",
-          municipio: "68081",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "013",
-          prestador: "ADECCO",
-          puntoAtencion:
-            "CARRERA 5 No 29-32 LOCAL 250 PISO 2, CENTRO COMERCIAL LA QUINTA",
-          departamento: "73",
-          municipio: "73001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "014",
-          prestador: "ADECCO",
-          puntoAtencion: "CALLE 44 NORTE No 2FN-28 la merced",
-          departamento: "76",
-          municipio: "76001",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "015",
-          prestador: "ADECCO",
-          puntoAtencion: "CARRERA 28 No 30-19 LOCAL 201",
-          departamento: "76",
-          municipio: "76520",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
-        },
-        {
-          id: "016",
-          prestador: "ADECCO",
-          puntoAtencion: "www.adeccoempleo.com",
-          departamento: "00",
-          municipio: "00000",
-          correo: "candidatos.adecco@adecco.com",
-          paginaWeb: "http://www.adecco.com.co",
-          fechaRegistro: "2019-10-11",
-          estado: "Pendiente"
+      puntoAtencion.obtenerPuntosAtencion(this.prestador).then((response) => {
+        if (response.status === "success") {
+          // this.procesando = false;
+          // this.error = false;
+          this.puntosAtencion = response.data;
+          console.log(this.puntosAtencion);
+        } else {
+          // this.procesando = false;
+          // this.error = true;
+          console.log(response);
         }
-      ];
+      });
     },
     getColor(estado) {
       let color = "gray";
@@ -875,11 +852,11 @@ export default {
 
       return color;
     },
-    editItem(item) {
-      this.editedIndex = this.puntosAtencion.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.modalFormulario = true;
-    },
+    // editItem(item) {
+    //   this.editedIndex = this.puntosAtencion.indexOf(item);
+    //   this.editedItem = Object.assign({}, item);
+    //   this.modalFormulario = true;
+    // },
     save() {
       // if (this.editedIndex > -1) {
       //   Object.assign(this.desserts[this.editedIndex], this.editedItem);
@@ -894,7 +871,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
-    }
-  }
+    },
+  },
 };
 </script>

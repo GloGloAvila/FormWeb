@@ -44,7 +44,7 @@ class Prestador extends Model
     'deleted_at'
   ];
 
-  
+
   // Función para saber si un registro está activo
   public function estaActivo()
   {
@@ -63,7 +63,8 @@ class Prestador extends Model
 
   public function puntosAtencion()
   {
-    return $this->hasMany(PuntoAtencion::class);
+    return $this->hasMany(PuntoAtencion::class)
+      ->where('puntos_atencion.activo', 1)
+      ->orderby('puntos_atencion.codigo', 'asc');
   }
-
 }
