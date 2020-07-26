@@ -20,7 +20,6 @@ class CreatePeriodosTable extends Migration
           $table->increments('id');
           $table->unsignedInteger('vigencia_id');
           $table->unsignedInteger('mes_id');
-          $table->unsignedInteger('estado_reporte_id');
           $table->date('fecha_inicio')->nullable();
           $table->date('fecha_fin')->nullable();
           $table->boolean('activo')->default(Periodo::REGISTRO_ACTIVO);
@@ -30,7 +29,6 @@ class CreatePeriodosTable extends Migration
 
           $table->foreign('vigencia_id')->references('id')->on('vigencias');
           $table->foreign('mes_id')->references('id')->on('opciones');
-          $table->foreign('estado_reporte_id')->references('id')->on('opciones');
 
         });
     }

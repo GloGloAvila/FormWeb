@@ -31,23 +31,9 @@ class LoadDataPeriodos extends Migration
 
       foreach ($meses as $mes) {
 
-        // Calculando estado de los periodos
-        $estado = 'Pendiente';
-        if ($vigencia->nombre === '2018' &&  intval($mes->descripcion) < 12) {
-          $estado = 'No aplica';
-        } else {
-          $estado = 'Reportado';
-          if ($vigencia->nombre === '2020' &&  intval($mes->descripcion) > 7) {
-            $estado = 'Pendiente';
-          } else if ($vigencia->nombre === '2020' && (intval($mes->descripcion) > 3 && intval($mes->descripcion) <= 7)) {
-            $estado = 'Sin reporte';
-          }
-        }
-
         $periodo = new Periodo();
         $periodo->vigencia_id = $vigencia->id;
         $periodo->mes_id = $mes->id;
-        $periodo->estado_reporte_id = Opcion::getOpcionXGrupoXValorTexto('estado_reporte', $estado)->id; //Pendiente
         $periodo->fecha_inicio = $vigencia->nombre.'-'.$mes->descripcion.'-01';
         $periodo->fecha_fin = $vigencia->nombre.'-'.$mes->descripcion.'-15';
         $periodo->save();
