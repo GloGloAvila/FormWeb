@@ -822,7 +822,7 @@ export default {
       return campo;
     },
     cargarListado() {
-      puntoAtencion.obtenerPuntosAtencion(this.vigencia, this.periodo, this.prestador).then((response) => {
+      puntoAtencion.obtenerPuntosAtencion(this.periodo, this.prestador).then((response) => {
         if (response.status === "success") {
           // this.procesando = false;
           // this.error = false;

@@ -1,8 +1,8 @@
 export default {
-  obtenerPuntosAtencion(vigencia, periodo, prestador) {
+  obtenerPuntosAtencion(periodo, prestador) {
     return new Promise((resolve, reject) => {
       axios
-        .get(`vigencias/${vigencia.id}/periodos/${periodo.id}/prestadores/${prestador.id}/puntosAtencion`)
+        .get(`periodos/${periodo.id}/prestadores/${prestador.id}/puntosAtencion`)
         .then(response => {
           resolve(response.data)
         }, response => {

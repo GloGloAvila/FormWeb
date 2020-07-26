@@ -21,8 +21,8 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::resource('vigencias', 'Vigencia\VigenciaController', ['except' => ['create', 'edit']]);
 Route::resource('vigencias.periodos', 'Vigencia\PeriodoController', ['only' => ['update']]);
-Route::resource('vigencias.periodos.prestadores.puntosAtencion', 'Vigencia\PuntoAtencionController', ['only' => ['index']])->parameters([
-    'vigencias' => 'vigencia',
+
+Route::resource('periodos.prestadores.puntosAtencion', 'Periodo\PuntoAtencionController', ['only' => ['index']])->parameters([
     'periodos' => 'periodo',
     'prestadores' => 'prestador'
 ]);

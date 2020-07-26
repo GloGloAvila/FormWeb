@@ -4,11 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
-
-use App\Models\Reporte;
-use App\Models\Periodo;
-use App\Models\PuntoAtencion;
 
 class PuntosAtencionResource extends JsonResource
 {
