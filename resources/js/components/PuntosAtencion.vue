@@ -629,8 +629,11 @@
                           >{{item.estado}}</v-chip>
                         </template>
                         <v-list>
-                          <v-list-item @click="modalFormulario = true">
+                          <v-list-item v-if="is('ROLE_PRESTADOR') && item.estado === 'Pendiente'" @click="modalFormulario = true">
                             <v-list-item-title>Reporte Mensual</v-list-item-title>
+                          </v-list-item>
+                          <v-list-item @click="modalFormularioDiligenciado = true">
+                            <v-list-item-title>Ver Reporte Diligenciado</v-list-item-title>
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -721,7 +724,7 @@ export default {
       filter: {},
       sortDesc: false,
       sortBy: "nombre",
-      keys: ["Nombre", "Código", "Departamento", "Municipio"],
+      keys: ["Nombre", "Código", "Departamento", "Municipio", "Estado"],
       vigencia: {},
       periodo: {},
       prestador: {},
@@ -816,24 +819,26 @@ export default {
       this.itemsPerPage = number === "Todo" ? -1 : number;
     },
     ordenarPor(campo) {
-      campo = campo === 'código' ? 'codigo' : campo;
-      campo = campo === 'departamento' ? 'departamento.nombre' : campo;
-      campo = campo === 'municipio' ? 'municipio.nombre' : campo;
+      campo = campo === "código" ? "codigo" : campo;
+      campo = campo === "departamento" ? "departamento.nombre" : campo;
+      campo = campo === "municipio" ? "municipio.nombre" : campo;
       return campo;
     },
     cargarListado() {
-      puntoAtencion.obtenerPuntosAtencion(this.periodo, this.prestador).then((response) => {
-        if (response.status === "success") {
-          // this.procesando = false;
-          // this.error = false;
-          this.puntosAtencion = response.data;
-          // console.log(this.puntosAtencion);
-        } else {
-          // this.procesando = false;
-          // this.error = true;
-          console.log(response);
-        }
-      });
+      puntoAtencion
+        .obtenerPuntosAtencion(this.periodo, this.prestador)
+        .then((response) => {
+          if (response.status === "success") {
+            // this.procesando = false;
+            // this.error = false;
+            this.puntosAtencion = response.data;
+            // console.log(this.puntosAtencion);
+          } else {
+            // this.procesando = false;
+            // this.error = true;
+            console.log(response);
+          }
+        });
     },
     getColor(estado) {
       let color = "gray";

@@ -172,7 +172,7 @@ export default {
       filter: {},
       sortDesc: false,
       sortBy: "nombre",
-      keys: ["Nombre", "Tipo"],
+      keys: ["Nombre", "Tipo", "Estado"],
       vigencia: {},
       periodo: {},
       modalFormulario: false,
