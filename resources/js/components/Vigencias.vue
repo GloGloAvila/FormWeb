@@ -123,7 +123,9 @@
           <CRow>
             <CCol sm="5">
               <h4 class="card-title mb-0">Vigencias</h4>
-              <div class="small text-muted">Listado</div>
+              <div
+                class="small text-muted"
+              >Listado {{is('ROLE_ADMINISTRADOR')}} - {{is('ROLE_PRESTADOR')}}</div>
             </CCol>
           </CRow>
           <CRow>
@@ -170,12 +172,13 @@
                           <v-icon>mdi-arrow-down</v-icon>
                         </v-btn>
                       </v-btn-toggle>
-                      <v-spacer></v-spacer>
+                      <v-spacer v-if="is('ROLE_ADMINISTRADOR')"></v-spacer>
                       <v-btn
                         large
                         depressed
                         color="green lighten-1"
                         @click="modalFormularioVigencia = true"
+                        v-if="is('ROLE_ADMINISTRADOR')"
                       >
                         <v-icon>mdi-plus</v-icon>
                       </v-btn>
@@ -196,8 +199,12 @@
                       <v-card>
                         <v-card-title class="subheading font-weight-bold justify-center">
                           {{ vigencia.nombre }}
-                          <v-spacer></v-spacer>
-                          <v-btn icon @click="editarVigencia(vigencia)">
+                          <v-spacer v-if="is('ROLE_ADMINISTRADOR')"></v-spacer>
+                          <v-btn
+                            v-if="is('ROLE_ADMINISTRADOR')"
+                            icon
+                            @click="editarVigencia(vigencia)"
+                          >
                             <v-icon>mdi-pencil</v-icon>
                           </v-btn>
                         </v-card-title>
@@ -231,7 +238,10 @@
                                     </template>
 
                                     <v-list>
-                                      <v-list-item @click="editarPeriodo(vigencia, periodo)">
+                                      <v-list-item
+                                        v-if="is('ROLE_ADMINISTRADOR')"
+                                        @click="editarPeriodo(vigencia, periodo)"
+                                      >
                                         <v-list-item-title>Control de Fechas</v-list-item-title>
                                       </v-list-item>
                                       <v-list-item @click="irListadoPrestadores(vigencia, periodo)">
@@ -332,7 +342,7 @@ export default {
         fecha_inicio: "",
         fecha_fin: "",
         mes: { valor_texto: "" },
-        estado:"",
+        estado: "",
       },
       periodoDefault: {
         id: 0,
