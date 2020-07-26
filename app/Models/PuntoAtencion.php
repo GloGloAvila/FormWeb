@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 use App\Models\Departamento;
 use App\Models\Municipio;
@@ -73,6 +74,26 @@ class PuntoAtencion extends Model
     return $this->autorizado == PuntoAtencion::AUTORIZADO;
   }
 
+  public function tieneReporte(Periodo $periodo)
+  {
+    return $this->reportes()->where('periodo_id', $periodo->id)->count() > 0;
+  }
+
+  public function obtenerEstado(Periodo $periodo)
+  {
+    $esFechaPermitida = $periodo->fechaPermitida(Carbon::parse(Carbon::now())->toDateString());
+    $tieneReporte = $this->tieneReporte($periodo);
+
+    $estado = 'Pendiente';
+    if ($tieneReporte) {
+      $estado = 'Reportado';
+    } else if (!$esFechaPermitida) {
+      $estado = 'Sin reporte';
+    }
+
+    return $estado;
+  }
+
   static public function obtenerPuntoAtencionXMigracionId($migracionId)
   {
     return PuntoAtencion::where('migracion_id', $migracionId)->first();
@@ -97,5 +118,4 @@ class PuntoAtencion extends Model
   {
     return $this->hasMany(Reporte::class, 'punto_atencion_id', 'id');
   }
-
 }

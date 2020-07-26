@@ -54,6 +54,11 @@ class Periodo extends Model
     return $this->activo == Periodo::REGISTRO_ACTIVO;
   }
 
+  public function fechaPermitida($fecha)
+  {
+    return $fecha >= $this->fecha_inicio && $fecha <= $this->fecha_fin;
+  }
+
   public function vigencia()
   {
     return $this->belongsTo(Vigencia::class);

@@ -619,21 +619,21 @@
                     <td>{{ item.codigo.toUpperCase() }}</td>
                     <td>{{ item.nombre.toUpperCase() }}</td>
                     <td>
-                      <!-- <v-menu bottom origin="center center" transition="scale-transition">
+                      <v-menu bottom origin="center center" transition="scale-transition">
                         <template v-slot:activator="{ on, attrs }">
                           <v-chip
-                            color="blue"
+                            :color="getColor(item.estado)"
                             dark
                             v-bind="attrs"
                             v-on="on"
-                          >Puntos de atención</v-chip>
+                          >{{item.estado}}</v-chip>
                         </template>
                         <v-list>
-                          <v-list-item @click="irListadoPuntosAtencion(item)">
-                            <v-list-item-title>Gestión Puntos de atención</v-list-item-title>
+                          <v-list-item @click="modalFormulario = true">
+                            <v-list-item-title>Reporte Mensual</v-list-item-title>
                           </v-list-item>
                         </v-list>
-                      </v-menu>-->
+                      </v-menu>
                     </td>
                   </tr>
                 </template>
@@ -771,7 +771,7 @@ export default {
         },
         {
           text: "Estado",
-          value: "accion",
+          value: "estado",
           sortable: false,
         },
       ],
@@ -822,7 +822,7 @@ export default {
       return campo;
     },
     cargarListado() {
-      puntoAtencion.obtenerPuntosAtencion(this.prestador).then((response) => {
+      puntoAtencion.obtenerPuntosAtencion(this.vigencia, this.periodo, this.prestador).then((response) => {
         if (response.status === "success") {
           // this.procesando = false;
           // this.error = false;
@@ -842,10 +842,10 @@ export default {
         case "Pendiente":
           color = "orange";
           break;
-        case "Diligenciado":
+        case "Reportado":
           color = "green";
           break;
-        case "Sin información":
+        case "Sin reporte":
           color = "red";
           break;
       }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vigencia;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PuntosAtencionResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class PuntoAtencionController extends Controller
      * @param  \App\Models\Periodo  $periodo
      * @return \Illuminate\Http\Response
      */
-    public function index(Prestador  $prestador, Vigencia $vigencia, Periodo $periodo)
+    public function index(Vigencia $vigencia, Periodo $periodo, Prestador  $prestador)
     {
         $puntosAtencion = $prestador->puntosAtencion()
             ->with('departamento')
@@ -30,10 +31,17 @@ class PuntoAtencionController extends Controller
             ->orderBy('nombre', 'asc')
             ->get();
 
+        $puntosAtencionCollection = [];
+        foreach ($puntosAtencion as $puntoAtencion) {
+            $puntoAtencion['vigencia'] = $vigencia;
+            $puntoAtencion['periodo'] = $periodo;
+            $puntosAtencionCollection[] = $puntoAtencion; 
+        }
+
         return response()->json(
             [
                 'status' => 'success',
-                'data' => $puntosAtencion
+                'data' => PuntosAtencionResource::collection($puntosAtencionCollection)
             ],
             200
         );
