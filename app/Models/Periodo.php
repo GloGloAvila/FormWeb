@@ -80,33 +80,41 @@ class Periodo extends Model
     $estado = 'Pendiente';
     if ($tieneReporte) {
       $estado = 'Reportado';
-      if ($esFechaPermitida) {
-        $estado = 'Pendiente';
-      } else {
-        // Evaluar si todos los prestadores presentaron reporte de lo contrario está imcompleto
-        $prestadores = Prestador::where('activo', 1)->get();
-        $totalEstadoPendiente = 0;
-        $totalEstadoReportado = 0;
-        $totalEstadoIncompleto = 0;
-        $totalEstadoSinReporte = 0;
 
-        $periodo = Periodo::find($this->id);
-        foreach ($prestadores as $prestador) {
-          switch ($prestador->obtenerEstadoReporte($periodo)) {
-            case 'Pendiente':
-              $totalEstadoPendiente++;
-            case 'Reportado':
-              $totalEstadoReportado++;
-              break;
-            case 'Incompleto':
-              $totalEstadoIncompleto++;
-              break;
-            case 'Sin reporte':
-              $totalEstadoSinReporte++;
-              break;
-          }
+      // Evaluar si todos los prestadores presentaron reporte de lo contrario está imcompleto
+      $prestadores = Prestador::where('activo', 1)->get();
+      $totalEstadoPendiente = 0;
+      $totalEstadoReportado = 0;
+      $totalEstadoEnProceso = 0;
+      $totalEstadoIncompleto = 0;
+      $totalEstadoSinReporte = 0;
+
+      $periodo = Periodo::find($this->id);
+      foreach ($prestadores as $prestador) {
+        switch ($prestador->obtenerEstadoReporte($periodo)) {
+          case 'Pendiente':
+            $totalEstadoPendiente++;
+          case 'Reportado':
+            $totalEstadoReportado++;
+            break;
+          case 'En proceso':
+            $totalEstadoEnProceso++;
+            break;
+          case 'Incompleto':
+            $totalEstadoIncompleto++;
+            break;
+          case 'Sin reporte':
+            $totalEstadoSinReporte++;
+            break;
         }
+      }
 
+      if ($esFechaPermitida) {
+        $estado = 'En proceso';
+        if ($totalEstadoPendiente === 0 && $totalEstadoEnProceso === 0 && $totalEstadoIncompleto === 0 && $totalEstadoSinReporte === 0) {
+          $estado = 'Reportado';
+        }
+      } else {
         if ($totalEstadoPendiente || $totalEstadoIncompleto || $totalEstadoSinReporte) {
           $estado = 'Incompleto';
         }
@@ -115,8 +123,11 @@ class Periodo extends Model
       if (!$esFechaPermitida) {
         $estado = 'Sin reporte';
       }
-      if ($esFechaPendiente || $esFechaPermitida) {
+      if ($esFechaPendiente) {
         $estado = 'Pendiente';
+      }
+      if ($esFechaPermitida) {
+        $estado = 'En proceso';
       }
     }
 

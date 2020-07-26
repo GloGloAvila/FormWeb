@@ -432,6 +432,9 @@ export default {
           color = "green";
           break;
         case "Incompleto":
+          color = "lime";
+          break;
+        case "En proceso":
           color = "blue";
           break;
         case "Sin reporte":

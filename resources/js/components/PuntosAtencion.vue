@@ -629,7 +629,7 @@
                           >{{item.estado}}</v-chip>
                         </template>
                         <v-list>
-                          <v-list-item v-if="is('ROLE_PRESTADOR') && item.estado === 'Pendiente'" @click="modalFormulario = true">
+                          <v-list-item v-if="!is('ROLE_PRESTADOR') && item.estado === 'En proceso'" @click="modalFormulario = true">
                             <v-list-item-title>Reporte Mensual</v-list-item-title>
                           </v-list-item>
                           <v-list-item @click="modalFormularioDiligenciado = true">
@@ -851,6 +851,9 @@ export default {
           color = "green";
           break;
         case "Incompleto":
+          color = "lime";
+          break;
+        case "En proceso":
           color = "blue";
           break;
         case "Sin reporte":

@@ -63,17 +63,17 @@ class Prestador extends Model
       switch ($puntoAtencion->obtenerEstadoReporte($periodo)) {
         case 'Pendiente':
           $totalEstadoPendiente++;
-        break;
+          break;
         case 'Reportado':
           $totalEstadoReportado++;
-        break;
+          break;
         case 'Sin reporte':
           $totalEstadoSinReporte++;
-        break;
+          break;
       }
     }
 
-    $estado = 'Reportado';
+    $estado = 'En proceso';
     if ($totalEstadoPendiente > 0) {
       $estado = 'Pendiente';
     }
@@ -83,6 +83,10 @@ class Prestador extends Model
     if ($totalEstadoSinReporte > 0 && $totalEstadoReportado > 0) {
       $estado = 'Incompleto';
     }
+    if ($totalEstadoReportado > 0 && $totalEstadoSinReporte === 0 && $totalEstadoReportado === 0) {
+      $estado = 'Reportado';
+    }
+
 
     return $estado;
   }
@@ -95,12 +99,16 @@ class Prestador extends Model
     $estado = 'Pendiente';
     if ($estadoReporte === 'Reportado') {
       $estado = 'Reportado';
-    } else if (!$esFechaPermitida) {
-      if ($estadoReporte === 'Sin reporte') {
-        $estado = 'Sin reporte';
-      }
-      if ($estadoReporte === 'Incompleto') {
-        $estado = 'Incompleto';
+    } else {
+      if (!$esFechaPermitida) {
+        if ($estadoReporte === 'Sin reporte') {
+          $estado = 'Sin reporte';
+        }
+        if ($estadoReporte === 'Incompleto') {
+          $estado = 'Incompleto';
+        }
+      } else {
+        $estado = 'En proceso';
       }
     }
 

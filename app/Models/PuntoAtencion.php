@@ -88,13 +88,16 @@ class PuntoAtencion extends Model
     $estado = 'Pendiente';
     if ($tieneReporte) {
       $estado = 'Reportado';
-    } else if (!$esFechaPermitida) {
-      $estado = 'Sin reporte';
-      if ($esFechaPendiente) {
-        $estado = 'Pendiente';
+    } else {
+      if (!$esFechaPermitida) {
+        $estado = 'Sin reporte';
+        if ($esFechaPendiente) {
+          $estado = 'Pendiente';
+        }
+      } else {
+        $estado = 'En proceso';
       }
     }
-
     return $estado;
   }
 
