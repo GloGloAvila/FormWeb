@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Vigencia;
 
-use App\Http\Controllers\Controller;
 use App\Http\Resources\VigenciaResource;
-use App\Models\Mes;
-use App\Models\Periodo;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
 use App\Models\Vigencia;
-use Illuminate\Support\Facades\Log;
+use App\Models\Periodo;
+use App\Models\Mes;
+use App\User;
 
 class VigenciaController extends Controller
 {
@@ -20,6 +22,7 @@ class VigenciaController extends Controller
      */
     public function index()
     {
+
         $vigencias = Vigencia::where('activo', 1)
             ->with(
                 'periodos',

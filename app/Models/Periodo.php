@@ -4,13 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
+use App\Models\Funcionario;
 use App\Models\Prestador;
 use App\Models\Vigencia;
 use App\Models\Reporte;
 use App\Models\Mes;
+use App\User;
 
 class Periodo extends Model
 {
@@ -82,7 +85,21 @@ class Periodo extends Model
       $estado = 'Reportado';
 
       // Evaluar si todos los prestadores presentaron reporte de lo contrario está imcompleto
-      $prestadores = Prestador::where('activo', 1)->get();
+      if (Auth::guard('funcionario')->check()) {
+        $usuario = Funcionario::find(Auth::guard('funcionario')->user()->id);
+      } else {
+        $usuario = User::find(Auth::user()->id);
+      }
+
+      if ($usuario->hasrole('ROLE_ADMINISTRADOR')) {
+        $prestadores = Prestador::where('activo', 1)->get();
+      } else {
+        $prestador = $usuario->prestador()->first();
+        $prestadores = Prestador::where('activo', 1)
+          ->where('id', $prestador->id)
+          ->get();
+      }
+
       $totalEstadoPendiente = 0;
       $totalEstadoReportado = 0;
       $totalEstadoEnProceso = 0;

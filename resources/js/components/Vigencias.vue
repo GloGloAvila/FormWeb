@@ -125,7 +125,7 @@
               <h4 class="card-title mb-0">Vigencias</h4>
               <div
                 class="small text-muted"
-              >Listado {{is('ROLE_ADMINISTRADOR')}} - {{is('ROLE_PRESTADOR')}}</div>
+              >Listado</div>
             </CCol>
           </CRow>
           <CRow>

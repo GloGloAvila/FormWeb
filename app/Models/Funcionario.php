@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
 
+use App\Models\Prestador;
 use App\Models\Opcion;
 
 class Funcionario extends Authenticatable
@@ -80,6 +81,11 @@ class Funcionario extends Authenticatable
   public function tipoFuncionario()
   {
     return $this->belongsTo(Opcion::class, 'tipo_funcionario_id');
+  }
+
+  public function prestador()
+  {
+    return $this->belongsTo(Prestador::class);
   }
 
   public function reportes()
