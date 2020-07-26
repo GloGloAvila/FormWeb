@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Vigencia;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\VigenciaResource;
 use App\Models\Mes;
 use App\Models\Periodo;
 use Illuminate\Http\Request;
@@ -22,8 +23,7 @@ class VigenciaController extends Controller
         $vigencias = Vigencia::where('activo', 1)
             ->with(
                 'periodos',
-                'periodos.mes',
-                'periodos.estadoReporte'
+                'periodos.mes'
             )
             ->orderBy('nombre', 'desc')
             ->get();
@@ -31,7 +31,8 @@ class VigenciaController extends Controller
         return response()->json(
             [
                 'status' => 'success',
-                'data' => $vigencias
+                'data' => VigenciaResource::collection($vigencias)
+
             ],
             200
         );

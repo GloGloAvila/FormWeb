@@ -1,8 +1,8 @@
 export default {
-  obtenerPrestadores() {
+  obtenerPrestadores(periodo) {
     return new Promise((resolve, reject) => {
       axios
-        .get('prestadores')
+        .get(`periodos/${periodo.id}/prestadores`)
         .then(response => {
           resolve(response.data)
         }, response => {

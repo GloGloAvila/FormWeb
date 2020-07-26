@@ -62,7 +62,7 @@
                   v-slot:header.tipo_prestador_id="{ header }"
                 >{{ header.text.toUpperCase() }}</template>
                 <template v-slot:header.nombre="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.accion="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:header.estado="{ header }">{{ header.text.toUpperCase() }}</template>
 
                 <template v-slot:item="{ item, index }">
                   <tr>
@@ -73,11 +73,11 @@
                       <v-menu bottom origin="center center" transition="scale-transition">
                         <template v-slot:activator="{ on, attrs }">
                           <v-chip
-                            color="blue"
+                            :color="getColor(item.estado)"
                             dark
                             v-bind="attrs"
                             v-on="on"
-                          >Puntos de atención</v-chip>
+                          >{{item.estado}}</v-chip>
                         </template>
                         <v-list>
                           <v-list-item @click="irListadoPuntosAtencion(item)">
@@ -157,6 +157,9 @@ export default {
   name: "Prestadores",
   components: {},
   mounted() {
+    this.vigencia = JSON.parse(sessionStorage.getItem("datosVigencia"));
+    this.periodo = JSON.parse(sessionStorage.getItem("datosPeriodo"));
+
     this.cargarListado();
   },
   data() {
@@ -170,6 +173,8 @@ export default {
       sortDesc: false,
       sortBy: "nombre",
       keys: ["Nombre", "Tipo"],
+      vigencia: {},
+      periodo: {},
       modalFormulario: false,
       botonGuardar: true,
       pasoFormulario: 1,
@@ -205,8 +210,8 @@ export default {
           sortable: false,
         },
         {
-          text: "Acciones",
-          value: "accion",
+          text: "Estado",
+          value: "estado",
           sortable: false,
         },
       ],
@@ -246,17 +251,38 @@ export default {
       this.itemsPerPage = number === "Todo" ? -1 : number;
     },
     cargarListado() {
-      prestador.obtenerPrestadores().then((response) => {
+      prestador.obtenerPrestadores(this.periodo).then((response) => {
         if (response.status === "success") {
           // this.procesando = false;
           // this.error = false;
           this.prestadores = response.data;
+          // console.log(this.prestadores);
         } else {
           // this.procesando = false;
           // this.error = true;
           console.log(response);
         }
       });
+    },
+    getColor(estado) {
+      let color = "gray";
+
+      switch (estado) {
+        case "Pendiente":
+          color = "orange";
+          break;
+        case "Reportado":
+          color = "green";
+          break;
+        case "Incompleto":
+          color = "blue";
+          break;
+        case "Sin reporte":
+          color = "red";
+          break;
+      }
+
+      return color;
     },
     // editItem(item) {
     //   this.editedIndex = this.puntosAtencion.indexOf(item);

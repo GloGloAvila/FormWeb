@@ -29,7 +29,7 @@ class PuntosAtencionResource extends JsonResource
             "fecha_registro" => $this->fecha_registro,
             "autorizado" => $this->autorizado,
             "activo" => $this->activo,
-            "estado" => $this->obtenerEstado($this->periodo),
+            "estado" => $this->obtenerEstadoReporte($this->periodo),
             "departamento" => $this->departamento,
             "municipio" => $this->municipio,
             "prestador" => $this->prestador

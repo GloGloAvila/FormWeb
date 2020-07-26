@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 use App\Models\PuntoAtencion;
 use App\Models\Opcion;
@@ -49,6 +50,61 @@ class Prestador extends Model
   public function estaActivo()
   {
     return $this->activo == Prestador::REGISTRO_ACTIVO;
+  }
+
+  public function estadoReporte(Periodo $periodo)
+  {
+    $puntosAtencion = $this->puntosAtencion()->get();
+    $totalEstadoPendiente = 0;
+    $totalEstadoReportado = 0;
+    $totalEstadoSinReporte = 0;
+
+    foreach ($puntosAtencion as $puntoAtencion) {
+      switch ($puntoAtencion->obtenerEstadoReporte($periodo)) {
+        case 'Pendiente':
+          $totalEstadoPendiente++;
+        break;
+        case 'Reportado':
+          $totalEstadoReportado++;
+        break;
+        case 'Sin reporte':
+          $totalEstadoSinReporte++;
+        break;
+      }
+    }
+
+    $estado = 'Reportado';
+    if ($totalEstadoPendiente > 0) {
+      $estado = 'Pendiente';
+    }
+    if ($totalEstadoSinReporte > 0 && $totalEstadoReportado === 0) {
+      $estado = 'Sin reporte';
+    }
+    if ($totalEstadoSinReporte > 0 && $totalEstadoReportado > 0) {
+      $estado = 'Incompleto';
+    }
+
+    return $estado;
+  }
+
+  public function obtenerEstadoReporte(Periodo $periodo)
+  {
+    $esFechaPermitida = $periodo->fechaPermitida(Carbon::parse(Carbon::now())->toDateString());
+    $estadoReporte = $this->estadoReporte($periodo);
+
+    $estado = 'Pendiente';
+    if ($estadoReporte === 'Reportado') {
+      $estado = 'Reportado';
+    } else if (!$esFechaPermitida) {
+      if ($estadoReporte === 'Sin reporte') {
+        $estado = 'Sin reporte';
+      }
+      if ($estadoReporte === 'Incompleto') {
+        $estado = 'Incompleto';
+      }
+    }
+
+    return $estado;
   }
 
   static public function obtenerPrestadorXMigracionId($migracionId)

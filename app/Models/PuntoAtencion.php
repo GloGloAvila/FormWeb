@@ -79,9 +79,10 @@ class PuntoAtencion extends Model
     return $this->reportes()->where('periodo_id', $periodo->id)->count() > 0;
   }
 
-  public function obtenerEstado(Periodo $periodo)
+  public function obtenerEstadoReporte(Periodo $periodo)
   {
     $esFechaPermitida = $periodo->fechaPermitida(Carbon::parse(Carbon::now())->toDateString());
+    $esFechaPendiente = $periodo->fechaPendiente(Carbon::parse(Carbon::now())->toDateString());
     $tieneReporte = $this->tieneReporte($periodo);
 
     $estado = 'Pendiente';
@@ -89,6 +90,9 @@ class PuntoAtencion extends Model
       $estado = 'Reportado';
     } else if (!$esFechaPermitida) {
       $estado = 'Sin reporte';
+      if ($esFechaPendiente) {
+        $estado = 'Pendiente';
+      }
     }
 
     return $estado;

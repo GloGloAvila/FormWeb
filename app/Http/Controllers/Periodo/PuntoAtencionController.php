@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Periodo;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PuntosAtencionResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+
+use App\Http\Resources\PuntosAtencionResource;
 
 use App\Models\Prestador;
 use App\Models\Periodo;
@@ -22,6 +23,7 @@ class PuntoAtencionController extends Controller
     public function index(Periodo $periodo, Prestador  $prestador)
     {
         $puntosAtencion = $prestador->puntosAtencion()
+            ->where('activo', 1)
             ->with('departamento')
             ->with('municipio')
             ->with('prestador')

@@ -217,17 +217,17 @@
                                   >
                                     <template v-slot:activator="{ on, attrs }">
                                       <v-chip
-                                        v-show="periodo.estado_reporte.valor_texto !== 'No aplica'"
-                                        :color="getColor(periodo.estado_reporte.valor_texto)"
+                                        v-show="periodo.estado !== 'No aplica'"
+                                        :color="getColor(periodo.estado)"
                                         dark
                                         v-bind="attrs"
                                         v-on="on"
-                                      >{{ periodo.estado_reporte.valor_texto }}</v-chip>
+                                      >{{ periodo.estado }}</v-chip>
                                       <v-chip
-                                        v-show="periodo.estado_reporte.valor_texto === 'No aplica'"
-                                        :color="getColor(periodo.estado_reporte.valor_texto)"
+                                        v-show="periodo.estado === 'No aplica'"
+                                        :color="getColor(periodo.estado)"
                                         dark
-                                      >{{ periodo.estado_reporte.valor_texto }}</v-chip>
+                                      >{{ periodo.estado }}</v-chip>
                                     </template>
 
                                     <v-list>
@@ -332,14 +332,14 @@ export default {
         fecha_inicio: "",
         fecha_fin: "",
         mes: { valor_texto: "" },
-        estado_reporte: { valor_texto: "" },
+        estado:"",
       },
       periodoDefault: {
         id: 0,
         fecha_inicio: "",
         fecha_fin: "",
         mes: { valor_texto: "" },
-        estado_reporte: { valor_texto: "" },
+        estado: "",
       },
       menuFechaInicio: false,
       fechaInicioRules: [(v) => !!v || "Fecha inicio es requerida"],
@@ -400,6 +400,7 @@ export default {
           // this.procesando = false;
           // this.error = false;
           this.vigencias = response.data;
+          // console.log(this.vigencias);
         } else {
           // this.procesando = false;
           // this.error = true;
@@ -419,6 +420,9 @@ export default {
           break;
         case "Reportado":
           color = "green";
+          break;
+        case "Incompleto":
+          color = "blue";
           break;
         case "Sin reporte":
           color = "red";

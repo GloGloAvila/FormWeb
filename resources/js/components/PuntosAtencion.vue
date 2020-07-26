@@ -827,7 +827,7 @@ export default {
           // this.procesando = false;
           // this.error = false;
           this.puntosAtencion = response.data;
-          console.log(this.puntosAtencion);
+          // console.log(this.puntosAtencion);
         } else {
           // this.procesando = false;
           // this.error = true;
@@ -844,6 +844,9 @@ export default {
           break;
         case "Reportado":
           color = "green";
+          break;
+        case "Incompleto":
+          color = "blue";
           break;
         case "Sin reporte":
           color = "red";
