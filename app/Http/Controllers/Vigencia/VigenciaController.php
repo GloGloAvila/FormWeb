@@ -28,6 +28,7 @@ class VigenciaController extends Controller
                 'periodos',
                 'periodos.mes'
             )
+            // ->limit(1)
             ->orderBy('nombre', 'desc')
             ->get();
 

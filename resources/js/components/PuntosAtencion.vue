@@ -1,9 +1,11 @@
 <template>
   <div>
     <v-app id="inspire">
-      <v-dialog v-model="modalFormulario" persistent max-width="80%" style="z-index: 1040">
+      <v-dialog v-model="modalFormularioReporte" persistent max-width="80%" style="z-index: 1040">
         <v-card>
-          <v-card-title class="headline text-uppercase">Resolución 293 de 2017 - {{ formTitle }}</v-card-title>
+          <v-card-title
+            class="headline text-uppercase"
+          >Resolución 293 de 2017 - {{ tituloFormularioReporte }}</v-card-title>
 
           <v-card-subtitle>En cumplimiento de lo enunciado en la Resolución 293 de 2017, se dispone este formulario, en caso de inquietudes por favor leer las recomendaciones del recuadro azul, y para un desplazamiento más rápido entre los campos utilice la tecla de tabulación.</v-card-subtitle>
 
@@ -20,13 +22,13 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="TOTAL (*)"></v-text-field>
+                      <v-text-field v-model="personasInscritasTotal" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.calories" label="Hombres"></v-text-field>
+                      <v-text-field v-model="editedItem.personas_inscritas_hombres" label="Hombres"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Mujeres"></v-text-field>
+                      <v-text-field v-model="editedItem.personas_inscritas_mujeres" label="Mujeres"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -56,13 +58,19 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="TOTAL (*)"></v-text-field>
+                      <v-text-field v-model="remisionesAEmpleadoresTotal" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.calories" label="Hombres"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.remisiones_a_empleadores_hombres"
+                        label="Hombres"
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Mujeres"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.remisiones_a_empleadores_mujeres"
+                        label="Mujeres"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -82,13 +90,13 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="TOTAL (*)"></v-text-field>
+                      <v-text-field v-model="colocadosTotal" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.calories" label="Hombres"></v-text-field>
+                      <v-text-field v-model="editedItem.colocados_hombres" label="Hombres"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Mujeres"></v-text-field>
+                      <v-text-field v-model="editedItem.colocados_mujeres" label="Mujeres"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -121,13 +129,16 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="Victimas"></v-text-field>
+                      <v-text-field v-model="editedItem.colocados_victimas" label="Victimas"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.calories" label="Jóvenes"></v-text-field>
+                      <v-text-field v-model="editedItem.colocados_jovenes" label="Jóvenes"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Discapacidad"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.colocados_discapacidad"
+                        label="Discapacidad"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -150,7 +161,10 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="TOTAL (*)"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.empleadores_inscritos_total"
+                        label="TOTAL (*)"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -173,13 +187,13 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="TOTAL (*)"></v-text-field>
+                      <v-text-field v-model="personasAtendidas" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.calories" label="Hombres"></v-text-field>
+                      <v-text-field v-model="editedItem.personas_atendidas_hombres" label="Hombres"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Mujeres"></v-text-field>
+                      <v-text-field v-model="editedItem.personas_atendidas_mujeres" label="Mujeres"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -202,13 +216,19 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="TOTAL (*)"></v-text-field>
+                      <v-text-field v-model="personasAtendidasEnTalleres" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.calories" label="Hombres"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.personas_atendidas_en_talleres_hombres"
+                        label="Hombres"
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Mujeres"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.personas_atendidas_en_talleres_mujeres"
+                        label="Mujeres"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -246,13 +266,13 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="TOTAL (*)"></v-text-field>
+                      <v-text-field v-model="remitidasFormacion" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="Hombres"></v-text-field>
+                      <v-text-field v-model="remitidasFormacionHombres" label="Hombres"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="Mujeres"></v-text-field>
+                      <v-text-field v-model="remitidasFormacionMujeres" label="Mujeres"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -267,30 +287,33 @@
                       <v-row>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.calories"
+                            v-model="editedItem.remitidas_formacion_competencias_hombres"
                             label="Competencias claves transversales"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.fat"
+                            v-model="editedItem.remitidas_formacion_tic_hombres"
                             label="Tecnologías de la Información y la Comunicaciones TIC"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.name"
+                            v-model="editedItem.remitidas_formacion_alfabetizacion_hombres"
                             label="Alfabetización o Bachillerato"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.calories"
+                            v-model="editedItem.remitidas_formacion_entrenamiento_hombres"
                             label="Entrenamiento o reentrenamiento técnico"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
-                          <v-text-field v-model="editedItem.fat" label="Técnico laboral"></v-text-field>
+                          <v-text-field
+                            v-model="editedItem.remitidas_formacion_tecnico_hombres"
+                            label="Técnico laboral"
+                          ></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -306,30 +329,33 @@
                       <v-row>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.calories"
+                            v-model="editedItem.remitidas_formacion_competencias_mujeres"
                             label="Competencias claves transversales"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.fat"
+                            v-model="editedItem.remitidas_formacion_tic_mujeres"
                             label="Tecnologías de la Información y la Comunicaciones TIC"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.name"
+                            v-model="editedItem.remitidas_formacion_alfabetizacion_mujeres"
                             label="Alfabetización o Bachillerato"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.calories"
+                            v-model="editedItem.remitidas_formacion_entrenamiento_mujeres"
                             label="Entrenamiento o reentrenamiento técnico"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
-                          <v-text-field v-model="editedItem.fat" label="Técnico laboral"></v-text-field>
+                          <v-text-field
+                            v-model="editedItem.remitidas_formacion_tecnico_mujeres"
+                            label="Técnico laboral"
+                          ></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -370,13 +396,13 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="TOTAL (*)"></v-text-field>
+                      <v-text-field v-model="culminaronFormacion" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="Hombres"></v-text-field>
+                      <v-text-field v-model="culminaronFormacionHombres" label="Hombres"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="Mujeres"></v-text-field>
+                      <v-text-field v-model="culminaronFormacionMujeres" label="Mujeres"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -391,30 +417,33 @@
                       <v-row>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.calories"
+                            v-model="editedItem.culminaron_formacion_competencias_hombres"
                             label="Competencias claves transversales"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.fat"
+                            v-model="editedItem.culminaron_formacion_tic_hombres"
                             label="Tecnologías de la Información y la Comunicaciones TIC"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.name"
+                            v-model="editedItem.culminaron_formacion_alfabetizacion_hombres"
                             label="Alfabetización o Bachillerato"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.calories"
+                            v-model="editedItem.culminaron_formacion_entrenamiento_hombres"
                             label="Entrenamiento o reentrenamiento técnico"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
-                          <v-text-field v-model="editedItem.fat" label="Técnico laboral"></v-text-field>
+                          <v-text-field
+                            v-model="editedItem.culminaron_formacion_tecnico_hombres"
+                            label="Técnico laboral"
+                          ></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -430,30 +459,33 @@
                       <v-row>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.calories"
+                            v-model="editedItem.culminaron_formacion_competencias_mujeres"
                             label="Competencias claves transversales"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.fat"
+                            v-model="editedItem.culminaron_formacion_tic_mujeres"
                             label="Tecnologías de la Información y la Comunicaciones TIC"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.name"
+                            v-model="editedItem.culminaron_formacion_alfabetizacion_mujeres"
                             label="Alfabetización o Bachillerato"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.calories"
+                            v-model="editedItem.culminaron_formacion_entrenamiento_mujeres"
                             label="Entrenamiento o reentrenamiento técnico"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
-                          <v-text-field v-model="editedItem.fat" label="Técnico laboral"></v-text-field>
+                          <v-text-field
+                            v-model="editedItem.culminaron_formacion_tecnico_mujeres"
+                            label="Técnico laboral"
+                          ></v-text-field>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -479,13 +511,19 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="TOTAL (*)"></v-text-field>
+                      <v-text-field v-model="remitidasProgramasEmprendimiento" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.calories" label="Hombres"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.remitidas_programas_emprendimiento_hombres"
+                        label="Hombres"
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Mujeres"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.remitidas_programas_emprendimiento_mujeres"
+                        label="Mujeres"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -508,7 +546,7 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.name" label="TOTAL (*)"></v-text-field>
+                      <v-text-field v-model="editedItem.pqrs_radicados_total" label="TOTAL (*)"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -528,7 +566,7 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
-                      <v-textarea counter label="Observaciones" v-model="editedItem.name"></v-textarea>
+                      <v-textarea counter label="Observaciones" v-model="editedItem.observaciones"></v-textarea>
                       <!-- :rules="rules" :value="value" -->
                     </v-col>
                   </v-row>
@@ -629,7 +667,10 @@
                           >{{item.estado}}</v-chip>
                         </template>
                         <v-list>
-                          <v-list-item v-if="is('ROLE_PRESTADOR') && item.estado === 'En proceso'" @click="modalFormulario = true">
+                          <v-list-item
+                            v-if="is('ROLE_PRESTADOR') && item.estado === 'En proceso'"
+                            @click="modalFormularioReporte = true"
+                          >
                             <v-list-item-title>Reporte Mensual</v-list-item-title>
                           </v-list-item>
                           <v-list-item @click="modalFormularioDiligenciado = true">
@@ -728,23 +769,138 @@ export default {
       vigencia: {},
       periodo: {},
       prestador: {},
-      modalFormulario: false,
+      modalFormularioReporte: false,
+      modalFormularioDiligenciado: false,
       botonGuardar: true,
       pasoFormulario: 1,
       editedIndex: -1,
       editedItem: {
-        name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        personas_inscritas_total: 0,
+        personas_inscritas_hombres: 0,
+        personas_inscritas_mujeres: 0,
+        remisiones_a_empleadores_total: 0,
+        remisiones_a_empleadores_hombres: 0,
+        remisiones_a_empleadores_mujeres: 0,
+        colocados_total: 0,
+        colocados_hombres: 0,
+        colocados_mujeres: 0,
+        colocados_victimas: 0,
+        colocados_jovenes: 0,
+        colocados_discapacidad: 0,
+        empleadores_inscritos_total: 0,
+        vacantes_registradas_total: 0,
+        vacantes_registradas_contrato_laboral: 0,
+        vacantes_registradas_prestacion: 0,
+        remitidas_gestion_empleo_total: 0,
+        remitidas_entrevista_orientacion: 0,
+        remitidas_talleres_orientacion: 0,
+        personas_atendidas: 0,
+        personas_atendidas_hombres: 0,
+        personas_atendidas_mujeres: 0,
+        personas_atendidas_en_talleres: 0,
+        personas_atendidas_en_talleres_hombres: 0,
+        personas_atendidas_en_talleres_mujeres: 0,
+        remitidas_formacion: 0,
+        remitidas_formacion_hombres: 0,
+        remitidas_formacion_competencias_hombres: 0,
+        remitidas_formacion_tic_hombres: 0,
+        remitidas_formacion_alfabetizacion_hombres: 0,
+        remitidas_formacion_entrenamiento_hombres: 0,
+        remitidas_formacion_tecnico_hombres: 0,
+        remitidas_formacion_mujeres: 0,
+        remitidas_formacion_competencias_mujeres: 0,
+        remitidas_formacion_tic_mujeres: 0,
+        remitidas_formacion_alfabetizacion_mujeres: 0,
+        remitidas_formacion_entrenamiento_mujeres: 0,
+        remitidas_formacion_tecnico_mujeres: 0,
+        culminaron_formacion: 0,
+        culminaron_formacion_hombres: 0,
+        culminaron_formacion_competencias_hombres: 0,
+        culminaron_formacion_tic_hombres: 0,
+        culminaron_formacion_alfabetizacion_hombres: 0,
+        culminaron_formacion_entrenamiento_hombres: 0,
+        culminaron_formacion_tecnico_hombres: 0,
+        culminaron_formacion_mujeres: 0,
+        culminaron_formacion_competencias_mujeres: 0,
+        culminaron_formacion_tic_mujeres: 0,
+        culminaron_formacion_alfabetizacion_mujeres: 0,
+        culminaron_formacion_entrenamiento_mujeres: 0,
+        culminaron_formacion_tecnico_mujeres: 0,
+        remitidas_talleres_emprendimiento: 0,
+        remitidas_servicios_complementarios: 0,
+        talleres_realizados: 0,
+        remitidas_programas_emprendimiento: 0,
+        remitidas_programas_emprendimiento_hombres: 0,
+        remitidas_programas_emprendimiento_mujeres: 0,
+        pqrs_radicados_total: 0,
+        personas_orientadas: 0,
+        colocados_40mil: 0,
+        transnacionales: 0,
+        observaciones: "",
       },
       defaultItem: {
-        name: "",
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
+        personas_inscritas_total: 0,
+        personas_inscritas_hombres: 0,
+        personas_inscritas_mujeres: 0,
+        remisiones_a_empleadores_total: 0,
+        remisiones_a_empleadores_hombres: 0,
+        remisiones_a_empleadores_mujeres: 0,
+        colocados_total: 0,
+        colocados_hombres: 0,
+        colocados_mujeres: 0,
+        colocados_victimas: 0,
+        colocados_jovenes: 0,
+        colocados_discapacidad: 0,
+        empleadores_inscritos_total: 0,
+        vacantes_registradas_total: 0,
+        vacantes_registradas_contrato_laboral: 0,
+        vacantes_registradas_prestacion: 0,
+        remitidas_gestion_empleo_total: 0,
+        remitidas_entrevista_orientacion: 0,
+        remitidas_talleres_orientacion: 0,
+        personas_atendidas: 0,
+        personas_atendidas_hombres: 0,
+        personas_atendidas_mujeres: 0,
+        personas_atendidas_en_talleres: 0,
+        personas_atendidas_en_talleres_hombres: 0,
+        personas_atendidas_en_talleres_mujeres: 0,
+        remitidas_formacion: 0,
+        remitidas_formacion_hombres: 0,
+        remitidas_formacion_competencias_hombres: 0,
+        remitidas_formacion_tic_hombres: 0,
+        remitidas_formacion_alfabetizacion_hombres: 0,
+        remitidas_formacion_entrenamiento_hombres: 0,
+        remitidas_formacion_tecnico_hombres: 0,
+        remitidas_formacion_mujeres: 0,
+        remitidas_formacion_competencias_mujeres: 0,
+        remitidas_formacion_tic_mujeres: 0,
+        remitidas_formacion_alfabetizacion_mujeres: 0,
+        remitidas_formacion_entrenamiento_mujeres: 0,
+        remitidas_formacion_tecnico_mujeres: 0,
+        culminaron_formacion: 0,
+        culminaron_formacion_hombres: 0,
+        culminaron_formacion_competencias_hombres: 0,
+        culminaron_formacion_tic_hombres: 0,
+        culminaron_formacion_alfabetizacion_hombres: 0,
+        culminaron_formacion_entrenamiento_hombres: 0,
+        culminaron_formacion_tecnico_hombres: 0,
+        culminaron_formacion_mujeres: 0,
+        culminaron_formacion_competencias_mujeres: 0,
+        culminaron_formacion_tic_mujeres: 0,
+        culminaron_formacion_alfabetizacion_mujeres: 0,
+        culminaron_formacion_entrenamiento_mujeres: 0,
+        culminaron_formacion_tecnico_mujeres: 0,
+        remitidas_talleres_emprendimiento: 0,
+        remitidas_servicios_complementarios: 0,
+        talleres_realizados: 0,
+        remitidas_programas_emprendimiento: 0,
+        remitidas_programas_emprendimiento_hombres: 0,
+        remitidas_programas_emprendimiento_mujeres: 0,
+        pqrs_radicados_total: 0,
+        personas_orientadas: 0,
+        colocados_40mil: 0,
+        transnacionales: 0,
+        observaciones: "",
       },
       headers: [
         {
@@ -796,10 +952,46 @@ export default {
     filteredKeys() {
       return this.keys.filter((key) => key !== `Nombre`);
     },
-    formTitle() {
+    tituloFormularioReporte() {
       return this.editedIndex === -1
         ? "Formulario de reporte mensual"
         : "Formulario de reporte mensual";
+    },
+    personasInscritasTotal() {
+      return this.obtenerTotalPersonasIncritas();
+    },
+    remisionesAEmpleadoresTotal() {
+      return this.obtenerTotalRemisionesAEmpleadores();
+    },
+    colocadosTotal() {
+      return this.obtenerTotalColocados();
+    },
+    personasAtendidas() {
+      return this.obtenerTotalPersonasAtendidas();
+    },
+    personasAtendidasEnTalleres() {
+      return this.obtenerTotalPersonasAtendidasEnTalleres();
+    },
+    remitidasFormacion() {
+      return this.obtenerTotalPersonasRemitidasAFormacion();
+    },
+    remitidasFormacionHombres() {
+      return this.obtenerTotalPersonasRemitidasAFormacionHombres();
+    },
+    remitidasFormacionMujeres() {
+      return this.obtenerTotalPersonasRemitidasAFormacionMujeres();
+    },
+    culminaronFormacion() {
+      return this.obtenerTotalPersonasQueCulminaronFormacion();
+    },
+    culminaronFormacionHombres() {
+      return this.obtenerTotalPersonasQueCulminaronFormacionHombres();
+    },
+    culminaronFormacionMujeres() {
+      return this.obtenerTotalPersonasQueCulminaronFormacionMujeres();
+    },
+    remitidasProgramasEmprendimiento() {
+      return this.obtenerTotalPersonasRemitidasAEmprendimiento();
     },
   },
   watch: {
@@ -823,6 +1015,166 @@ export default {
       campo = campo === "departamento" ? "departamento.nombre" : campo;
       campo = campo === "municipio" ? "municipio.nombre" : campo;
       return campo;
+    },
+    obtenerTotalPersonasIncritas() {
+      this.editedItem.personas_inscritas_total =
+        (parseInt(this.editedItem.personas_inscritas_hombres) > 0
+          ? parseInt(this.editedItem.personas_inscritas_hombres)
+          : 0) +
+        (parseInt(this.editedItem.personas_inscritas_mujeres) > 0
+          ? parseInt(this.editedItem.personas_inscritas_mujeres)
+          : 0);
+      return this.editedItem.personas_inscritas_total;
+    },
+    obtenerTotalRemisionesAEmpleadores() {
+      this.editedItem.remisiones_a_empleadores_total =
+        (parseInt(this.editedItem.remisiones_a_empleadores_hombres) > 0
+          ? parseInt(this.editedItem.remisiones_a_empleadores_hombres)
+          : 0) +
+        (parseInt(this.editedItem.remisiones_a_empleadores_mujeres) > 0
+          ? parseInt(this.editedItem.remisiones_a_empleadores_mujeres)
+          : 0);
+      return this.editedItem.remisiones_a_empleadores_total;
+    },
+    obtenerTotalColocados() {
+      this.editedItem.colocados_total =
+        (parseInt(this.editedItem.colocados_hombres) > 0
+          ? parseInt(this.editedItem.colocados_hombres)
+          : 0) +
+        (parseInt(this.editedItem.colocados_mujeres) > 0
+          ? parseInt(this.editedItem.colocados_mujeres)
+          : 0);
+      return this.editedItem.colocados_total;
+    },
+    obtenerTotalPersonasAtendidas() {
+      this.editedItem.personas_atendidas =
+        (parseInt(this.editedItem.personas_atendidas_hombres) > 0
+          ? parseInt(this.editedItem.personas_atendidas_hombres)
+          : 0) +
+        (parseInt(this.editedItem.personas_atendidas_mujeres) > 0
+          ? parseInt(this.editedItem.personas_atendidas_mujeres)
+          : 0);
+      return this.editedItem.personas_atendidas;
+    },
+    obtenerTotalPersonasAtendidasEnTalleres() {
+      this.editedItem.personas_atendidas_en_talleres =
+        (parseInt(this.editedItem.personas_atendidas_en_talleres_hombres) > 0
+          ? parseInt(this.editedItem.personas_atendidas_en_talleres_hombres)
+          : 0) +
+        (parseInt(this.editedItem.personas_atendidas_en_talleres_mujeres) > 0
+          ? parseInt(this.editedItem.personas_atendidas_en_talleres_mujeres)
+          : 0);
+      return this.editedItem.personas_atendidas_en_talleres;
+    },
+    obtenerTotalPersonasRemitidasAFormacion() {
+      this.editedItem.remitidas_formacion =
+        this.obtenerTotalPersonasRemitidasAFormacionHombres() +
+        this.obtenerTotalPersonasRemitidasAFormacionMujeres();
+      return this.editedItem.remitidas_formacion;
+    },
+    obtenerTotalPersonasRemitidasAFormacionHombres() {
+      this.editedItem.remitidas_formacion_hombres =
+        (parseInt(this.editedItem.remitidas_formacion_competencias_hombres) > 0
+          ? parseInt(this.editedItem.remitidas_formacion_competencias_hombres)
+          : 0) +
+        (parseInt(this.editedItem.remitidas_formacion_tic_hombres) > 0
+          ? parseInt(this.editedItem.remitidas_formacion_tic_hombres)
+          : 0) +
+        (parseInt(this.editedItem.remitidas_formacion_alfabetizacion_hombres) >
+        0
+          ? parseInt(this.editedItem.remitidas_formacion_alfabetizacion_hombres)
+          : 0) +
+        (parseInt(this.editedItem.remitidas_formacion_entrenamiento_hombres) > 0
+          ? parseInt(this.editedItem.remitidas_formacion_entrenamiento_hombres)
+          : 0) +
+        (parseInt(this.editedItem.remitidas_formacion_tecnico_hombres) > 0
+          ? parseInt(this.editedItem.remitidas_formacion_tecnico_hombres)
+          : 0);
+      return this.editedItem.remitidas_formacion_hombres;
+    },
+    obtenerTotalPersonasRemitidasAFormacionMujeres() {
+      this.editedItem.remitidas_formacion_mujeres =
+        (parseInt(this.editedItem.remitidas_formacion_competencias_mujeres) > 0
+          ? parseInt(this.editedItem.remitidas_formacion_competencias_mujeres)
+          : 0) +
+        (parseInt(this.editedItem.remitidas_formacion_tic_mujeres) > 0
+          ? parseInt(this.editedItem.remitidas_formacion_tic_mujeres)
+          : 0) +
+        (parseInt(this.editedItem.remitidas_formacion_alfabetizacion_mujeres) >
+        0
+          ? parseInt(this.editedItem.remitidas_formacion_alfabetizacion_mujeres)
+          : 0) +
+        (parseInt(this.editedItem.remitidas_formacion_entrenamiento_mujeres) > 0
+          ? parseInt(this.editedItem.remitidas_formacion_entrenamiento_mujeres)
+          : 0) +
+        (parseInt(this.editedItem.remitidas_formacion_tecnico_mujeres) > 0
+          ? parseInt(this.editedItem.remitidas_formacion_tecnico_mujeres)
+          : 0);
+      return this.editedItem.remitidas_formacion_mujeres;
+    },
+    obtenerTotalPersonasQueCulminaronFormacion() {
+      this.editedItem.culminaron_formacion =
+        this.obtenerTotalPersonasQueCulminaronFormacionHombres() +
+        this.obtenerTotalPersonasQueCulminaronFormacionMujeres();
+      return this.editedItem.culminaron_formacion;
+    },
+    obtenerTotalPersonasQueCulminaronFormacionHombres() {
+      this.editedItem.culminaron_formacion_hombres =
+        (parseInt(this.editedItem.culminaron_formacion_competencias_hombres) > 0
+          ? parseInt(this.editedItem.culminaron_formacion_competencias_hombres)
+          : 0) +
+        (parseInt(this.editedItem.culminaron_formacion_tic_hombres) > 0
+          ? parseInt(this.editedItem.culminaron_formacion_tic_hombres)
+          : 0) +
+        (parseInt(this.editedItem.culminaron_formacion_alfabetizacion_hombres) >
+        0
+          ? parseInt(
+              this.editedItem.culminaron_formacion_alfabetizacion_hombres
+            )
+          : 0) +
+        (parseInt(this.editedItem.culminaron_formacion_entrenamiento_hombres) >
+        0
+          ? parseInt(this.editedItem.culminaron_formacion_entrenamiento_hombres)
+          : 0) +
+        (parseInt(this.editedItem.culminaron_formacion_tecnico_hombres) > 0
+          ? parseInt(this.editedItem.culminaron_formacion_tecnico_hombres)
+          : 0);
+      return this.editedItem.culminaron_formacion_hombres;
+    },
+    obtenerTotalPersonasQueCulminaronFormacionMujeres() {
+      this.editedItem.culminaron_formacion_mujeres =
+        (parseInt(this.editedItem.culminaron_formacion_competencias_mujeres) > 0
+          ? parseInt(this.editedItem.culminaron_formacion_competencias_mujeres)
+          : 0) +
+        (parseInt(this.editedItem.culminaron_formacion_tic_mujeres) > 0
+          ? parseInt(this.editedItem.culminaron_formacion_tic_mujeres)
+          : 0) +
+        (parseInt(this.editedItem.culminaron_formacion_alfabetizacion_mujeres) >
+        0
+          ? parseInt(
+              this.editedItem.culminaron_formacion_alfabetizacion_mujeres
+            )
+          : 0) +
+        (parseInt(this.editedItem.culminaron_formacion_entrenamiento_mujeres) >
+        0
+          ? parseInt(this.editedItem.culminaron_formacion_entrenamiento_mujeres)
+          : 0) +
+        (parseInt(this.editedItem.culminaron_formacion_tecnico_mujeres) > 0
+          ? parseInt(this.editedItem.culminaron_formacion_tecnico_mujeres)
+          : 0);
+      return this.editedItem.culminaron_formacion_mujeres;
+    },
+    obtenerTotalPersonasRemitidasAEmprendimiento() {
+      this.editedItem.remitidas_programas_emprendimiento =
+        (parseInt(this.editedItem.remitidas_programas_emprendimiento_hombres) >
+        0
+          ? parseInt(this.editedItem.remitidas_programas_emprendimiento_hombres)
+          : 0) +
+        (parseInt(this.editedItem.remitidas_programas_emprendimiento_mujeres) >
+        0
+          ? parseInt(this.editedItem.remitidas_programas_emprendimiento_mujeres)
+          : 0);
+      return this.editedItem.remitidas_programas_emprendimiento;
     },
     cargarListado() {
       puntoAtencion
@@ -866,9 +1218,11 @@ export default {
     // editItem(item) {
     //   this.editedIndex = this.puntosAtencion.indexOf(item);
     //   this.editedItem = Object.assign({}, item);
-    //   this.modalFormulario = true;
+    //   this.modalFormularioReporte = true;
     // },
     save() {
+      console.log(this.editedItem);
+
       // if (this.editedIndex > -1) {
       //   Object.assign(this.desserts[this.editedIndex], this.editedItem);
       // } else {
@@ -877,7 +1231,7 @@ export default {
       this.close();
     },
     close() {
-      this.modalFormulario = false;
+      this.modalFormularioReporte = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
