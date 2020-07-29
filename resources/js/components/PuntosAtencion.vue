@@ -10,12 +10,12 @@
           <v-card-subtitle>En cumplimiento de lo enunciado en la Resolución 293 de 2017, se dispone este formulario, en caso de inquietudes por favor leer las recomendaciones del recuadro azul, y para un desplazamiento más rápido entre los campos utilice la tecla de tabulación.</v-card-subtitle>
 
           <v-card-text>
-            <v-stepper v-model="pasoFormulario" vertical>
+            <v-stepper v-model="pasoFormulario" ref="formulario" vertical>
               <v-stepper-step
                 :complete="pasoFormulario > 1"
                 step="1"
               >Número de Personas inscritas/registradas</v-stepper-step>
-              <v-stepper-content step="1">
+              <v-stepper-content step="1" ref="primerPaso">
                 <v-alert icon="mdi-alert-octagon-outline" prominent text type="info">
                   <small>Es el número de personas que registraron/inscribieron su hoja de vida en el sistema de información que le ha sido autorizado al prestador, de manera asistida por el Punto de Atención o autónoma (auto-registro de forma virtual), en el mes de referencia. Esta información debe presentarse desagregada por sexo: hombres y mujeres.</small>
                 </v-alert>
@@ -25,10 +25,16 @@
                       <v-text-field v-model="personasInscritasTotal" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.personas_inscritas_hombres" label="Hombres"></v-text-field>
+                      <v-text-field
+                        v-model="formularioReporte.personas_inscritas_hombres"
+                        label="Hombres"
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.personas_inscritas_mujeres" label="Mujeres"></v-text-field>
+                      <v-text-field
+                        v-model="formularioReporte.personas_inscritas_mujeres"
+                        label="Mujeres"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -62,13 +68,13 @@
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.remisiones_a_empleadores_hombres"
+                        v-model="formularioReporte.remisiones_a_empleadores_hombres"
                         label="Hombres"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.remisiones_a_empleadores_mujeres"
+                        v-model="formularioReporte.remisiones_a_empleadores_mujeres"
                         label="Mujeres"
                       ></v-text-field>
                     </v-col>
@@ -93,10 +99,10 @@
                       <v-text-field v-model="colocadosTotal" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.colocados_hombres" label="Hombres"></v-text-field>
+                      <v-text-field v-model="formularioReporte.colocados_hombres" label="Hombres"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.colocados_mujeres" label="Mujeres"></v-text-field>
+                      <v-text-field v-model="formularioReporte.colocados_mujeres" label="Mujeres"></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -129,14 +135,14 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.colocados_victimas" label="Victimas"></v-text-field>
+                      <v-text-field v-model="formularioReporte.colocados_victimas" label="Victimas"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.colocados_jovenes" label="Jóvenes"></v-text-field>
+                      <v-text-field v-model="formularioReporte.colocados_jovenes" label="Jóvenes"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.colocados_discapacidad"
+                        v-model="formularioReporte.colocados_discapacidad"
                         label="Discapacidad"
                       ></v-text-field>
                     </v-col>
@@ -162,7 +168,7 @@
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.empleadores_inscritos_total"
+                        v-model="formularioReporte.empleadores_inscritos_total"
                         label="TOTAL (*)"
                       ></v-text-field>
                     </v-col>
@@ -190,10 +196,16 @@
                       <v-text-field v-model="personasAtendidas" label="TOTAL (*)"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.personas_atendidas_hombres" label="Hombres"></v-text-field>
+                      <v-text-field
+                        v-model="formularioReporte.personas_atendidas_hombres"
+                        label="Hombres"
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.personas_atendidas_mujeres" label="Mujeres"></v-text-field>
+                      <v-text-field
+                        v-model="formularioReporte.personas_atendidas_mujeres"
+                        label="Mujeres"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -220,13 +232,13 @@
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.personas_atendidas_en_talleres_hombres"
+                        v-model="formularioReporte.personas_atendidas_en_talleres_hombres"
                         label="Hombres"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.personas_atendidas_en_talleres_mujeres"
+                        v-model="formularioReporte.personas_atendidas_en_talleres_mujeres"
                         label="Mujeres"
                       ></v-text-field>
                     </v-col>
@@ -287,31 +299,31 @@
                       <v-row>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.remitidas_formacion_competencias_hombres"
+                            v-model="formularioReporte.remitidas_formacion_competencias_hombres"
                             label="Competencias claves transversales"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.remitidas_formacion_tic_hombres"
+                            v-model="formularioReporte.remitidas_formacion_tic_hombres"
                             label="Tecnologías de la Información y la Comunicaciones TIC"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.remitidas_formacion_alfabetizacion_hombres"
+                            v-model="formularioReporte.remitidas_formacion_alfabetizacion_hombres"
                             label="Alfabetización o Bachillerato"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.remitidas_formacion_entrenamiento_hombres"
+                            v-model="formularioReporte.remitidas_formacion_entrenamiento_hombres"
                             label="Entrenamiento o reentrenamiento técnico"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.remitidas_formacion_tecnico_hombres"
+                            v-model="formularioReporte.remitidas_formacion_tecnico_hombres"
                             label="Técnico laboral"
                           ></v-text-field>
                         </v-col>
@@ -329,31 +341,31 @@
                       <v-row>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.remitidas_formacion_competencias_mujeres"
+                            v-model="formularioReporte.remitidas_formacion_competencias_mujeres"
                             label="Competencias claves transversales"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.remitidas_formacion_tic_mujeres"
+                            v-model="formularioReporte.remitidas_formacion_tic_mujeres"
                             label="Tecnologías de la Información y la Comunicaciones TIC"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.remitidas_formacion_alfabetizacion_mujeres"
+                            v-model="formularioReporte.remitidas_formacion_alfabetizacion_mujeres"
                             label="Alfabetización o Bachillerato"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.remitidas_formacion_entrenamiento_mujeres"
+                            v-model="formularioReporte.remitidas_formacion_entrenamiento_mujeres"
                             label="Entrenamiento o reentrenamiento técnico"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.remitidas_formacion_tecnico_mujeres"
+                            v-model="formularioReporte.remitidas_formacion_tecnico_mujeres"
                             label="Técnico laboral"
                           ></v-text-field>
                         </v-col>
@@ -417,31 +429,31 @@
                       <v-row>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.culminaron_formacion_competencias_hombres"
+                            v-model="formularioReporte.culminaron_formacion_competencias_hombres"
                             label="Competencias claves transversales"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.culminaron_formacion_tic_hombres"
+                            v-model="formularioReporte.culminaron_formacion_tic_hombres"
                             label="Tecnologías de la Información y la Comunicaciones TIC"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.culminaron_formacion_alfabetizacion_hombres"
+                            v-model="formularioReporte.culminaron_formacion_alfabetizacion_hombres"
                             label="Alfabetización o Bachillerato"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.culminaron_formacion_entrenamiento_hombres"
+                            v-model="formularioReporte.culminaron_formacion_entrenamiento_hombres"
                             label="Entrenamiento o reentrenamiento técnico"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.culminaron_formacion_tecnico_hombres"
+                            v-model="formularioReporte.culminaron_formacion_tecnico_hombres"
                             label="Técnico laboral"
                           ></v-text-field>
                         </v-col>
@@ -459,31 +471,31 @@
                       <v-row>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.culminaron_formacion_competencias_mujeres"
+                            v-model="formularioReporte.culminaron_formacion_competencias_mujeres"
                             label="Competencias claves transversales"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.culminaron_formacion_tic_mujeres"
+                            v-model="formularioReporte.culminaron_formacion_tic_mujeres"
                             label="Tecnologías de la Información y la Comunicaciones TIC"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.culminaron_formacion_alfabetizacion_mujeres"
+                            v-model="formularioReporte.culminaron_formacion_alfabetizacion_mujeres"
                             label="Alfabetización o Bachillerato"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.culminaron_formacion_entrenamiento_mujeres"
+                            v-model="formularioReporte.culminaron_formacion_entrenamiento_mujeres"
                             label="Entrenamiento o reentrenamiento técnico"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="12" md="12">
                           <v-text-field
-                            v-model="editedItem.culminaron_formacion_tecnico_mujeres"
+                            v-model="formularioReporte.culminaron_formacion_tecnico_mujeres"
                             label="Técnico laboral"
                           ></v-text-field>
                         </v-col>
@@ -515,13 +527,13 @@
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.remitidas_programas_emprendimiento_hombres"
+                        v-model="formularioReporte.remitidas_programas_emprendimiento_hombres"
                         label="Hombres"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
-                        v-model="editedItem.remitidas_programas_emprendimiento_mujeres"
+                        v-model="formularioReporte.remitidas_programas_emprendimiento_mujeres"
                         label="Mujeres"
                       ></v-text-field>
                     </v-col>
@@ -546,7 +558,10 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.pqrs_radicados_total" label="TOTAL (*)"></v-text-field>
+                      <v-text-field
+                        v-model="formularioReporte.pqrs_radicados_total"
+                        label="TOTAL (*)"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -566,7 +581,11 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="12" md="12">
-                      <v-textarea counter label="Observaciones" v-model="editedItem.observaciones"></v-textarea>
+                      <v-textarea
+                        counter
+                        label="Observaciones"
+                        v-model="formularioReporte.observaciones"
+                      ></v-textarea>
                       <!-- :rules="rules" :value="value" -->
                     </v-col>
                   </v-row>
@@ -581,8 +600,8 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-            <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
+            <v-btn color="blue darken-1" text @click="cerrarFormularioReporte">Cancelar</v-btn>
+            <v-btn color="blue darken-1" text @click="guardarFormularioReporte">Guardar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -669,11 +688,11 @@
                         <v-list>
                           <v-list-item
                             v-if="is('ROLE_PRESTADOR') && item.estado === 'En proceso'"
-                            @click="modalFormularioReporte = true"
+                            @click="mostrarFormularioReporte(item)"
                           >
                             <v-list-item-title>Reporte Mensual</v-list-item-title>
                           </v-list-item>
-                          <v-list-item @click="modalFormularioDiligenciado = true">
+                          <v-list-item @click="mostrarReporteDiligenciado(item)">
                             <v-list-item-title>Ver Reporte Diligenciado</v-list-item-title>
                           </v-list-item>
                         </v-list>
@@ -744,6 +763,7 @@
 
 <script>
 import puntoAtencion from "../services/puntoAtencion.js";
+import reporte from "../services/reporte.js";
 
 export default {
   name: "PuntosAtencion",
@@ -773,8 +793,9 @@ export default {
       modalFormularioDiligenciado: false,
       botonGuardar: true,
       pasoFormulario: 1,
-      editedIndex: -1,
-      editedItem: {
+      scrollInvoked: 0,
+      formularioReporteIndex: -1,
+      formularioReporte: {
         personas_inscritas_total: 0,
         personas_inscritas_hombres: 0,
         personas_inscritas_mujeres: 0,
@@ -838,7 +859,7 @@ export default {
         transnacionales: 0,
         observaciones: "",
       },
-      defaultItem: {
+      formularioReporteDefault: {
         personas_inscritas_total: 0,
         personas_inscritas_hombres: 0,
         personas_inscritas_mujeres: 0,
@@ -901,6 +922,45 @@ export default {
         colocados_40mil: 0,
         transnacionales: 0,
         observaciones: "",
+      },
+      puntoAtencionIndex: -1,
+      puntoAtencion: {
+        activo: 0,
+        autorizado: 0,
+        codigo: "",
+        correo_electronico: "",
+        departamento: {},
+        departamento_id: 0,
+        direccion: "",
+        estado: "",
+        fecha_registro: "",
+        id: 0,
+        migracion_id: "",
+        municipio: {},
+        municipio_id: 0,
+        nombre: "",
+        prestador: {},
+        prestador_id: 0,
+        sitio_web: "",
+      },
+      puntoAtencionDefault: {
+        activo: 0,
+        autorizado: 0,
+        codigo: "",
+        correo_electronico: "",
+        departamento: {},
+        departamento_id: 0,
+        direccion: "",
+        estado: "",
+        fecha_registro: "",
+        id: 0,
+        migracion_id: "",
+        municipio: {},
+        municipio_id: 0,
+        nombre: "",
+        prestador: {},
+        prestador_id: 0,
+        sitio_web: "",
       },
       headers: [
         {
@@ -953,7 +1013,7 @@ export default {
       return this.keys.filter((key) => key !== `Nombre`);
     },
     tituloFormularioReporte() {
-      return this.editedIndex === -1
+      return this.formularioReporteIndex === -1
         ? "Formulario de reporte mensual"
         : "Formulario de reporte mensual";
     },
@@ -1017,164 +1077,224 @@ export default {
       return campo;
     },
     obtenerTotalPersonasIncritas() {
-      this.editedItem.personas_inscritas_total =
-        (parseInt(this.editedItem.personas_inscritas_hombres) > 0
-          ? parseInt(this.editedItem.personas_inscritas_hombres)
+      this.formularioReporte.personas_inscritas_total =
+        (parseInt(this.formularioReporte.personas_inscritas_hombres) > 0
+          ? parseInt(this.formularioReporte.personas_inscritas_hombres)
           : 0) +
-        (parseInt(this.editedItem.personas_inscritas_mujeres) > 0
-          ? parseInt(this.editedItem.personas_inscritas_mujeres)
+        (parseInt(this.formularioReporte.personas_inscritas_mujeres) > 0
+          ? parseInt(this.formularioReporte.personas_inscritas_mujeres)
           : 0);
-      return this.editedItem.personas_inscritas_total;
+      return this.formularioReporte.personas_inscritas_total;
     },
     obtenerTotalRemisionesAEmpleadores() {
-      this.editedItem.remisiones_a_empleadores_total =
-        (parseInt(this.editedItem.remisiones_a_empleadores_hombres) > 0
-          ? parseInt(this.editedItem.remisiones_a_empleadores_hombres)
+      this.formularioReporte.remisiones_a_empleadores_total =
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_hombres) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_hombres)
           : 0) +
-        (parseInt(this.editedItem.remisiones_a_empleadores_mujeres) > 0
-          ? parseInt(this.editedItem.remisiones_a_empleadores_mujeres)
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres)
           : 0);
-      return this.editedItem.remisiones_a_empleadores_total;
+      return this.formularioReporte.remisiones_a_empleadores_total;
     },
     obtenerTotalColocados() {
-      this.editedItem.colocados_total =
-        (parseInt(this.editedItem.colocados_hombres) > 0
-          ? parseInt(this.editedItem.colocados_hombres)
+      this.formularioReporte.colocados_total =
+        (parseInt(this.formularioReporte.colocados_hombres) > 0
+          ? parseInt(this.formularioReporte.colocados_hombres)
           : 0) +
-        (parseInt(this.editedItem.colocados_mujeres) > 0
-          ? parseInt(this.editedItem.colocados_mujeres)
+        (parseInt(this.formularioReporte.colocados_mujeres) > 0
+          ? parseInt(this.formularioReporte.colocados_mujeres)
           : 0);
-      return this.editedItem.colocados_total;
+      return this.formularioReporte.colocados_total;
     },
     obtenerTotalPersonasAtendidas() {
-      this.editedItem.personas_atendidas =
-        (parseInt(this.editedItem.personas_atendidas_hombres) > 0
-          ? parseInt(this.editedItem.personas_atendidas_hombres)
+      this.formularioReporte.personas_atendidas =
+        (parseInt(this.formularioReporte.personas_atendidas_hombres) > 0
+          ? parseInt(this.formularioReporte.personas_atendidas_hombres)
           : 0) +
-        (parseInt(this.editedItem.personas_atendidas_mujeres) > 0
-          ? parseInt(this.editedItem.personas_atendidas_mujeres)
+        (parseInt(this.formularioReporte.personas_atendidas_mujeres) > 0
+          ? parseInt(this.formularioReporte.personas_atendidas_mujeres)
           : 0);
-      return this.editedItem.personas_atendidas;
+      return this.formularioReporte.personas_atendidas;
     },
     obtenerTotalPersonasAtendidasEnTalleres() {
-      this.editedItem.personas_atendidas_en_talleres =
-        (parseInt(this.editedItem.personas_atendidas_en_talleres_hombres) > 0
-          ? parseInt(this.editedItem.personas_atendidas_en_talleres_hombres)
+      this.formularioReporte.personas_atendidas_en_talleres =
+        (parseInt(
+          this.formularioReporte.personas_atendidas_en_talleres_hombres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.personas_atendidas_en_talleres_hombres
+            )
           : 0) +
-        (parseInt(this.editedItem.personas_atendidas_en_talleres_mujeres) > 0
-          ? parseInt(this.editedItem.personas_atendidas_en_talleres_mujeres)
+        (parseInt(
+          this.formularioReporte.personas_atendidas_en_talleres_mujeres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.personas_atendidas_en_talleres_mujeres
+            )
           : 0);
-      return this.editedItem.personas_atendidas_en_talleres;
+      return this.formularioReporte.personas_atendidas_en_talleres;
     },
     obtenerTotalPersonasRemitidasAFormacion() {
-      this.editedItem.remitidas_formacion =
+      this.formularioReporte.remitidas_formacion =
         this.obtenerTotalPersonasRemitidasAFormacionHombres() +
         this.obtenerTotalPersonasRemitidasAFormacionMujeres();
-      return this.editedItem.remitidas_formacion;
+      return this.formularioReporte.remitidas_formacion;
     },
     obtenerTotalPersonasRemitidasAFormacionHombres() {
-      this.editedItem.remitidas_formacion_hombres =
-        (parseInt(this.editedItem.remitidas_formacion_competencias_hombres) > 0
-          ? parseInt(this.editedItem.remitidas_formacion_competencias_hombres)
+      this.formularioReporte.remitidas_formacion_hombres =
+        (parseInt(
+          this.formularioReporte.remitidas_formacion_competencias_hombres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.remitidas_formacion_competencias_hombres
+            )
           : 0) +
-        (parseInt(this.editedItem.remitidas_formacion_tic_hombres) > 0
-          ? parseInt(this.editedItem.remitidas_formacion_tic_hombres)
+        (parseInt(this.formularioReporte.remitidas_formacion_tic_hombres) > 0
+          ? parseInt(this.formularioReporte.remitidas_formacion_tic_hombres)
           : 0) +
-        (parseInt(this.editedItem.remitidas_formacion_alfabetizacion_hombres) >
+        (parseInt(
+          this.formularioReporte.remitidas_formacion_alfabetizacion_hombres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.remitidas_formacion_alfabetizacion_hombres
+            )
+          : 0) +
+        (parseInt(
+          this.formularioReporte.remitidas_formacion_entrenamiento_hombres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.remitidas_formacion_entrenamiento_hombres
+            )
+          : 0) +
+        (parseInt(this.formularioReporte.remitidas_formacion_tecnico_hombres) >
         0
-          ? parseInt(this.editedItem.remitidas_formacion_alfabetizacion_hombres)
-          : 0) +
-        (parseInt(this.editedItem.remitidas_formacion_entrenamiento_hombres) > 0
-          ? parseInt(this.editedItem.remitidas_formacion_entrenamiento_hombres)
-          : 0) +
-        (parseInt(this.editedItem.remitidas_formacion_tecnico_hombres) > 0
-          ? parseInt(this.editedItem.remitidas_formacion_tecnico_hombres)
+          ? parseInt(this.formularioReporte.remitidas_formacion_tecnico_hombres)
           : 0);
-      return this.editedItem.remitidas_formacion_hombres;
+      return this.formularioReporte.remitidas_formacion_hombres;
     },
     obtenerTotalPersonasRemitidasAFormacionMujeres() {
-      this.editedItem.remitidas_formacion_mujeres =
-        (parseInt(this.editedItem.remitidas_formacion_competencias_mujeres) > 0
-          ? parseInt(this.editedItem.remitidas_formacion_competencias_mujeres)
+      this.formularioReporte.remitidas_formacion_mujeres =
+        (parseInt(
+          this.formularioReporte.remitidas_formacion_competencias_mujeres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.remitidas_formacion_competencias_mujeres
+            )
           : 0) +
-        (parseInt(this.editedItem.remitidas_formacion_tic_mujeres) > 0
-          ? parseInt(this.editedItem.remitidas_formacion_tic_mujeres)
+        (parseInt(this.formularioReporte.remitidas_formacion_tic_mujeres) > 0
+          ? parseInt(this.formularioReporte.remitidas_formacion_tic_mujeres)
           : 0) +
-        (parseInt(this.editedItem.remitidas_formacion_alfabetizacion_mujeres) >
+        (parseInt(
+          this.formularioReporte.remitidas_formacion_alfabetizacion_mujeres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.remitidas_formacion_alfabetizacion_mujeres
+            )
+          : 0) +
+        (parseInt(
+          this.formularioReporte.remitidas_formacion_entrenamiento_mujeres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.remitidas_formacion_entrenamiento_mujeres
+            )
+          : 0) +
+        (parseInt(this.formularioReporte.remitidas_formacion_tecnico_mujeres) >
         0
-          ? parseInt(this.editedItem.remitidas_formacion_alfabetizacion_mujeres)
-          : 0) +
-        (parseInt(this.editedItem.remitidas_formacion_entrenamiento_mujeres) > 0
-          ? parseInt(this.editedItem.remitidas_formacion_entrenamiento_mujeres)
-          : 0) +
-        (parseInt(this.editedItem.remitidas_formacion_tecnico_mujeres) > 0
-          ? parseInt(this.editedItem.remitidas_formacion_tecnico_mujeres)
+          ? parseInt(this.formularioReporte.remitidas_formacion_tecnico_mujeres)
           : 0);
-      return this.editedItem.remitidas_formacion_mujeres;
+      return this.formularioReporte.remitidas_formacion_mujeres;
     },
     obtenerTotalPersonasQueCulminaronFormacion() {
-      this.editedItem.culminaron_formacion =
+      this.formularioReporte.culminaron_formacion =
         this.obtenerTotalPersonasQueCulminaronFormacionHombres() +
         this.obtenerTotalPersonasQueCulminaronFormacionMujeres();
-      return this.editedItem.culminaron_formacion;
+      return this.formularioReporte.culminaron_formacion;
     },
     obtenerTotalPersonasQueCulminaronFormacionHombres() {
-      this.editedItem.culminaron_formacion_hombres =
-        (parseInt(this.editedItem.culminaron_formacion_competencias_hombres) > 0
-          ? parseInt(this.editedItem.culminaron_formacion_competencias_hombres)
-          : 0) +
-        (parseInt(this.editedItem.culminaron_formacion_tic_hombres) > 0
-          ? parseInt(this.editedItem.culminaron_formacion_tic_hombres)
-          : 0) +
-        (parseInt(this.editedItem.culminaron_formacion_alfabetizacion_hombres) >
-        0
+      this.formularioReporte.culminaron_formacion_hombres =
+        (parseInt(
+          this.formularioReporte.culminaron_formacion_competencias_hombres
+        ) > 0
           ? parseInt(
-              this.editedItem.culminaron_formacion_alfabetizacion_hombres
+              this.formularioReporte.culminaron_formacion_competencias_hombres
             )
           : 0) +
-        (parseInt(this.editedItem.culminaron_formacion_entrenamiento_hombres) >
-        0
-          ? parseInt(this.editedItem.culminaron_formacion_entrenamiento_hombres)
+        (parseInt(this.formularioReporte.culminaron_formacion_tic_hombres) > 0
+          ? parseInt(this.formularioReporte.culminaron_formacion_tic_hombres)
           : 0) +
-        (parseInt(this.editedItem.culminaron_formacion_tecnico_hombres) > 0
-          ? parseInt(this.editedItem.culminaron_formacion_tecnico_hombres)
+        (parseInt(
+          this.formularioReporte.culminaron_formacion_alfabetizacion_hombres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.culminaron_formacion_alfabetizacion_hombres
+            )
+          : 0) +
+        (parseInt(
+          this.formularioReporte.culminaron_formacion_entrenamiento_hombres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.culminaron_formacion_entrenamiento_hombres
+            )
+          : 0) +
+        (parseInt(this.formularioReporte.culminaron_formacion_tecnico_hombres) >
+        0
+          ? parseInt(
+              this.formularioReporte.culminaron_formacion_tecnico_hombres
+            )
           : 0);
-      return this.editedItem.culminaron_formacion_hombres;
+      return this.formularioReporte.culminaron_formacion_hombres;
     },
     obtenerTotalPersonasQueCulminaronFormacionMujeres() {
-      this.editedItem.culminaron_formacion_mujeres =
-        (parseInt(this.editedItem.culminaron_formacion_competencias_mujeres) > 0
-          ? parseInt(this.editedItem.culminaron_formacion_competencias_mujeres)
-          : 0) +
-        (parseInt(this.editedItem.culminaron_formacion_tic_mujeres) > 0
-          ? parseInt(this.editedItem.culminaron_formacion_tic_mujeres)
-          : 0) +
-        (parseInt(this.editedItem.culminaron_formacion_alfabetizacion_mujeres) >
-        0
+      this.formularioReporte.culminaron_formacion_mujeres =
+        (parseInt(
+          this.formularioReporte.culminaron_formacion_competencias_mujeres
+        ) > 0
           ? parseInt(
-              this.editedItem.culminaron_formacion_alfabetizacion_mujeres
+              this.formularioReporte.culminaron_formacion_competencias_mujeres
             )
           : 0) +
-        (parseInt(this.editedItem.culminaron_formacion_entrenamiento_mujeres) >
-        0
-          ? parseInt(this.editedItem.culminaron_formacion_entrenamiento_mujeres)
+        (parseInt(this.formularioReporte.culminaron_formacion_tic_mujeres) > 0
+          ? parseInt(this.formularioReporte.culminaron_formacion_tic_mujeres)
           : 0) +
-        (parseInt(this.editedItem.culminaron_formacion_tecnico_mujeres) > 0
-          ? parseInt(this.editedItem.culminaron_formacion_tecnico_mujeres)
+        (parseInt(
+          this.formularioReporte.culminaron_formacion_alfabetizacion_mujeres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.culminaron_formacion_alfabetizacion_mujeres
+            )
+          : 0) +
+        (parseInt(
+          this.formularioReporte.culminaron_formacion_entrenamiento_mujeres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.culminaron_formacion_entrenamiento_mujeres
+            )
+          : 0) +
+        (parseInt(this.formularioReporte.culminaron_formacion_tecnico_mujeres) >
+        0
+          ? parseInt(
+              this.formularioReporte.culminaron_formacion_tecnico_mujeres
+            )
           : 0);
-      return this.editedItem.culminaron_formacion_mujeres;
+      return this.formularioReporte.culminaron_formacion_mujeres;
     },
     obtenerTotalPersonasRemitidasAEmprendimiento() {
-      this.editedItem.remitidas_programas_emprendimiento =
-        (parseInt(this.editedItem.remitidas_programas_emprendimiento_hombres) >
-        0
-          ? parseInt(this.editedItem.remitidas_programas_emprendimiento_hombres)
+      this.formularioReporte.remitidas_programas_emprendimiento =
+        (parseInt(
+          this.formularioReporte.remitidas_programas_emprendimiento_hombres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.remitidas_programas_emprendimiento_hombres
+            )
           : 0) +
-        (parseInt(this.editedItem.remitidas_programas_emprendimiento_mujeres) >
-        0
-          ? parseInt(this.editedItem.remitidas_programas_emprendimiento_mujeres)
+        (parseInt(
+          this.formularioReporte.remitidas_programas_emprendimiento_mujeres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.remitidas_programas_emprendimiento_mujeres
+            )
           : 0);
-      return this.editedItem.remitidas_programas_emprendimiento;
+      return this.formularioReporte.remitidas_programas_emprendimiento;
     },
     cargarListado() {
       puntoAtencion
@@ -1215,26 +1335,43 @@ export default {
 
       return color;
     },
-    // editItem(item) {
-    //   this.editedIndex = this.puntosAtencion.indexOf(item);
-    //   this.editedItem = Object.assign({}, item);
-    //   this.modalFormularioReporte = true;
-    // },
-    save() {
-      console.log(this.editedItem);
-
-      // if (this.editedIndex > -1) {
-      //   Object.assign(this.desserts[this.editedIndex], this.editedItem);
-      // } else {
-      //   this.desserts.push(this.editedItem);
-      // }
-      this.close();
+    mostrarFormularioReporte(puntoAtencion) {
+      this.puntoAtencionIndex = this.puntosAtencion.indexOf(puntoAtencion);
+      this.puntoAtencion = Object.assign({}, puntoAtencion);
+      this.modalFormularioReporte = true;
     },
-    close() {
+    guardarFormularioReporte() {
+      console.log(this.formularioReporte);
+
+      if (this.puntoAtencionIndex > -1) {
+        reporte
+          .guardarReporte(this.puntoAtencion, this.periodo, this.formularioReporte)
+          .then((response) => {
+            console.log(response.data);
+            Object.assign(this.puntosAtencion[this.puntoAtencionIndex], response.data);
+            this.cerrarFormularioReporte();
+          })
+          .catch((error) => {
+            console.log(error);
+            this.cerrarFormularioReporte();
+          });
+
+        Object.assign(
+          this.puntosAtencion[this.puntoAtencionIndex],
+          this.puntoAtencion
+        );
+      } else {
+        // this.desserts.push(this.formularioReporte);
+      }
+    },
+    cerrarFormularioReporte() {
+      document.getElementsByClassName("v-dialog--active")[0].scrollTop = 0;
       this.modalFormularioReporte = false;
+
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+        this.formularioReporte = Object.assign({}, this.formularioReporteDefault);
+        this.formularioReporteIndex = -1;
+        this.pasoFormulario = 1;
       });
     },
   },

@@ -60,7 +60,8 @@ class Prestador extends Model
     $totalEstadoSinReporte = 0;
 
     foreach ($puntosAtencion as $puntoAtencion) {
-      switch ($puntoAtencion->obtenerEstadoReporte($periodo)) {
+      $e = $puntoAtencion->obtenerEstadoReporte($periodo);
+      switch ($e) {
         case 'Pendiente':
           $totalEstadoPendiente++;
           break;
@@ -71,6 +72,7 @@ class Prestador extends Model
           $totalEstadoSinReporte++;
           break;
       }
+  
     }
 
     $estado = 'En proceso';
@@ -83,10 +85,9 @@ class Prestador extends Model
     if ($totalEstadoSinReporte > 0 && $totalEstadoReportado > 0) {
       $estado = 'Incompleto';
     }
-    if ($totalEstadoReportado > 0 && $totalEstadoSinReporte === 0 && $totalEstadoReportado === 0) {
+    if ($totalEstadoReportado > 0 && $totalEstadoSinReporte === 0 && $totalEstadoPendiente === 0) {
       $estado = 'Reportado';
     }
-
 
     return $estado;
   }

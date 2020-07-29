@@ -98,6 +98,7 @@ class PuntoAtencion extends Model
         $estado = 'En proceso';
       }
     }
+
     return $estado;
   }
 

@@ -35,3 +35,7 @@ Route::resource('prestadores.puntosAtencion', 'Prestador\PuntoAtencionController
     'prestadores' => 'prestador'
 ]);
 
+Route::resource('puntosAtencion.periodos.reportes', 'PuntoAtencion\PeriodoController', ['only' => ['store']])->parameters([
+    'puntosAtencion' => 'puntoAtencion',
+    'periodos' => 'periodo'
+]);
