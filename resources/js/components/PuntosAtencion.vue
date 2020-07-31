@@ -10,38 +10,55 @@
           <v-card-subtitle>En cumplimiento de lo enunciado en la Resolución 293 de 2017, se dispone este formulario, en caso de inquietudes por favor leer las recomendaciones del recuadro azul, y para un desplazamiento más rápido entre los campos utilice la tecla de tabulación.</v-card-subtitle>
 
           <v-card-text>
-            <v-stepper v-model="pasoFormulario" ref="formulario" vertical>
+            <v-stepper v-model="pasoFormulario" vertical>
               <v-stepper-step
                 :complete="pasoFormulario > 1"
                 step="1"
               >Número de Personas inscritas/registradas</v-stepper-step>
-              <v-stepper-content step="1" ref="primerPaso">
+              <v-stepper-content step="1">
                 <v-alert icon="mdi-alert-octagon-outline" prominent text type="info">
                   <small>Es el número de personas que registraron/inscribieron su hoja de vida en el sistema de información que le ha sido autorizado al prestador, de manera asistida por el Punto de Atención o autónoma (auto-registro de forma virtual), en el mes de referencia. Esta información debe presentarse desagregada por sexo: hombres y mujeres.</small>
                 </v-alert>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="personasInscritasTotal" label="TOTAL (*)"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.personas_inscritas_hombres"
-                        label="Hombres"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.personas_inscritas_mujeres"
-                        label="Mujeres"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 1">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 2">Siguiente</v-btn>
-                </div>
+                <v-form ref="formPaso1" v-model="paso1Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="personasInscritasTotal"
+                          label="TOTAL (*)"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.personas_inscritas_hombres"
+                          label="Hombres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.personas_inscritas_mujeres"
+                          label="Mujeres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 2"
+                      v-if="paso1Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step
@@ -61,29 +78,47 @@
                     </ol>
                   </small>
                 </v-alert>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="remisionesAEmpleadoresTotal" label="TOTAL (*)"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.remisiones_a_empleadores_hombres"
-                        label="Hombres"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.remisiones_a_empleadores_mujeres"
-                        label="Mujeres"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 1">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 3">Siguiente</v-btn>
-                </div>
+                <v-form ref="formPaso2" v-model="paso2Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="remisionesAEmpleadoresTotal"
+                          label="TOTAL (*)"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.remisiones_a_empleadores_hombres"
+                          label="Hombres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.remisiones_a_empleadores_mujeres"
+                          label="Mujeres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 1" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 3"
+                      v-if="paso2Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step :complete="pasoFormulario > 3" step="3">Número de personas colocadas</v-stepper-step>
@@ -93,23 +128,47 @@
                     <small>Corresponde al número total de personas que fueron contratadas por el empleador como resultado de la gestión y validación realizada por el Punto de Atención, en el mes de referencia. Esta información debe presentarse desagregada por sexo: hombres y mujeres.</small>
                   </p>
                 </v-alert>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="colocadosTotal" label="TOTAL (*)"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="formularioReporte.colocados_hombres" label="Hombres"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="formularioReporte.colocados_mujeres" label="Mujeres"></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 2">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 4">Siguiente</v-btn>
-                </div>
+                <v-form ref="formPaso3" v-model="paso3Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="colocadosTotal"
+                          label="TOTAL (*)"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.colocados_hombres"
+                          label="Hombres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.colocados_mujeres"
+                          label="Mujeres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 2" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 4"
+                      v-if="paso3Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step
@@ -132,26 +191,46 @@
                     </ol>
                   </small>
                 </v-alert>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="formularioReporte.colocados_victimas" label="Victimas"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="formularioReporte.colocados_jovenes" label="Jóvenes"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.colocados_discapacidad"
-                        label="Discapacidad"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 3">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 5">Siguiente</v-btn>
-                </div>
+                <v-form ref="formPaso4" v-model="paso4Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.colocados_victimas"
+                          label="Victimas"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.colocados_jovenes"
+                          label="Jóvenes"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.colocados_discapacidad"
+                          label="Discapacidad"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 3" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 5"
+                      v-if="paso4Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step
@@ -164,20 +243,31 @@
                     <small>Es el número de empleadores (personas jurídicas) que se registraron/ inscribieron en el sistema de información que le ha sido autorizado al prestador, de manera asistida por el Punto de Atención o autónoma (auto-registro de forma virtual), en el mes de referencia.</small>
                   </p>
                 </v-alert>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.empleadores_inscritos_total"
-                        label="TOTAL (*)"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 4">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 6">Siguiente</v-btn>
-                </div>
+                <v-form ref="formPaso5" v-model="paso5Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4"></v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.empleadores_inscritos_total"
+                          label="TOTAL (*)"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 4" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 6"
+                      v-if="paso5Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step
@@ -190,29 +280,47 @@
                     <small>Corresponde al número de personas atendidas en entrevistas individuales con un orientador ocupacional, con el objetivo de identificar su perfil laboral y definir acciones que contribuyan a mejorar su empleabilidad. Esta información debe presentarse desagregada por sexo: hombres y mujeres.</small>
                   </p>
                 </v-alert>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="personasAtendidas" label="TOTAL (*)"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.personas_atendidas_hombres"
-                        label="Hombres"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.personas_atendidas_mujeres"
-                        label="Mujeres"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 5">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 7">Siguiente</v-btn>
-                </div>
+                <v-form ref="formPaso6" v-model="paso6Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="personasAtendidas"
+                          label="TOTAL (*)"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.personas_atendidas_hombres"
+                          label="Hombres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.personas_atendidas_mujeres"
+                          label="Mujeres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 5" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 7"
+                      v-if="paso6Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step
@@ -225,29 +333,47 @@
                     <small>Es el número de personas atendidas en actividades grupales, como talleres, en las cuales se brindan a los buscadores de empleo herramientas y asesoría para la búsqueda de empleo, identificación de alternativas laborales, herramientas para el autoempleo, información sobre programas de empleabilidad e información general del mercado laboral. Esta información debe presentarse desagregada por sexo: hombres y mujeres.</small>
                   </p>
                 </v-alert>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="personasAtendidasEnTalleres" label="TOTAL (*)"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.personas_atendidas_en_talleres_hombres"
-                        label="Hombres"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.personas_atendidas_en_talleres_mujeres"
-                        label="Mujeres"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 6">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 8">Siguiente</v-btn>
-                </div>
+                <v-form ref="formPaso7" v-model="paso7Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="personasAtendidasEnTalleres"
+                          label="TOTAL (*)"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.personas_atendidas_en_talleres_hombres"
+                          label="Hombres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.personas_atendidas_en_talleres_mujeres"
+                          label="Mujeres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 6" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 8"
+                      v-if="paso7Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step
@@ -274,110 +400,155 @@
                     <small>Esta información debe presentarse desagregada para cada uno de los tipos de formación.</small>
                   </p>
                 </v-alert>
+                <v-form ref="formPaso8" v-model="paso8Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="remitidasFormacion"
+                          label="TOTAL (*)"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="remitidasFormacionHombres"
+                          label="Hombres"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="remitidasFormacionMujeres"
+                          label="Mujeres"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
 
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="remitidasFormacion" label="TOTAL (*)"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="remitidasFormacionHombres" label="Hombres"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="remitidasFormacionMujeres" label="Mujeres"></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                  <v-container>
+                    <v-alert color="blue lighten-2" border="top" elevation="2" colored-border>
+                      <v-subheader class="blue--text text--lighten-2">
+                        <strong>HOMBRES</strong>
+                      </v-subheader>
 
-                <v-container>
-                  <v-alert color="blue lighten-2" border="top" elevation="2" colored-border>
-                    <v-subheader class="blue--text text--lighten-2">
-                      <strong>HOMBRES</strong>
-                    </v-subheader>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.remitidas_formacion_competencias_hombres"
+                              label="Competencias claves transversales"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.remitidas_formacion_tic_hombres"
+                              label="Tecnologías de la Información y la Comunicaciones TIC"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.remitidas_formacion_alfabetizacion_hombres"
+                              label="Alfabetización o Bachillerato"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.remitidas_formacion_entrenamiento_hombres"
+                              label="Entrenamiento o reentrenamiento técnico"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.remitidas_formacion_tecnico_hombres"
+                              label="Técnico laboral"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-alert>
+                  </v-container>
 
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.remitidas_formacion_competencias_hombres"
-                            label="Competencias claves transversales"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.remitidas_formacion_tic_hombres"
-                            label="Tecnologías de la Información y la Comunicaciones TIC"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.remitidas_formacion_alfabetizacion_hombres"
-                            label="Alfabetización o Bachillerato"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.remitidas_formacion_entrenamiento_hombres"
-                            label="Entrenamiento o reentrenamiento técnico"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.remitidas_formacion_tecnico_hombres"
-                            label="Técnico laboral"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-alert>
-                </v-container>
+                  <v-container>
+                    <v-alert color="pink lighten-2" border="top" elevation="2" colored-border>
+                      <v-subheader class="pink--text text--lighten-2">
+                        <strong>MUJERES</strong>
+                      </v-subheader>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.remitidas_formacion_competencias_mujeres"
+                              label="Competencias claves transversales"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.remitidas_formacion_tic_mujeres"
+                              label="Tecnologías de la Información y la Comunicaciones TIC"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.remitidas_formacion_alfabetizacion_mujeres"
+                              label="Alfabetización o Bachillerato"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.remitidas_formacion_entrenamiento_mujeres"
+                              label="Entrenamiento o reentrenamiento técnico"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.remitidas_formacion_tecnico_mujeres"
+                              label="Técnico laboral"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-alert>
+                  </v-container>
 
-                <v-container>
-                  <v-alert color="pink lighten-2" border="top" elevation="2" colored-border>
-                    <v-subheader class="pink--text text--lighten-2">
-                      <strong>MUJERES</strong>
-                    </v-subheader>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.remitidas_formacion_competencias_mujeres"
-                            label="Competencias claves transversales"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.remitidas_formacion_tic_mujeres"
-                            label="Tecnologías de la Información y la Comunicaciones TIC"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.remitidas_formacion_alfabetizacion_mujeres"
-                            label="Alfabetización o Bachillerato"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.remitidas_formacion_entrenamiento_mujeres"
-                            label="Entrenamiento o reentrenamiento técnico"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.remitidas_formacion_tecnico_mujeres"
-                            label="Técnico laboral"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-alert>
-                </v-container>
-
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 7">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 9">Siguiente</v-btn>
-                </div>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 7" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 9"
+                      v-if="paso8Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step
@@ -404,110 +575,155 @@
                     <small>Esta información debe presentarse desagregada para cada uno de los tipos de formación.</small>
                   </p>
                 </v-alert>
+                <v-form ref="formPaso9" v-model="paso9Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="culminaronFormacion"
+                          label="TOTAL (*)"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="culminaronFormacionHombres"
+                          label="Hombres"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="culminaronFormacionMujeres"
+                          label="Mujeres"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
 
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="culminaronFormacion" label="TOTAL (*)"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="culminaronFormacionHombres" label="Hombres"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="culminaronFormacionMujeres" label="Mujeres"></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
+                  <v-container>
+                    <v-alert color="blue lighten-2" border="top" elevation="2" colored-border>
+                      <v-subheader class="blue--text text--lighten-2">
+                        <strong>HOMBRES</strong>
+                      </v-subheader>
 
-                <v-container>
-                  <v-alert color="blue lighten-2" border="top" elevation="2" colored-border>
-                    <v-subheader class="blue--text text--lighten-2">
-                      <strong>HOMBRES</strong>
-                    </v-subheader>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.culminaron_formacion_competencias_hombres"
+                              label="Competencias claves transversales"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.culminaron_formacion_tic_hombres"
+                              label="Tecnologías de la Información y la Comunicaciones TIC"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.culminaron_formacion_alfabetizacion_hombres"
+                              label="Alfabetización o Bachillerato"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.culminaron_formacion_entrenamiento_hombres"
+                              label="Entrenamiento o reentrenamiento técnico"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.culminaron_formacion_tecnico_hombres"
+                              label="Técnico laboral"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-alert>
+                  </v-container>
 
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.culminaron_formacion_competencias_hombres"
-                            label="Competencias claves transversales"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.culminaron_formacion_tic_hombres"
-                            label="Tecnologías de la Información y la Comunicaciones TIC"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.culminaron_formacion_alfabetizacion_hombres"
-                            label="Alfabetización o Bachillerato"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.culminaron_formacion_entrenamiento_hombres"
-                            label="Entrenamiento o reentrenamiento técnico"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.culminaron_formacion_tecnico_hombres"
-                            label="Técnico laboral"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-alert>
-                </v-container>
+                  <v-container>
+                    <v-alert color="pink lighten-2" border="top" elevation="2" colored-border>
+                      <v-subheader class="pink--text text--lighten-2">
+                        <strong>MUJERES</strong>
+                      </v-subheader>
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.culminaron_formacion_competencias_mujeres"
+                              label="Competencias claves transversales"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.culminaron_formacion_tic_mujeres"
+                              label="Tecnologías de la Información y la Comunicaciones TIC"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.culminaron_formacion_alfabetizacion_mujeres"
+                              label="Alfabetización o Bachillerato"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.culminaron_formacion_entrenamiento_mujeres"
+                              label="Entrenamiento o reentrenamiento técnico"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                          <v-col cols="12" sm="12" md="12">
+                            <v-text-field
+                              v-model="formularioReporte.culminaron_formacion_tecnico_mujeres"
+                              label="Técnico laboral"
+                              :disabled="puntoAtencionIndex === -1"
+                              :rules="numeroRules"
+                            ></v-text-field>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-alert>
+                  </v-container>
 
-                <v-container>
-                  <v-alert color="pink lighten-2" border="top" elevation="2" colored-border>
-                    <v-subheader class="pink--text text--lighten-2">
-                      <strong>MUJERES</strong>
-                    </v-subheader>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.culminaron_formacion_competencias_mujeres"
-                            label="Competencias claves transversales"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.culminaron_formacion_tic_mujeres"
-                            label="Tecnologías de la Información y la Comunicaciones TIC"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.culminaron_formacion_alfabetizacion_mujeres"
-                            label="Alfabetización o Bachillerato"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.culminaron_formacion_entrenamiento_mujeres"
-                            label="Entrenamiento o reentrenamiento técnico"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="12" md="12">
-                          <v-text-field
-                            v-model="formularioReporte.culminaron_formacion_tecnico_mujeres"
-                            label="Técnico laboral"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-alert>
-                </v-container>
-
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 8">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 10">Siguiente</v-btn>
-                </div>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 8" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 10"
+                      v-if="paso9Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step
@@ -520,29 +736,47 @@
                     <small>Corresponde al número de personas direccionadas por el prestador a programas específicos de emprendimiento para personas que incursionan como emprendedores o que tienen experiencia en emprendimiento, los cuales son ofrecidos directamente por el prestador o por entidades externas, tales como programas que ofrecen capital semilla, líneas de financiamiento, asesoría en la estructuración de proyectos y orientación a emprendedores entre otros.</small>
                   </p>
                 </v-alert>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="remitidasProgramasEmprendimiento" label="TOTAL (*)"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.remitidas_programas_emprendimiento_hombres"
-                        label="Hombres"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.remitidas_programas_emprendimiento_mujeres"
-                        label="Mujeres"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 9">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 11">Siguiente</v-btn>
-                </div>
+                <v-form ref="formPaso10" v-model="paso10Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="remitidasProgramasEmprendimiento"
+                          label="TOTAL (*)"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.remitidas_programas_emprendimiento_hombres"
+                          label="Hombres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.remitidas_programas_emprendimiento_mujeres"
+                          label="Mujeres"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 9" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 11"
+                      v-if="paso10Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step
@@ -555,20 +789,31 @@
                     <small>Corresponde al Número de PQRSD radicados en el Punto de Atención.</small>
                   </p>
                 </v-alert>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="formularioReporte.pqrs_radicados_total"
-                        label="TOTAL (*)"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 10">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 12">Siguiente</v-btn>
-                </div>
+                <v-form ref="formPaso11" v-model="paso11Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="6" md="4"></v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="formularioReporte.pqrs_radicados_total"
+                          label="TOTAL (*)"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 10" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 12"
+                      v-if="paso11Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
 
               <v-stepper-step :complete="pasoFormulario > 12" step="12">Observaciones</v-stepper-step>
@@ -578,30 +823,52 @@
                     <small>En el campo de observaciones por favor indiquenos en que aspectos podemos mejorar.</small>
                   </p>
                 </v-alert>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="12" md="12">
-                      <v-textarea
-                        counter
-                        label="Observaciones"
-                        v-model="formularioReporte.observaciones"
-                      ></v-textarea>
-                      <!-- :rules="rules" :value="value" -->
-                    </v-col>
-                  </v-row>
-                </v-container>
-                <div style="display: flex; justify-content: space-around">
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 11">Anterior</v-btn>
-                  <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 13">Siguiente</v-btn>
-                </div>
+                <v-form ref="formPaso12" v-model="paso12Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="12" md="12">
+                        <v-textarea
+                          counter
+                          v-model="formularioReporte.observaciones"
+                          label="Observaciones"
+                          :disabled="puntoAtencionIndex === -1"
+                          :rules="textoRules"
+                        ></v-textarea>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn color="blue-grey lighten-1" @click="pasoFormulario = 11" dark>Anterior</v-btn>
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 13"
+                      v-if="paso12Valido"
+                      dark
+                    >Siguiente</v-btn>
+                    <v-btn color="gray darken-1" disabled v-else>Siguiente</v-btn>
+                  </div>
+                </v-form>
               </v-stepper-content>
             </v-stepper>
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="cerrarFormularioReporte">Cancelar</v-btn>
-            <v-btn color="blue darken-1" text @click="guardarFormularioReporte">Guardar</v-btn>
+            <v-btn color="red darken-1" @click="cerrarFormularioReporte" dark>Cancelar</v-btn>
+            <v-btn
+              color="blue darken-1"
+              @click="revisarFormulario"
+              v-if="pasoFormulario === 13"
+              dark
+            >Revisar formulario</v-btn>
+            <v-btn color="gray darken-1" disabled v-else>Revisar formulario</v-btn>
+            <v-btn
+              color="green darken-1"
+              @click="guardarFormularioReporte"
+              v-if="puntoAtencionIndex > -1 && pasoFormulario === 13"
+              dark
+            >Guardar</v-btn>
+            <v-btn color="gray darken-1" disabled v-else>Guardar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -793,7 +1060,26 @@ export default {
       modalFormularioDiligenciado: false,
       botonGuardar: true,
       pasoFormulario: 1,
-      scrollInvoked: 0,
+      paso1Valido: true,
+      paso2Valido: true,
+      paso3Valido: true,
+      paso4Valido: true,
+      paso5Valido: true,
+      paso6Valido: true,
+      paso7Valido: true,
+      paso8Valido: true,
+      paso9Valido: true,
+      paso10Valido: true,
+      paso11Valido: true,
+      paso12Valido: true,
+      numeroRules: [
+        (v) => v >= 0 || "Es un campo numérico obligatorio",
+        (v) => /[0-9]/.test(v) || "Es un campo numérico obligatorio",
+      ],
+      textoRules: [
+        (v) => !!v || "Es un campo obligatorio",
+        (v) => v.length <= 1000 || "Este campo sólo permite un máximo de 1000 caracteres.",
+      ],
       formularioReporteIndex: -1,
       formularioReporte: {
         personas_inscritas_total: 0,
@@ -1304,7 +1590,7 @@ export default {
             // this.procesando = false;
             // this.error = false;
             this.puntosAtencion = response.data;
-            // console.log(this.puntosAtencion);
+            console.log(this.puntosAtencion);
           } else {
             // this.procesando = false;
             // this.error = true;
@@ -1340,15 +1626,37 @@ export default {
       this.puntoAtencion = Object.assign({}, puntoAtencion);
       this.modalFormularioReporte = true;
     },
+    mostrarReporteDiligenciado(puntoAtencion) {
+      reporte.obtenerReporte(puntoAtencion, this.periodo).then((response) => {
+        if (response.status === "success") {
+          // this.procesando = false;
+          // this.error = false;
+          this.puntoAtencionIndex = -1;
+          if (response.data) {
+            this.formularioReporte = response.data;
+          }
+          this.modalFormularioReporte = true;
+        } else {
+          // this.procesando = false;
+          // this.error = true;
+          console.log(response);
+        }
+      });
+    },
     guardarFormularioReporte() {
-      console.log(this.formularioReporte);
-
       if (this.puntoAtencionIndex > -1) {
         reporte
-          .guardarReporte(this.puntoAtencion, this.periodo, this.formularioReporte)
+          .guardarReporte(
+            this.puntoAtencion,
+            this.periodo,
+            this.formularioReporte
+          )
           .then((response) => {
             console.log(response.data);
-            Object.assign(this.puntosAtencion[this.puntoAtencionIndex], response.data);
+            Object.assign(
+              this.puntosAtencion[this.puntoAtencionIndex],
+              response.data
+            );
             this.cerrarFormularioReporte();
           })
           .catch((error) => {
@@ -1361,15 +1669,25 @@ export default {
           this.puntoAtencion
         );
       } else {
-        // this.desserts.push(this.formularioReporte);
+        this.cerrarFormularioReporte();
       }
     },
-    cerrarFormularioReporte() {
+    scrollTopFormulario() {
       document.getElementsByClassName("v-dialog--active")[0].scrollTop = 0;
+    },
+    revisarFormulario() {
+      this.scrollTopFormulario();
+      this.pasoFormulario = 1;
+    },
+    cerrarFormularioReporte() {
+      this.scrollTopFormulario();
       this.modalFormularioReporte = false;
 
       this.$nextTick(() => {
-        this.formularioReporte = Object.assign({}, this.formularioReporteDefault);
+        this.formularioReporte = Object.assign(
+          {},
+          this.formularioReporteDefault
+        );
         this.formularioReporteIndex = -1;
         this.pasoFormulario = 1;
       });

@@ -12,12 +12,34 @@ use App\Http\Resources\PuntosAtencionResource;
 use App\Models\PuntoAtencion;
 use App\Models\Periodo;
 use App\Models\Reporte;
-use App\User;
 
-class PeriodoController extends Controller
+class ReporteController extends Controller
 {
 
     /**
+     * Display a listing of the resource.
+     *
+     * @param  \App\Models\PuntoAtencion $puntoAtencion
+     * @param  \App\Models\Periodo  $periodo
+     * @return \Illuminate\Http\Response
+     */
+    public function index(PuntoAtencion $puntoAtencion, Periodo $periodo)
+    {
+        // Listar el punto de atención con los datos después de la creación
+        $reporte = Reporte::where('punto_atencion_id', $puntoAtencion->id)
+            ->where('periodo_id', $periodo->id)
+            ->first();
+
+        return response()->json(
+            [
+                'status' => 'success',
+                'data' => $reporte
+            ],
+            201
+        );
+    }
+
+        /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -56,4 +78,5 @@ class PeriodoController extends Controller
             201
         );
     }
+
 }

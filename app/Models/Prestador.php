@@ -56,6 +56,7 @@ class Prestador extends Model
   {
     $puntosAtencion = $this->puntosAtencion()->get();
     $totalEstadoPendiente = 0;
+    $totalEstadoEnProceso = 0;
     $totalEstadoReportado = 0;
     $totalEstadoSinReporte = 0;
 
@@ -65,6 +66,9 @@ class Prestador extends Model
         case 'Pendiente':
           $totalEstadoPendiente++;
           break;
+        case 'En proceso':
+          $totalEstadoEnProceso++;
+          break;
         case 'Reportado':
           $totalEstadoReportado++;
           break;
@@ -72,7 +76,10 @@ class Prestador extends Model
           $totalEstadoSinReporte++;
           break;
       }
-  
+
+      if ($puntoAtencion->prestador->id === 9) {
+        Log::info('PP -> ' . $e);
+      }
     }
 
     $estado = 'En proceso';
@@ -85,8 +92,17 @@ class Prestador extends Model
     if ($totalEstadoSinReporte > 0 && $totalEstadoReportado > 0) {
       $estado = 'Incompleto';
     }
-    if ($totalEstadoReportado > 0 && $totalEstadoSinReporte === 0 && $totalEstadoPendiente === 0) {
+    if ($totalEstadoReportado > 0 && $totalEstadoSinReporte === 0 && $totalEstadoPendiente === 0 && $totalEstadoEnProceso === 0) {
       $estado = 'Reportado';
+    }
+
+    if ($this->id === 9) {
+      Log::info('totalEstadoPendiente -> ' . $totalEstadoPendiente);
+      Log::info('totalEstadoEnProceso -> ' . $totalEstadoEnProceso);
+      Log::info('totalEstadoReportado -> ' . $totalEstadoReportado);
+      Log::info('totalEstadoSinReporte -> ' . $totalEstadoSinReporte);
+
+      Log::info('P -> ' . $estado);
     }
 
     return $estado;

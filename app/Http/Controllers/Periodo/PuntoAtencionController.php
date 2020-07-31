@@ -33,7 +33,7 @@ class PuntoAtencionController extends Controller
         $puntosAtencionCollection = [];
         foreach ($puntosAtencion as $puntoAtencion) {
             $puntoAtencion['periodo'] = $periodo;
-            $puntosAtencionCollection[] = $puntoAtencion; 
+            $puntosAtencionCollection[] = $puntoAtencion;
         }
 
         return response()->json(
