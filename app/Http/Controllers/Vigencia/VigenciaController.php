@@ -26,9 +26,9 @@ class VigenciaController extends Controller
         $vigencias = Vigencia::where('activo', 1)
             ->with(
                 'periodos',
-                'periodos.mes'
+                'periodos.mes',
+                'periodos.estadoReporte'
             )
-            // ->limit(1)
             ->orderBy('nombre', 'desc')
             ->get();
 
@@ -72,12 +72,12 @@ class VigenciaController extends Controller
                 'periodos',
                 'periodos.mes',
                 'periodos.estadoReporte'
-            )->first();
+            )->get();
 
         return response()->json(
             [
                 'status' => 'success',
-                'data' => $vigencia
+                'data' => VigenciaResource::collection($vigencia)[0]
             ],
             201
         );

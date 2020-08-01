@@ -123,9 +123,7 @@
           <CRow>
             <CCol sm="5">
               <h4 class="card-title mb-0">Vigencias</h4>
-              <div
-                class="small text-muted"
-              >Listado</div>
+              <div class="small text-muted">Listado</div>
             </CCol>
           </CRow>
           <CRow>
@@ -410,7 +408,7 @@ export default {
           // this.procesando = false;
           // this.error = false;
           this.vigencias = response.data;
-          // console.log(this.vigencias);
+          console.log(this.vigencias);
         } else {
           // this.procesando = false;
           // this.error = true;
@@ -467,6 +465,7 @@ export default {
         vigencia
           .crearVigencia(this.vigencia)
           .then((response) => {
+            console.log(response.data);
             this.vigencias.push(response.data);
             this.cerrarFormularioVigencia();
           })

@@ -21,7 +21,6 @@ class VigenciaResource extends JsonResource
             "id" => $this->id,
             "nombre" => $this->nombre,
             "activo" => $this->activo,
-            "periodos_2" => $this->periodos,
             "periodos" => PeriodoResource::collection($this->periodos)
         ];
     }

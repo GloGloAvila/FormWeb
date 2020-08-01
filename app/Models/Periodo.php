@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
+use App\Models\EstadoReporte;
 use App\Models\Funcionario;
 use App\Models\Prestador;
 use App\Models\Vigencia;
@@ -163,6 +164,11 @@ class Periodo extends Model
   public function mes()
   {
     return $this->belongsTo(Mes::class);
+  }
+
+  public function estadoReporte()
+  {
+    return $this->belongsTo(EstadoReporte::class);
   }
 
   public function reportes()
