@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 
+use App\Http\Resources\PeriodoResource;
+
 use App\Models\Vigencia;
 use App\Models\Periodo;
 
@@ -29,10 +31,12 @@ class PeriodoController extends Controller
             $periodo->save();
         }
 
+        $periodo = Periodo::where('id', $periodo->id)->get();
+
         return response()->json(
             [
                 'status' => 'success',
-                'data' => $periodo
+                'data' => PeriodoResource::collection($periodo)[0]
             ],
             200
         );

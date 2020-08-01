@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
+use App\Classes\Fecha;
 
 use App\Models\Departamento;
 use App\Models\Municipio;
@@ -31,9 +31,6 @@ class PuntoAtencion extends Model
    *
    * @var array
    */
-  //ID, Nombre, ID_Prestador, ID_Departamento, ID_Municipio, Mail_Punto_Atencion, Direccion_Punto_Atencion,
-  //pagina_web, fecha_registro
-
   protected $fillable = [
     'migracion_id',
     'prestador_id',
@@ -81,8 +78,8 @@ class PuntoAtencion extends Model
 
   public function obtenerEstadoReporte(Periodo $periodo)
   {
-    $esFechaPermitida = $periodo->fechaPermitida(Carbon::parse(Carbon::now())->toDateString());
-    $esFechaPendiente = $periodo->fechaPendiente(Carbon::parse(Carbon::now())->toDateString());
+    $esFechaPermitida = $periodo->fechaPermitida(Fecha::obtenerFechaActual());
+    $esFechaPendiente = $periodo->fechaPendiente(Fecha::obtenerFechaActual());
     $tieneReporte = $this->tieneReporte($periodo);
 
     $estado = 'Pendiente';

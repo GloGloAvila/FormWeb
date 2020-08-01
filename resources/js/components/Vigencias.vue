@@ -12,7 +12,8 @@
             <strong>{{periodo.mes.valor_texto}}</strong> para la vigencia
             <strong>{{vigencia.nombre}}</strong>.
             <br />
-            <v-form v-model="formularioPeriodoValido">
+            <v-form ref="formularioPeriodo">
+              <!-- lazy-validation -->
               <v-container>
                 <v-row>
                   <v-col cols="12" md="6">
@@ -26,6 +27,7 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           v-model="periodo.fecha_inicio"
+                          :rules="fechaInicioRules"
                           prepend-icon="mdi-calendar"
                           label="Fecha inicio"
                           v-on="on"
@@ -333,7 +335,6 @@ export default {
       sortBy: "nombre",
       keys: ["Nombre"],
       modalFormularioPeriodo: false,
-      formularioPeriodoValido: false,
       periodoIndex: -1,
       periodo: {
         id: 0,
@@ -350,12 +351,17 @@ export default {
         estado: "",
       },
       menuFechaInicio: false,
-      fechaInicioRules: [(v) => !!v || "Fecha inicio es requerida"],
+      fechaInicioRules: [
+        (v) => !!v || "Fecha inicio es requerida",
+        (v) =>
+          (v && this.validarFechaInicio(v)) ||
+          "La fecha inicio debe ser inferior a la fecha fin",
+      ],
       menuFechaFin: false,
       fechaFinRules: [
         (v) => !!v || "Fecha fin es requerida",
         (v) =>
-          this.validarFechaFin(v) ||
+          (v && this.validarFechaFin(v)) ||
           "La fecha fin debe ser superior a la fecha inicio",
       ],
       modalFormularioVigencia: false,
@@ -385,6 +391,15 @@ export default {
     accion() {
       return this.vigenciaIndex === -1 ? "Crear" : "Editar";
     },
+    formularioPeriodoValido() {
+      if (this.$refs.formularioPeriodo) {
+        this.$refs.formularioPeriodo.validate();
+      }
+      return (
+        this.validarFechaInicio(this.periodo.fecha_inicio) &&
+        this.validarFechaFin(this.periodo.fecha_fin)
+      );
+    },
   },
   watch: {
     dialog(val) {
@@ -408,13 +423,16 @@ export default {
           // this.procesando = false;
           // this.error = false;
           this.vigencias = response.data;
-          console.log(this.vigencias);
+          // console.log(this.vigencias);
         } else {
           // this.procesando = false;
           // this.error = true;
           console.log(response);
         }
       });
+    },
+    validarFechaInicio(fechaInicio) {
+      return fechaInicio <= this.periodo.fecha_fin;
     },
     validarFechaFin(fechaFin) {
       return fechaFin >= this.periodo.fecha_inicio;
@@ -495,12 +513,10 @@ export default {
       periodo
         .actualizarPeriodo(this.vigencia, this.periodo)
         .then((response) => {
-          this.vigencias[this.vigenciaIndex].periodos[
-            this.periodoIndex
-          ].fecha_inicio = response.data.fecha_inicio;
-          this.vigencias[this.vigenciaIndex].periodos[
-            this.periodoIndex
-          ].fecha_fin = response.data.fecha_fin;
+          Object.assign(
+            this.vigencias[this.vigenciaIndex].periodos[this.periodoIndex],
+            response.data
+          );
           this.cerrarFormularioPeriodo();
         })
         .catch((error) => {

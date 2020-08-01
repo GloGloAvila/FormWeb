@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
+use App\Classes\Fecha;
 
 use App\Models\PuntoAtencion;
 use App\Models\Opcion;
@@ -77,9 +77,6 @@ class Prestador extends Model
           break;
       }
 
-      if ($puntoAtencion->prestador->id === 9) {
-        Log::info('PP -> ' . $e);
-      }
     }
 
     $estado = 'En proceso';
@@ -96,21 +93,12 @@ class Prestador extends Model
       $estado = 'Reportado';
     }
 
-    if ($this->id === 9) {
-      Log::info('totalEstadoPendiente -> ' . $totalEstadoPendiente);
-      Log::info('totalEstadoEnProceso -> ' . $totalEstadoEnProceso);
-      Log::info('totalEstadoReportado -> ' . $totalEstadoReportado);
-      Log::info('totalEstadoSinReporte -> ' . $totalEstadoSinReporte);
-
-      Log::info('P -> ' . $estado);
-    }
-
     return $estado;
   }
 
   public function obtenerEstadoReporte(Periodo $periodo)
   {
-    $esFechaPermitida = $periodo->fechaPermitida(Carbon::parse(Carbon::now())->toDateString());
+    $esFechaPermitida = $periodo->fechaPermitida(Fecha::obtenerFechaActual());
     $estadoReporte = $this->estadoReporte($periodo);
 
     $estado = 'Pendiente';

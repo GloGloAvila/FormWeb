@@ -44,9 +44,6 @@ class LoadDataPeriodos extends Migration
           }
         }
 
-        Log::info($mes);
-        Log::info($estado);
-
         $periodo = new Periodo();
         $periodo->vigencia_id = $vigencia->id;
         $periodo->mes_id = $mes->id;

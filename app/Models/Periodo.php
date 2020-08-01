@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use App\Classes\Fecha;
 use Carbon\Carbon;
 
 use App\Models\EstadoReporte;
@@ -70,18 +71,30 @@ class Periodo extends Model
     return $fecha <= $this->fecha_fin;
   }
 
+  public function fechaVencida($fecha)
+  {
+    return $fecha > $this->fecha_fin;
+  }
+
+  public function estadoPendiente()
+  {
+    return $this->estadoReporte()->first()->valor_texto === 'Pendiente';
+  }
+
   public function tieneReporte()
   {
     return $this->reportes()->count() > 0;
   }
 
-  public function obtenerEstadoReporte()
+  public function calcularEstado()
   {
-    $esFechaPermitida = $this->fechaPermitida(Carbon::parse(Carbon::now())->toDateString());
-    $esFechaPendiente = $this->fechaPendiente(Carbon::parse(Carbon::now())->toDateString());
+
+    $esFechaPermitida = $this->fechaPermitida(Fecha::obtenerFechaActual());
+    $esFechaPendiente = $this->fechaPendiente(Fecha::obtenerFechaActual());
     $tieneReporte = $this->tieneReporte();
 
     $estado = 'Pendiente';
+
     if ($tieneReporte) {
       $estado = 'Reportado';
 
@@ -151,6 +164,36 @@ class Periodo extends Model
 
     if ($this->fecha_inicio < Carbon::parse('2018-12-01')->toDateString() && $this->fecha_fin < Carbon::parse('2018-12-01')->toDateString()) {
       $estado = 'No aplica';
+    }
+
+    return $estado;
+  }
+
+  public function obtenerEstadoReporte()
+  {
+    $esFechaPermitida = $this->fechaPermitida(Fecha::obtenerFechaActual());
+    $esFechaVencida = $this->fechaVencida(Fecha::obtenerFechaActual());
+
+    $esEstadoPendiente = $this->estadoPendiente();
+
+    $estado = 'Pendiente';
+    if ($esEstadoPendiente && $esFechaPermitida) {
+      $estado = $this->calcularEstado();
+    } else if ($esFechaPermitida) {
+      $estado = 'En proceso';
+    } else {
+
+      if ($esEstadoPendiente && $esFechaVencida) {
+        // Si el estado es pendiente y la fecha está vencida, se debe calcular el estado del periodo 
+        $estado = $this->calcularEstado();
+        if ($estado !== 'Pendiente' && $estado !== 'En proceso') {
+          $this->estado_reporte_id = Opcion::getOpcionXGrupoXValorTexto('estado_reporte', $estado)->id;
+          $this->save();
+        }
+      } else {
+        // Si el estado no es pendiente ni la fecha está vencida, sólo se muestra el estado actual
+        $estado = $this->estadoReporte()->first()->valor_texto;
+      }
     }
 
     return $estado;
