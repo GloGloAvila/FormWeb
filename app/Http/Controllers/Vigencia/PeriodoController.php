@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Resources\PeriodoResource;
 
+use App\Models\EstadoReporte;
 use App\Models\Vigencia;
 use App\Models\Periodo;
 
@@ -28,6 +29,7 @@ class PeriodoController extends Controller
         if($vigencia->id === $periodo->vigencia_id){
             $periodo->fecha_inicio = $data['fecha_inicio'];
             $periodo->fecha_fin = $data['fecha_fin'];
+            $periodo->estado_reporte_id = EstadoReporte::getOpcionXGrupoXValorTexto('estado_reporte','Pendiente')->id;
             $periodo->save();
         }
 
