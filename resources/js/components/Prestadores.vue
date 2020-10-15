@@ -57,12 +57,21 @@
                 class="elevation-1"
                 hide-default-footer
               >
-                <template v-slot:header.id="{ header }">{{ header.text.toUpperCase() }}</template>
+                <!-- <template v-slot:header.id="{ header }">{{ header.text.toUpperCase() }}</template>
                 <template
                   v-slot:header.tipo_prestador_id="{ header }"
                 >{{ header.text.toUpperCase() }}</template>
                 <template v-slot:header.nombre="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.estado="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:header.estado="{ header }">{{ header.text.toUpperCase() }}</template> -->
+
+                <template v-slot:header="{ header }">
+                  <tr>
+                    <td>{{ header.id.toUpperCase() }}</td>
+                    <td>{{ header.tipo_prestador_id.toUpperCase() }}</td>
+                    <td>{{ header.nombre.toUpperCase() }}</td>
+                    <td>{{ header.estado.toUpperCase() }}</td>
+                  </tr>
+                </template>
 
                 <template v-slot:item="{ item, index }">
                   <tr>
