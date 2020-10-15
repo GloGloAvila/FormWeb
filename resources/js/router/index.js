@@ -7,6 +7,7 @@ const TheSimpleContainer = () => import('../containers/TheSimpleContainer')
 
 // Views
 const PuntosAtencion = () => import('../components/PuntosAtencion')
+const UsuariosPrestador = () => import('../components/UsuariosPrestador')
 const Prestadores = () => import('../components/Prestadores')
 const Vigencias = () => import('../components/Vigencias')
 
@@ -73,7 +74,7 @@ function configRoutes() {
                   },
                   redirect: '/vigencias/prestadores/puntos-atencion/listado',
                   component: TheSimpleContainer,
-                  children: [    
+                  children: [
                     {
                       path: 'listado',
                       name: 'gestion-vigencias-prestadores-listado-puntos-atencion',
@@ -83,8 +84,27 @@ function configRoutes() {
                       component: PuntosAtencion
                     },
                   ]
-                }
-              ]
+                },
+                {
+                    path: 'usuarios',
+                    name: 'gestion-vigencias-prestadores-usuarios',
+                    meta: {
+                      label: 'Usuarios'
+                    },
+                    redirect: '/vigencias/prestadores/usuarios/listado',
+                    component: TheSimpleContainer,
+                    children: [
+                      {
+                        path: 'listado',
+                        name: 'gestion-vigencias-prestadores-listado-usuarios',
+                        meta: {
+                          label: 'Listado'
+                        },
+                        component: UsuariosPrestador
+                      },
+                    ]
+                  }
+                ]
             },
           ]
         },
