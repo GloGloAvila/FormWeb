@@ -928,12 +928,12 @@
                 class="elevation-1"
                 hide-default-footer
               >
-                <template v-slot:header.id="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.departamento_id="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.municipio_id="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.codigo="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.nombre="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.accion="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:[`header.id`]="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:[`header.departamento_id`]="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:[`header.municipio_id`]="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:[`header.codigo`]="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:[`header.nombre`]="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:[`header.accion`]="{ header }">{{ header.text.toUpperCase() }}</template>
 
                 <template v-slot:item="{ item, index }">
                   <tr>
