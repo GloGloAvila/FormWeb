@@ -34,10 +34,20 @@
                   ></v-select>
                   <v-spacer></v-spacer>
                   <v-btn-toggle v-model="sortDesc" mandatory v-show="true">
-                    <v-btn large depressed color="blue-grey lighten-1" :value="false">
+                    <v-btn
+                      large
+                      depressed
+                      color="blue-grey lighten-1"
+                      :value="false"
+                    >
                       <v-icon>mdi-arrow-up</v-icon>
                     </v-btn>
-                    <v-btn large depressed color="blue-grey lighten-1" :value="true">
+                    <v-btn
+                      large
+                      depressed
+                      color="blue-grey lighten-1"
+                      :value="true"
+                    >
                       <v-icon>mdi-arrow-down</v-icon>
                     </v-btn>
                   </v-btn-toggle>
@@ -50,47 +60,60 @@
                 :page.sync="page"
                 :items-per-page.sync="itemsPerPage"
                 :items="prestadores"
-                :sort-by="sortBy.toLowerCase() === 'tipo' ? 'tipo_prestador.descripcion' : sortBy.toLowerCase()"
+                :sort-by="
+                  sortBy.toLowerCase() === 'tipo'
+                    ? 'tipo_prestador.descripcion'
+                    : sortBy.toLowerCase()
+                "
                 :sort-desc="sortDesc"
                 :search="search"
                 loading-text="Cargando... Espere por favor"
                 class="elevation-1"
                 hide-default-footer
               >
-                <!-- <template v-slot:header.id="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template
-                  v-slot:header.tipo_prestador_id="{ header }"
-                >{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.nombre="{ header }">{{ header.text.toUpperCase() }}</template>
-                <template v-slot:header.estado="{ header }">{{ header.text.toUpperCase() }}</template> -->
-
-                <template v-slot:header="{ header }">
-                  <tr>
-                    <td>{{ header.id.toUpperCase() }}</td>
-                    <td>{{ header.tipo_prestador_id.toUpperCase() }}</td>
-                    <td>{{ header.nombre.toUpperCase() }}</td>
-                    <td>{{ header.estado.toUpperCase() }}</td>
-                  </tr>
-                </template>
+                <template v-slot:[`header.id`]="{ header }">{{
+                  header.text.toUpperCase()
+                }}</template>
+                <template v-slot:[`header.tipo_prestador_id`]="{ header }">{{
+                  header.text.toUpperCase()
+                }}</template>
+                <template v-slot:[`header.nombre`]="{ header }">{{
+                  header.text.toUpperCase()
+                }}</template>
+                <template v-slot:[`header.estado`]="{ header }">{{
+                  header.text.toUpperCase()
+                }}</template>
 
                 <template v-slot:item="{ item, index }">
                   <tr>
-                    <td>{{ index + 1 + (page-1)*10}}</td>
+                    <td>{{ index + 1 + (page - 1) * 10 }}</td>
                     <td>{{ item.nombre.toUpperCase() }}</td>
                     <td>{{ item.tipo_prestador.descripcion.toUpperCase() }}</td>
                     <td>
-                      <v-menu bottom origin="center center" transition="scale-transition">
+                      <v-menu
+                        bottom
+                        origin="center center"
+                        transition="scale-transition"
+                      >
                         <template v-slot:activator="{ on, attrs }">
                           <v-chip
                             :color="getColor(item.estado)"
                             dark
                             v-bind="attrs"
                             v-on="on"
-                          >{{item.estado}}</v-chip>
+                            >{{ item.estado }}</v-chip
+                          >
                         </template>
                         <v-list>
                           <v-list-item @click="irListadoPuntosAtencion(item)">
-                            <v-list-item-title>Gestión Puntos de atención</v-list-item-title>
+                            <v-list-item-title
+                              >Gestión Puntos de atención</v-list-item-title
+                            >
+                          </v-list-item>
+                          <v-list-item @click="irListadoUsuarios(item)">
+                            <v-list-item-title
+                              >Gestión Usuarios</v-list-item-title
+                            >
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -102,7 +125,9 @@
                   <br />No tiene información registrada.
                   <br />
                   <br />
-                  <v-btn color="warning" @click="cargarListado()">Recargar</v-btn>
+                  <v-btn color="warning" @click="cargarListado()"
+                    >Recargar</v-btn
+                  >
                   <br />
                   <br />
                 </template>
@@ -120,7 +145,7 @@
                       v-bind="attrs"
                       v-on="on"
                     >
-                      {{ itemsPerPage === -1 ? 'Todo' : itemsPerPage }}
+                      {{ itemsPerPage === -1 ? "Todo" : itemsPerPage }}
                       <v-icon>mdi-chevron-down</v-icon>
                     </v-btn>
                   </template>
@@ -136,16 +161,39 @@
                 </v-menu>
 
                 <v-spacer></v-spacer>
-                <span
-                  class="mr-4 grey--text"
-                >Mostrando registros del {{ 1 + (page-1)*itemsPerPage }} al {{ itemsPerPage === -1 ? total : ( total > ((page-1)*itemsPerPage + itemsPerPage) ? ((page-1)*itemsPerPage + itemsPerPage) : total) }} de un total de {{ total }}</span>
+                <span class="mr-4 grey--text"
+                  >Mostrando registros del
+                  {{ 1 + (page - 1) * itemsPerPage }} al
+                  {{
+                    itemsPerPage === -1
+                      ? total
+                      : total > (page - 1) * itemsPerPage + itemsPerPage
+                      ? (page - 1) * itemsPerPage + itemsPerPage
+                      : total
+                  }}
+                  de un total de {{ total }}</span
+                >
 
                 <v-spacer></v-spacer>
-                <span class="mr-4 grey--text">Página {{ page }} de {{ numberOfPages }}</span>
-                <v-btn fab dark color="blue-grey lighten-1" class="mr-1" @click="formerPage">
+                <span class="mr-4 grey--text"
+                  >Página {{ page }} de {{ numberOfPages }}</span
+                >
+                <v-btn
+                  fab
+                  dark
+                  color="blue-grey lighten-1"
+                  class="mr-1"
+                  @click="formerPage"
+                >
                   <v-icon>mdi-chevron-left</v-icon>
                 </v-btn>
-                <v-btn fab dark color="blue-grey lighten-1" class="ml-1" @click="nextPage">
+                <v-btn
+                  fab
+                  dark
+                  color="blue-grey lighten-1"
+                  class="ml-1"
+                  @click="nextPage"
+                >
                   <v-icon>mdi-chevron-right</v-icon>
                 </v-btn>
               </v-row>
@@ -262,13 +310,8 @@ export default {
     cargarListado() {
       prestador.obtenerPrestadores(this.periodo).then((response) => {
         if (response.status === "success") {
-          // this.procesando = false;
-          // this.error = false;
           this.prestadores = response.data;
-          // console.log(this.prestadores);
         } else {
-          // this.procesando = false;
-          // this.error = true;
           console.log(response);
         }
       });
@@ -296,31 +339,18 @@ export default {
 
       return color;
     },
-    // editItem(item) {
-    //   this.editedIndex = this.puntosAtencion.indexOf(item);
-    //   this.editedItem = Object.assign({}, item);
-    //   this.modalFormulario = true;
-    // },
-    // save() {
-    //   // if (this.editedIndex > -1) {
-    //   //   Object.assign(this.desserts[this.editedIndex], this.editedItem);
-    //   // } else {
-    //   //   this.desserts.push(this.editedItem);
-    //   // }
-    //   this.close();
-    // },
-    // close() {
-    //   this.modalFormulario = false;
-    //   this.$nextTick(() => {
-    //     this.editedItem = Object.assign({}, this.defaultItem);
-    //     this.editedIndex = -1;
-    //   });
-    // },
     irListadoPuntosAtencion(prestador) {
       sessionStorage.setItem("datosPrestador", JSON.stringify(prestador));
 
       router.push({
         name: "gestion-vigencias-prestadores-listado-puntos-atencion",
+      });
+    },
+    irListadoUsuarios(prestador) {
+      sessionStorage.setItem("datosPrestador", JSON.stringify(prestador));
+
+      router.push({
+        name: "gestion-vigencias-prestadores-listado-usuarios",
       });
     },
   },
