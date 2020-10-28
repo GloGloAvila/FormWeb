@@ -7,7 +7,7 @@ const TheSimpleContainer = () => import('../containers/TheSimpleContainer')
 
 // Views
 const PuntosAtencion = () => import('../components/PuntosAtencion')
-const UsuariosPrestador = () => import('../components/UsuariosPrestador')
+const Funcionarios = () => import('../components/Funcionarios')
 const Prestadores = () => import('../components/Prestadores')
 const Vigencias = () => import('../components/Vigencias')
 
@@ -100,7 +100,7 @@ function configRoutes() {
                         meta: {
                           label: 'Listado'
                         },
-                        component: UsuariosPrestador
+                        component: Funcionarios
                       },
                     ]
                   }

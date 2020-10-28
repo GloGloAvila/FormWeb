@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use App\Classes\Fecha;
 
 use App\Models\PuntoAtencion;
+use App\Models\Funcionario;
 use App\Models\Opcion;
 
 class Prestador extends Model
@@ -135,5 +136,13 @@ class Prestador extends Model
     return $this->hasMany(PuntoAtencion::class)
       ->where('puntos_atencion.activo', 1)
       ->orderby('puntos_atencion.codigo', 'asc');
+  }
+
+  public function funcionarios()
+  {
+    return $this->hasMany(Funcionario::class)
+      ->where('funcionarios.activo', 1)
+      ->orderby('funcionarios.apellido', 'asc')
+      ->orderby('funcionarios.nombre', 'asc');
   }
 }
