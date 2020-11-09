@@ -930,6 +930,9 @@
               >
                 <template v-slot:[`header.id`]="{ header }">{{ header.text.toUpperCase() }}</template>
                 <template v-slot:[`header.departamento_id`]="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:[`header.prestador_id`]="{ header }">{{ header.text.toUpperCase() }}</template>
+                <template v-slot:[`header.prestador`]="{ header }">{{ header.text.toUpperCase() }}</template>
+            
                 <template v-slot:[`header.municipio_id`]="{ header }">{{ header.text.toUpperCase() }}</template>
                 <template v-slot:[`header.codigo`]="{ header }">{{ header.text.toUpperCase() }}</template>
                 <template v-slot:[`header.nombre`]="{ header }">{{ header.text.toUpperCase() }}</template>
@@ -1254,6 +1257,17 @@ export default {
           value: "id",
           sortable: false,
         },
+        {
+          text: "Codigo Prestador",
+          value: "prestador_id",
+          sortable: false,
+        },
+        {
+          text: "Prestador",
+          value: "prestador",
+          sortable: false,
+        },
+        
         {
           text: "Departamento",
           value: "departamento_id",
