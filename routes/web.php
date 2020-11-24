@@ -15,10 +15,11 @@ Route::resource('vigencias.periodos', 'Vigencia\PeriodoController', ['only' => [
 Route::resource('periodos.prestadores', 'Periodo\PrestadorController', ['only' => ['index']])->parameters([
     'periodos' => 'periodo'
 ]);
-Route::resource('periodos.prestadores.puntosAtencion', 'Periodo\PuntoAtencionController', ['only' => ['index']])->parameters([
-    'periodos' => 'periodo',
-    'prestadores' => 'prestador'
-]);
+Route::resource('periodos.prestadores.puntosAtencion', 'Periodo\PuntoAtencionController', ['only' => ['index']])
+    ->parameters([
+        'periodos' => 'periodo',
+        'prestadores' => 'prestador'
+    ]);
 
 Route::resource('tiposFuncionario', 'TipoFuncionario\TipoFuncionarioController', ['only' => ['index']]);
 
@@ -26,8 +27,9 @@ Route::resource('prestadores', 'Prestador\PrestadorController', ['only' => ['ind
 Route::resource('prestadores.puntosAtencion', 'Prestador\PuntoAtencionController', ['only' => ['index']])->parameters([
     'prestadores' => 'prestador'
 ]);
-Route::resource('prestadores.funcionarios', 'Prestador\FuncionarioController', ['only' => ['index']])->parameters([
-    'prestadores' => 'prestador'
+Route::resource('prestadores.funcionarios', 'Prestador\FuncionarioController', ['only' => ['index', 'store', 'update']])->parameters([
+    'prestadores' => 'prestador',
+    'funcionarios' => 'funcionario'
 ]);
 
 Route::resource('puntosAtencion.periodos.reportes', 'PuntoAtencion\ReporteController', ['only' => ['store', 'index']])->parameters([

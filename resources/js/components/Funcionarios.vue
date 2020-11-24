@@ -143,6 +143,19 @@
               </v-toolbar>
 
               <br />
+
+              <v-alert
+                color="blue-grey lighten-1"
+                dark
+                icon="mdi-office-building"
+                prominent
+              >
+                Listado de funcionarios del prestador
+                <strong
+                  >({{ prestador.migracion_id }}) {{ prestador.nombre }}</strong
+                >
+              </v-alert>
+
               <v-data-table
                 :headers="headers"
                 :items="funcionarios"
@@ -181,12 +194,22 @@
                   <tr>
                     <td>{{ index + 1 + (page - 1) * 10 }}</td>
                     <td>
-                      {{ item.tipo_funcionario.valor_texto.toUpperCase() }}
+                      {{
+                        item.tipo_funcionario.valor_texto
+                          ? item.tipo_funcionario.valor_texto.toUpperCase()
+                          : ""
+                      }}
                     </td>
-                    <td>{{ item.full_name.toUpperCase() }}</td>
-                    <td>{{ item.email.toUpperCase() }}</td>
-                    <td>{{ item.telefono.toUpperCase() }}</td>
-                    <td>{{ item.celular.toUpperCase() }}</td>
+                    <td>
+                      {{ item.full_name ? item.full_name.toUpperCase() : "" }}
+                    </td>
+                    <td>{{ item.email ? item.email.toUpperCase() : "" }}</td>
+                    <td>
+                      {{ item.telefono }}
+                    </td>
+                    <td>
+                      {{ item.celular }}
+                    </td>
                     <td>
                       <v-menu
                         bottom
@@ -444,6 +467,9 @@ export default {
 
         if (funcionarios.status === "success") {
           this.funcionarios = funcionarios.data;
+          if (this.funcionarios.length) {
+            console.log(this.prestador);
+          }
           console.log(this.funcionarios);
         } else {
           console.log(funcionarios);
@@ -465,37 +491,43 @@ export default {
       this.obtenerDatosFormularioGestion(funcionario);
       this.modalMostrarConfirmacionBorrado = true;
     },
-    obtenerDatosFormularioGestion(funcionario){
+    obtenerDatosFormularioGestion(funcionario) {
       this.formularioGestionIndex = this.funcionarios.indexOf(funcionario);
       this.formularioGestion = Object.assign({}, funcionario);
     },
     guardarFormularioGestion() {
-      //   if (this.puntoAtencionIndex > -1) {
-      //     reporte
-      //       .guardarReporte(
-      //         this.puntoAtencion,
-      //         this.periodo,
-      //         this.formularioReporte
-      //       )
-      //       .then((response) => {
-      //         console.log(response.data);
-      //         Object.assign(
-      //           this.puntosAtencion[this.puntoAtencionIndex],
-      //           response.data
-      //         );
-      //         this.cerrarFormularioReporte();
-      //       })
-      //       .catch((error) => {
-      //         console.log(error);
-      //         this.cerrarFormularioReporte();
-      //       });
-      //     Object.assign(
-      //       this.puntosAtencion[this.puntoAtencionIndex],
-      //       this.puntoAtencion
-      //     );
-      //   } else {
-      //     this.cerrarFormularioReporte();
-      //   }
+      if (this.formularioGestionIndex > -1) {
+        this.update();
+      } else {
+        this.create();
+      }
+    },
+    create() {
+      funcionario
+        .crearFuncionario(this.prestador, this.formularioGestion)
+        .then((response) => {
+          this.resetForm();
+          this.cerrarFormularioGestion();
+        });
+    },
+    update() {
+      funcionario
+        .editarFuncionario(this.prestador, this.formularioGestion)
+        .then((response) => {
+          console.log(response);
+          console.log(this.formularioGestion);
+          Object.assign(
+            this.funcionarios[this.formularioGestionIndex],
+            this.formularioGestion
+          );
+
+          this.resetForm();
+          this.cerrarFormularioGestion();
+        });
+    },
+    resetForm() {
+      this.formularioGestionIndex = -1;
+      this.formularioGestion = { ...this.formularioGestionDefault };
     },
     cerrarFormularioGestion() {
       this.modalFormularioGestion = false;

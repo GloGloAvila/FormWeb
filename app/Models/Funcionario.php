@@ -34,6 +34,7 @@ class Funcionario extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'prestador_id',
         'tipo_funcionario_id',
         'nombre',
         'apellido',
