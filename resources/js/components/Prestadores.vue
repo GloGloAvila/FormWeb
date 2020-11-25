@@ -55,6 +55,20 @@
               </v-toolbar>
 
               <br />
+
+              <v-alert
+                color="blue-grey lighten-1"
+                dark
+                icon="mdi-office-building"
+                prominent
+              >
+                Periodo:
+                <strong>
+                  {{ periodo.mes ? periodo.mes.valor_texto : "" }}
+                  {{ vigencia.nombre }}
+                </strong>
+              </v-alert>
+
               <v-data-table
                 :headers="headers"
                 :page.sync="page"
@@ -77,6 +91,9 @@
                 <template v-slot:[`header.tipo_prestador_id`]="{ header }">{{
                   header.text.toUpperCase()
                 }}</template>
+                <template v-slot:[`header.migracion_id`]="{ header }">{{
+                  header.text.toUpperCase()
+                }}</template>
                 <template v-slot:[`header.nombre`]="{ header }">{{
                   header.text.toUpperCase()
                 }}</template>
@@ -87,6 +104,7 @@
                 <template v-slot:item="{ item, index }">
                   <tr>
                     <td>{{ index + 1 + (page - 1) * 10 }}</td>
+                    <td>{{ item.migracion_id }}</td>
                     <td>{{ item.nombre.toUpperCase() }}</td>
                     <td>{{ item.tipo_prestador.descripcion.toUpperCase() }}</td>
                     <td>
@@ -110,7 +128,7 @@
                               >Gestión Puntos de atención</v-list-item-title
                             >
                           </v-list-item>
-                          <v-list-item @click="irListadoUsuarios(item)">
+                          <v-list-item v-if="is('ROLE_ADMINISTRADOR')" @click="irListadoUsuarios(item)">
                             <v-list-item-title
                               >Gestión Usuarios</v-list-item-title
                             >
@@ -257,6 +275,11 @@ export default {
           sortable: false,
         },
         {
+          text: "CÓDIGO",
+          value: "migracion_id",
+          sortable: false,
+        },
+        {
           text: "Nombre",
           value: "nombre",
           sortable: false,
@@ -311,6 +334,7 @@ export default {
       prestador.obtenerPrestadores(this.periodo).then((response) => {
         if (response.status === "success") {
           this.prestadores = response.data;
+          console.log(this.prestadores);
         } else {
           console.log(response);
         }

@@ -116,8 +116,6 @@
         </div>
         @endif
 
-
-
         <div class="content">
 
             <img src="/img/logo-spe-footer.png" alt="">
