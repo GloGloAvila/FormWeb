@@ -41,7 +41,7 @@
               <br />
               Periodo:
               <strong>
-                {{ periodo.mes.valor_texto }}
+                {{ periodo.mes ? periodo.mes.valor_texto : "" }}
                 {{ vigencia.nombre }}
               </strong>
             </v-alert>
@@ -1310,9 +1310,10 @@
                 </strong>
                 <br />
                 Periodo:
-                <strong
-                  >{{ periodo.mes.valor_texto }} {{ vigencia.nombre }}</strong
-                >
+                <strong>
+                  {{ periodo.mes ? periodo.mes.valor_texto : "" }}
+                  {{ vigencia.nombre }}
+                </strong>
               </v-alert>
 
               <v-data-table
