@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 use App\Models\PuntoAtencion;
 use App\Models\Funcionario;
+use App\User;
 use App\Models\Periodo;
 
 class Reporte extends Model
@@ -29,7 +30,8 @@ class Reporte extends Model
    */
   protected $fillable = [
     'punto_atencion_id',
-    'funcionario_id',
+    'responsable_id',
+    'responsable_type',
     'periodo_id',
     'personas_inscritas_total',
     'personas_inscritas_hombres',
@@ -92,6 +94,14 @@ class Reporte extends Model
     'personas_orientadas',
     'colocados_40mil',
     'transnacionales',
+    'hojas_vida_remitidas_exterior_total',
+    'hojas_vida_remitidas_exterior_hombres',
+    'hojas_vida_remitidas_exterior_mujeres',
+    'personas_colocadas_exterior_total',
+    'personas_colocadas_exterior_hombres',
+    'personas_colocadas_exterior_mujeres',
+    'empleadores_registrados_exterior',
+    'vacantes_registradas_exterior',
     'observaciones',
     'activo'
   ];
@@ -118,9 +128,9 @@ class Reporte extends Model
     return $this->belongsTo(PuntoAtencion::class, 'punto_atencion_id');
   }
 
-  public function funcionario()
+  public function responsable()
   {
-    return $this->belongsTo(Funcionario::class);
+    return $this->morphTo();
   }
 
   public function periodo()
