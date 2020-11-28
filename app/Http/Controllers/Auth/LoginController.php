@@ -58,7 +58,7 @@ class LoginController extends Controller
             return redirect()->intended('/');
         }
 
-        if (Auth::guard('funcionario')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
             return redirect()->intended('/');
         }
 
