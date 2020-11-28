@@ -20,5 +20,16 @@ export default {
           reject(response.data)
         })
     })
+  },
+  actualizarReporte(puntoAtencion, periodo, reporte) {
+    return new Promise((resolve, reject) => {
+      axios
+        .put(`puntosAtencion/${puntoAtencion.id}/periodos/${periodo.id}/reportes/${reporte.id}`, { data: reporte })
+        .then(response => {
+          resolve(response.data)
+        }, response => {
+          reject(response.data)
+        })
+    })
   }
 }
