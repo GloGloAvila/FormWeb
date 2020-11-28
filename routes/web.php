@@ -34,7 +34,7 @@ Route::resource('prestadores.funcionarios', 'Prestador\FuncionarioController', [
     'funcionarios' => 'funcionario'
 ]);
 
-Route::resource('puntosAtencion.periodos.reportes', 'PuntoAtencion\ReporteController', ['only' => ['store', 'index']])->parameters([
+Route::resource('puntosAtencion.periodos.reportes', 'PuntoAtencion\ReporteController', ['only' => ['store', 'index', 'update']])->parameters([
     'puntosAtencion' => 'puntoAtencion',
     'periodos' => 'periodo'
 ]);
