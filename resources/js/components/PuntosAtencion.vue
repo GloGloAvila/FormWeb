@@ -82,7 +82,12 @@
                         <v-text-field
                           v-model="formularioReporte.personas_inscritas_hombres"
                           label="Hombres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -90,7 +95,12 @@
                         <v-text-field
                           v-model="formularioReporte.personas_inscritas_mujeres"
                           label="Mujeres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -121,14 +131,12 @@
                   text
                   type="info"
                 >
-                  <p>
-                    <small
-                      >Corresponde al número total de hojas de vida enviadas a
-                      empleadores para procesos de selección y/o contratación en
-                      el mes de referencia. Las remisiones de hojas de vida a
-                      empleadores comprenden los siguientes casos:</small
-                    >
-                  </p>
+                  <small
+                    >Corresponde al número total de hojas de vida enviadas a
+                    empleadores para procesos de selección y/o contratación en
+                    el mes de referencia. Las remisiones de hojas de vida a
+                    empleadores comprenden los siguientes casos:</small
+                  >
                   <small>
                     <ol type="A">
                       <li>
@@ -166,7 +174,12 @@
                             formularioReporte.remisiones_a_empleadores_hombres
                           "
                           label="Hombres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -176,7 +189,12 @@
                             formularioReporte.remisiones_a_empleadores_mujeres
                           "
                           label="Mujeres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -213,15 +231,13 @@
                   text
                   type="info"
                 >
-                  <p>
-                    <small
-                      >Corresponde al número total de personas que fueron
-                      contratadas por el empleador como resultado de la gestión
-                      y validación realizada por el Punto de Atención, en el mes
-                      de referencia. Esta información debe presentarse
-                      desagregada por sexo: hombres y mujeres.</small
-                    >
-                  </p>
+                  <small
+                    >Corresponde al número total de personas que fueron
+                    contratadas por el empleador como resultado de la gestión y
+                    validación realizada por el Punto de Atención, en el mes de
+                    referencia. Esta información debe presentarse desagregada
+                    por sexo: hombres y mujeres.</small
+                  >
                 </v-alert>
                 <v-form ref="formPaso3" v-model="paso3Valido">
                   <v-container>
@@ -239,7 +255,12 @@
                         <v-text-field
                           v-model="formularioReporte.colocados_hombres"
                           label="Hombres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -247,7 +268,12 @@
                         <v-text-field
                           v-model="formularioReporte.colocados_mujeres"
                           label="Mujeres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -312,32 +338,66 @@
                 <v-form ref="formPaso4" v-model="paso4Valido">
                   <v-container>
                     <v-row>
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="6" md="3">
+                        <v-text-field
+                          v-model="totalColocadosEnfoqueDiferencial"
+                          label="Total colocados con enfoque diferencial"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="3">
                         <v-text-field
                           v-model="formularioReporte.colocados_victimas"
                           label="Victimas"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="6" md="3">
                         <v-text-field
                           v-model="formularioReporte.colocados_jovenes"
                           label="Jóvenes"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
-                      <v-col cols="12" sm="6" md="4">
+                      <v-col cols="12" sm="6" md="3">
                         <v-text-field
                           v-model="formularioReporte.colocados_discapacidad"
                           label="Discapacidad"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
                     </v-row>
                   </v-container>
+                  <v-alert
+                    v-if="!validarTotalColocadosVSTotalEnfoqueDiferencial"
+                    color="yellow lighten-3"
+                    icon="mdi-alert-octagon"
+                    prominent
+                  >
+                    El total de colocados con enfoque diferencial, no puede
+                    superar el total de personas colocadas del punto anterior.
+                  </v-alert>
+
                   <div style="display: flex; justify-content: space-around">
                     <v-btn
                       color="blue-grey lighten-1"
@@ -348,7 +408,10 @@
                     <v-btn
                       color="blue-grey lighten-1"
                       @click="pasoFormulario = 5"
-                      v-if="paso4Valido"
+                      v-if="
+                        paso4Valido &&
+                        validarTotalColocadosVSTotalEnfoqueDiferencial
+                      "
                       dark
                       >Siguiente</v-btn
                     >
@@ -369,15 +432,13 @@
                   text
                   type="info"
                 >
-                  <p>
-                    <small
-                      >Es el número de empleadores (personas jurídicas) que se
-                      registraron/ inscribieron en el sistema de información que
-                      le ha sido autorizado al prestador, de manera asistida por
-                      el Punto de Atención o autónoma (auto-registro de forma
-                      virtual), en el mes de referencia.</small
-                    >
-                  </p>
+                  <small
+                    >Es el número de empleadores (personas jurídicas) que se
+                    registraron/ inscribieron en el sistema de información que
+                    le ha sido autorizado al prestador, de manera asistida por
+                    el Punto de Atención o autónoma (auto-registro de forma
+                    virtual), en el mes de referencia.</small
+                  >
                 </v-alert>
                 <v-form ref="formPaso5" v-model="paso5Valido">
                   <v-container>
@@ -389,7 +450,12 @@
                             formularioReporte.empleadores_inscritos_total
                           "
                           label="TOTAL (*)"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -427,16 +493,14 @@
                   text
                   type="info"
                 >
-                  <p>
-                    <small
-                      >Corresponde al número de personas atendidas en
-                      entrevistas individuales con un orientador ocupacional,
-                      con el objetivo de identificar su perfil laboral y definir
-                      acciones que contribuyan a mejorar su empleabilidad. Esta
-                      información debe presentarse desagregada por sexo: hombres
-                      y mujeres.</small
-                    >
-                  </p>
+                  <small
+                    >Corresponde al número de personas atendidas en entrevistas
+                    individuales con un orientador ocupacional, con el objetivo
+                    de identificar su perfil laboral y definir acciones que
+                    contribuyan a mejorar su empleabilidad. Esta información
+                    debe presentarse desagregada por sexo: hombres y
+                    mujeres.</small
+                  >
                 </v-alert>
                 <v-form ref="formPaso6" v-model="paso6Valido">
                   <v-container>
@@ -454,7 +518,12 @@
                         <v-text-field
                           v-model="formularioReporte.personas_atendidas_hombres"
                           label="Hombres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -462,7 +531,12 @@
                         <v-text-field
                           v-model="formularioReporte.personas_atendidas_mujeres"
                           label="Mujeres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -500,18 +574,16 @@
                   text
                   type="info"
                 >
-                  <p>
-                    <small
-                      >Es el número de personas atendidas en actividades
-                      grupales, como talleres, en las cuales se brindan a los
-                      buscadores de empleo herramientas y asesoría para la
-                      búsqueda de empleo, identificación de alternativas
-                      laborales, herramientas para el autoempleo, información
-                      sobre programas de empleabilidad e información general del
-                      mercado laboral. Esta información debe presentarse
-                      desagregada por sexo: hombres y mujeres.</small
-                    >
-                  </p>
+                  <small
+                    >Es el número de personas atendidas en actividades grupales,
+                    como talleres, en las cuales se brindan a los buscadores de
+                    empleo herramientas y asesoría para la búsqueda de empleo,
+                    identificación de alternativas laborales, herramientas para
+                    el autoempleo, información sobre programas de empleabilidad
+                    e información general del mercado laboral. Esta información
+                    debe presentarse desagregada por sexo: hombres y
+                    mujeres.</small
+                  >
                 </v-alert>
                 <v-form ref="formPaso7" v-model="paso7Valido">
                   <v-container>
@@ -531,7 +603,12 @@
                             formularioReporte.personas_atendidas_en_talleres_hombres
                           "
                           label="Hombres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -541,7 +618,12 @@
                             formularioReporte.personas_atendidas_en_talleres_mujeres
                           "
                           label="Mujeres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -579,17 +661,16 @@
                   text
                   type="info"
                 >
-                  <p>
-                    <small
-                      >Hace referencia al número de personas que fueron
-                      direccionadas (preinscritos o inscritos) a cursos y/o
-                      programas, los cuales son ofrecidos directamente por el
-                      prestador o por entidades externas, relacionados con
-                      alguno de los siguientes tipos de formación, en el mes de
-                      referencia:</small
-                    >
-                  </p>
-
+                  <small
+                    >Hace referencia al número de personas que fueron
+                    direccionadas (preinscritos o inscritos) a cursos y/o
+                    programas, los cuales son ofrecidos directamente por el
+                    prestador o por entidades externas, relacionados con alguno
+                    de los siguientes tipos de formación, en el mes de
+                    referencia:</small
+                  >
+                  <br />
+                  <br />
                   <small>
                     <ol type="A">
                       <li>Formación en competencias claves y transversales.</li>
@@ -602,13 +683,10 @@
                       <li>Técnico laboral.</li>
                     </ol>
                   </small>
-
-                  <p>
-                    <small
-                      >Esta información debe presentarse desagregada para cada
-                      uno de los tipos de formación.</small
-                    >
-                  </p>
+                  <small
+                    >Esta información debe presentarse desagregada para cada uno
+                    de los tipos de formación.</small
+                  >
                 </v-alert>
                 <v-form ref="formPaso8" v-model="paso8Valido">
                   <v-container>
@@ -662,7 +740,12 @@
                                 formularioReporte.remitidas_formacion_competencias_hombres
                               "
                               label="Competencias claves transversales"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -672,7 +755,12 @@
                                 formularioReporte.remitidas_formacion_tic_hombres
                               "
                               label="Tecnologías de la Información y la Comunicaciones TIC"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -682,7 +770,12 @@
                                 formularioReporte.remitidas_formacion_alfabetizacion_hombres
                               "
                               label="Alfabetización o Bachillerato"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -692,7 +785,12 @@
                                 formularioReporte.remitidas_formacion_entrenamiento_hombres
                               "
                               label="Entrenamiento o reentrenamiento técnico"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -702,7 +800,12 @@
                                 formularioReporte.remitidas_formacion_tecnico_hombres
                               "
                               label="Técnico laboral"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -729,7 +832,12 @@
                                 formularioReporte.remitidas_formacion_competencias_mujeres
                               "
                               label="Competencias claves transversales"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -739,7 +847,12 @@
                                 formularioReporte.remitidas_formacion_tic_mujeres
                               "
                               label="Tecnologías de la Información y la Comunicaciones TIC"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -749,7 +862,12 @@
                                 formularioReporte.remitidas_formacion_alfabetizacion_mujeres
                               "
                               label="Alfabetización o Bachillerato"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -759,7 +877,12 @@
                                 formularioReporte.remitidas_formacion_entrenamiento_mujeres
                               "
                               label="Entrenamiento o reentrenamiento técnico"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -769,7 +892,12 @@
                                 formularioReporte.remitidas_formacion_tecnico_mujeres
                               "
                               label="Técnico laboral"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -810,16 +938,15 @@
                   text
                   type="info"
                 >
-                  <p>
-                    <small
-                      >Hace referencia al número de personas que culminaron
-                      cursos y/o programas, los cuales son ofrecidos
-                      directamente por el prestador o por entidades externas,
-                      relacionados con alguno de los siguientes tipos de
-                      formación, en el mes de referencia:</small
-                    >
-                  </p>
-
+                  <small
+                    >Hace referencia al número de personas que culminaron cursos
+                    y/o programas, los cuales son ofrecidos directamente por el
+                    prestador o por entidades externas, relacionados con alguno
+                    de los siguientes tipos de formación, en el mes de
+                    referencia:</small
+                  >
+                  <br />
+                  <br />
                   <small>
                     <ol type="A">
                       <li>Formación en competencias claves y transversales.</li>
@@ -833,12 +960,10 @@
                     </ol>
                   </small>
 
-                  <p>
-                    <small
-                      >Esta información debe presentarse desagregada para cada
-                      uno de los tipos de formación.</small
-                    >
-                  </p>
+                  <small
+                    >Esta información debe presentarse desagregada para cada uno
+                    de los tipos de formación.</small
+                  >
                 </v-alert>
                 <v-form ref="formPaso9" v-model="paso9Valido">
                   <v-container>
@@ -892,7 +1017,12 @@
                                 formularioReporte.culminaron_formacion_competencias_hombres
                               "
                               label="Competencias claves transversales"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -902,7 +1032,12 @@
                                 formularioReporte.culminaron_formacion_tic_hombres
                               "
                               label="Tecnologías de la Información y la Comunicaciones TIC"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -912,7 +1047,12 @@
                                 formularioReporte.culminaron_formacion_alfabetizacion_hombres
                               "
                               label="Alfabetización o Bachillerato"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -922,7 +1062,12 @@
                                 formularioReporte.culminaron_formacion_entrenamiento_hombres
                               "
                               label="Entrenamiento o reentrenamiento técnico"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -932,7 +1077,12 @@
                                 formularioReporte.culminaron_formacion_tecnico_hombres
                               "
                               label="Técnico laboral"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -959,7 +1109,12 @@
                                 formularioReporte.culminaron_formacion_competencias_mujeres
                               "
                               label="Competencias claves transversales"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -969,7 +1124,12 @@
                                 formularioReporte.culminaron_formacion_tic_mujeres
                               "
                               label="Tecnologías de la Información y la Comunicaciones TIC"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -979,7 +1139,12 @@
                                 formularioReporte.culminaron_formacion_alfabetizacion_mujeres
                               "
                               label="Alfabetización o Bachillerato"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -989,7 +1154,12 @@
                                 formularioReporte.culminaron_formacion_entrenamiento_mujeres
                               "
                               label="Entrenamiento o reentrenamiento técnico"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -999,7 +1169,12 @@
                                 formularioReporte.culminaron_formacion_tecnico_mujeres
                               "
                               label="Técnico laboral"
-                              :disabled="puntoAtencionIndex === -1"
+                              :disabled="
+                                (formularioReporteIndex !== -1 &&
+                                  puntoAtencion.estado !== 'En proceso' &&
+                                  is('ROLE_PRESTADOR')) ||
+                                puntoAtencion.estado === 'Pendiente'
+                              "
                               :rules="numeroRules"
                             ></v-text-field>
                           </v-col>
@@ -1040,19 +1215,16 @@
                   text
                   type="info"
                 >
-                  <p>
-                    <small
-                      >Corresponde al número de personas direccionadas por el
-                      prestador a programas específicos de emprendimiento para
-                      personas que incursionan como emprendedores o que tienen
-                      experiencia en emprendimiento, los cuales son ofrecidos
-                      directamente por el prestador o por entidades externas,
-                      tales como programas que ofrecen capital semilla, líneas
-                      de financiamiento, asesoría en la estructuración de
-                      proyectos y orientación a emprendedores entre
-                      otros.</small
-                    >
-                  </p>
+                  <small
+                    >Corresponde al número de personas direccionadas por el
+                    prestador a programas específicos de emprendimiento para
+                    personas que incursionan como emprendedores o que tienen
+                    experiencia en emprendimiento, los cuales son ofrecidos
+                    directamente por el prestador o por entidades externas,
+                    tales como programas que ofrecen capital semilla, líneas de
+                    financiamiento, asesoría en la estructuración de proyectos y
+                    orientación a emprendedores entre otros.</small
+                  >
                 </v-alert>
                 <v-form ref="formPaso10" v-model="paso10Valido">
                   <v-container>
@@ -1072,7 +1244,12 @@
                             formularioReporte.remitidas_programas_emprendimiento_hombres
                           "
                           label="Hombres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -1082,7 +1259,12 @@
                             formularioReporte.remitidas_programas_emprendimiento_mujeres
                           "
                           label="Mujeres"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -1120,12 +1302,10 @@
                   text
                   type="info"
                 >
-                  <p>
-                    <small
-                      >Corresponde al Número de PQRSD radicados en el Punto de
-                      Atención.</small
-                    >
-                  </p>
+                  <small
+                    >Corresponde al Número de PQRSD radicados en el Punto de
+                    Atención.</small
+                  >
                 </v-alert>
                 <v-form ref="formPaso11" v-model="paso11Valido">
                   <v-container>
@@ -1135,7 +1315,12 @@
                         <v-text-field
                           v-model="formularioReporte.pqrs_radicados_total"
                           label="TOTAL (*)"
-                          :disabled="puntoAtencionIndex === -1"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
                           :rules="numeroRules"
                         ></v-text-field>
                       </v-col>
@@ -1163,8 +1348,8 @@
               </v-stepper-content>
 
               <v-stepper-step :complete="pasoFormulario > 12" step="12"
-                >Observaciones</v-stepper-step
-              >
+                >Servicios de gestión y colocación de empleo en el exterior.
+              </v-stepper-step>
               <v-stepper-content step="12">
                 <v-alert
                   icon="mdi-alert-octagon-outline"
@@ -1172,27 +1357,309 @@
                   text
                   type="info"
                 >
-                  <p>
-                    <small
-                      >En el campo de observaciones por favor indiquenos en que
-                      aspectos podemos mejorar.</small
-                    >
-                  </p>
+                  <small>
+                    Es importante que sí en esta opción “sí presta servicios en
+                    el exterior” solamente sea activaba por los prestadores que
+                    se encuentren autorizados para prestar los servicios de
+                    gestión y colocación en el exterior. De lo contrario omita
+                    este paso y continue con el siguiente paso.
+                  </small>
                 </v-alert>
                 <v-form ref="formPaso12" v-model="paso12Valido">
                   <v-container>
                     <v-row>
-                      <v-col cols="12" sm="12" md="12">
-                        <v-textarea
-                          counter
-                          v-model="formularioReporte.observaciones"
-                          label="Observaciones"
-                          :disabled="puntoAtencionIndex === -1"
-                          :rules="textoRules"
-                        ></v-textarea>
+                      <v-col cols="12" sm="6" md="6">
+                        <v-switch
+                          v-model="formularioReporte.transnacionales"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
+                          label="¿Presta servicios de gestión y colocación de empleo en el exterior?"
+                          color="teal lighten-2"
+                          hide-details
+                        ></v-switch>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="6">
+                        <v-alert
+                          text
+                          dense
+                          color="orange darken-3"
+                          v-if="!formularioReporte.transnacionales"
+                        >
+                          <small
+                            >Ha seleccionado: <br />
+                            <strong>No</strong> presta servicios de gestión y
+                            colocación de empleo en el exterior
+                          </small>
+                        </v-alert>
+                        <v-alert text dense color="teal lighten-3" v-else>
+                          <small
+                            >Ha seleccionado: <br />
+                            <strong>Sí</strong> presta servicios de gestión y
+                            colocación de empleo en el exterior
+                          </small>
+                        </v-alert>
                       </v-col>
                     </v-row>
                   </v-container>
+
+                  <div v-if="formularioReporte.transnacionales">
+                    <v-container>
+                      <v-alert
+                        color="blue-grey lighten-2"
+                        border="top"
+                        elevation="2"
+                        colored-border
+                      >
+                        <v-subheader class="blue-grey--text text--lighten-2">
+                          <strong class="text-transform-uppercase"
+                            >Número de hojas de vida remitidas a empleadores en
+                            el exterior</strong
+                          >
+                        </v-subheader>
+                        <v-container>
+                          <v-alert
+                            icon="mdi-alert-octagon-outline"
+                            prominent
+                            text
+                            type="info"
+                          >
+                            <small
+                              >Corresponde al número total de hojas de vida
+                              enviadas a empleadores en el exterior para
+                              procesos de selección y/o contratación en el mes
+                              de referencia. Las remisiones de hojas de vida a
+                              empleadores comprenden los siguientes
+                              casos:</small
+                            >
+                            <br />
+                            <br />
+                            <small>
+                              <ol type="A">
+                                <li>
+                                  Cuando el Punto de Atención del prestador
+                                  efectúa directamente el envío de las hojas de
+                                  vida al empleador.
+                                </li>
+                                <li>
+                                  Cuando la persona inscrita/registrada se
+                                  postula directamente a una vacante a través
+                                  del sistema de información que le ha sido
+                                  autorizado al prestador.
+                                </li>
+                                <li>
+                                  Cuando el empleador preselecciona directamente
+                                  las hojas de vida a través del sistema de
+                                  información que le ha sido autorizado al
+                                  prestador.
+                                </li>
+                              </ol>
+                            </small>
+
+                            <small
+                              >Esta información debe presentarse desagregada por
+                              sexo: hombres y mujeres.</small
+                            >
+                          </v-alert>
+                          <v-row>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-text-field
+                                v-model="hojasVidaRemitidasExterior"
+                                label="TOTAL (*)"
+                                filled
+                                disabled
+                                dense
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-text-field
+                                v-model="
+                                  formularioReporte.hojas_vida_remitidas_exterior_hombres
+                                "
+                                label="Hombres"
+                                :disabled="
+                                  (formularioReporteIndex !== -1 &&
+                                    puntoAtencion.estado !== 'En proceso' &&
+                                    is('ROLE_PRESTADOR')) ||
+                                  puntoAtencion.estado === 'Pendiente'
+                                "
+                                :rules="numeroRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-text-field
+                                v-model="
+                                  formularioReporte.hojas_vida_remitidas_exterior_mujeres
+                                "
+                                label="Mujeres"
+                                :disabled="
+                                  (formularioReporteIndex !== -1 &&
+                                    puntoAtencion.estado !== 'En proceso' &&
+                                    is('ROLE_PRESTADOR')) ||
+                                  puntoAtencion.estado === 'Pendiente'
+                                "
+                                :rules="numeroRules"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-alert>
+                    </v-container>
+
+                    <v-container>
+                      <v-alert
+                        color="blue-grey lighten-2"
+                        border="top"
+                        elevation="2"
+                        colored-border
+                      >
+                        <v-subheader class="blue-grey--text text--lighten-2">
+                          <strong class="text-transform-uppercase"
+                            >Número de personas colocadas en el exterior</strong
+                          >
+                        </v-subheader>
+                        <v-container>
+                          <v-alert
+                            icon="mdi-alert-octagon-outline"
+                            prominent
+                            text
+                            type="info"
+                          >
+                            <small
+                              >Corresponde al número total de personas que
+                              fueron contratadas por empleadores en el exterior
+                              como resultado de la gestión y validación
+                              realizada por el Punto de Atención, en el mes de
+                              referencia.</small
+                            >
+                            <br />
+                            <br />
+                            <small
+                              >Esta información debe presentarse desagregada por
+                              sexo: hombres y mujeres.</small
+                            >
+                          </v-alert>
+                          <v-row>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-text-field
+                                v-model="personasColocadasExterior"
+                                label="TOTAL (*)"
+                                filled
+                                disabled
+                                dense
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-text-field
+                                v-model="
+                                  formularioReporte.personas_colocadas_exterior_hombres
+                                "
+                                label="Hombres"
+                                :disabled="
+                                  (formularioReporteIndex !== -1 &&
+                                    puntoAtencion.estado !== 'En proceso' &&
+                                    is('ROLE_PRESTADOR')) ||
+                                  puntoAtencion.estado === 'Pendiente'
+                                "
+                                :rules="numeroRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-text-field
+                                v-model="
+                                  formularioReporte.personas_colocadas_exterior_mujeres
+                                "
+                                label="Mujeres"
+                                :disabled="
+                                  (formularioReporteIndex !== -1 &&
+                                    puntoAtencion.estado !== 'En proceso' &&
+                                    is('ROLE_PRESTADOR')) ||
+                                  puntoAtencion.estado === 'Pendiente'
+                                "
+                                :rules="numeroRules"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-alert>
+                    </v-container>
+                    <v-container>
+                      <v-alert
+                        color="blue-grey lighten-2"
+                        border="top"
+                        elevation="2"
+                        colored-border
+                      >
+                        <v-subheader class="blue-grey--text text--lighten-2">
+                          <strong class="text-transform-uppercase"
+                            >Número de empleadores registrados/inscritos en el
+                            exterior</strong
+                          >
+                        </v-subheader>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12" sm="6" md="4"> </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-text-field
+                                v-model="
+                                  formularioReporte.empleadores_registrados_exterior
+                                "
+                                label="Total"
+                                :disabled="
+                                  (formularioReporteIndex !== -1 &&
+                                    puntoAtencion.estado !== 'En proceso' &&
+                                    is('ROLE_PRESTADOR')) ||
+                                  puntoAtencion.estado === 'Pendiente'
+                                "
+                                :rules="numeroRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4"> </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-alert>
+                    </v-container>
+                    <v-container>
+                      <v-alert
+                        color="blue-grey lighten-2"
+                        border="top"
+                        elevation="2"
+                        colored-border
+                      >
+                        <v-subheader class="blue-grey--text text--lighten-2">
+                          <strong class="text-transform-uppercase"
+                            >Número de vacantes registradas en el
+                            exterior</strong
+                          >
+                        </v-subheader>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12" sm="6" md="4"> </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-text-field
+                                v-model="
+                                  formularioReporte.vacantes_registradas_exterior
+                                "
+                                label="Total"
+                                :disabled="
+                                  (formularioReporteIndex !== -1 &&
+                                    puntoAtencion.estado !== 'En proceso' &&
+                                    is('ROLE_PRESTADOR')) ||
+                                  puntoAtencion.estado === 'Pendiente'
+                                "
+                                :rules="numeroRules"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4"> </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-alert>
+                    </v-container>
+                  </div>
+
                   <div style="display: flex; justify-content: space-around">
                     <v-btn
                       color="blue-grey lighten-1"
@@ -1213,6 +1680,61 @@
                   </div>
                 </v-form>
               </v-stepper-content>
+
+              <v-stepper-step :complete="pasoFormulario > 13" step="13"
+                >Observaciones</v-stepper-step
+              >
+              <v-stepper-content step="13">
+                <v-alert
+                  icon="mdi-alert-octagon-outline"
+                  prominent
+                  text
+                  type="info"
+                >
+                  <small
+                    >En el campo de observaciones por favor indiquenos en que
+                    aspectos podemos mejorar.</small
+                  >
+                </v-alert>
+                <v-form ref="formPaso13" v-model="paso13Valido">
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12" sm="12" md="12">
+                        <v-textarea
+                          counter
+                          v-model="formularioReporte.observaciones"
+                          label="Observaciones"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
+                          :rules="textoRules"
+                        ></v-textarea>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                  <div style="display: flex; justify-content: space-around">
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 12"
+                      dark
+                      >Anterior</v-btn
+                    >
+                    <v-btn
+                      color="blue-grey lighten-1"
+                      @click="pasoFormulario = 14"
+                      v-if="paso13Valido"
+                      dark
+                      >Siguiente</v-btn
+                    >
+                    <v-btn color="gray darken-1" disabled v-else
+                      >Siguiente</v-btn
+                    >
+                  </div>
+                </v-form>
+              </v-stepper-content>
             </v-stepper>
           </v-card-text>
 
@@ -1224,7 +1746,15 @@
             <v-btn
               color="blue darken-1"
               @click="revisarFormulario"
-              v-if="pasoFormulario === 13"
+              v-if="
+                pasoFormulario === 14 &&
+                !(
+                  (formularioReporteIndex !== -1 &&
+                    puntoAtencion.estado !== 'En proceso' &&
+                    is('ROLE_PRESTADOR')) ||
+                  puntoAtencion.estado === 'Pendiente'
+                )
+              "
               dark
               >Revisar formulario</v-btn
             >
@@ -1234,7 +1764,16 @@
             <v-btn
               color="green darken-1"
               @click="guardarFormularioReporte"
-              v-if="puntoAtencionIndex > -1 && pasoFormulario === 13"
+              v-if="
+                revisionFormulario === true &&
+                pasoFormulario === 14 &&
+                !(
+                  (formularioReporteIndex !== -1 &&
+                    puntoAtencion.estado !== 'En proceso' &&
+                    is('ROLE_PRESTADOR')) ||
+                  puntoAtencion.estado === 'Pendiente'
+                )
+              "
               dark
               >Guardar</v-btn
             >
@@ -1351,8 +1890,20 @@
                 <template v-slot:item="{ item, index }">
                   <tr>
                     <td>{{ index + 1 + (page - 1) * 10 }}</td>
-                    <td>{{ item.departamento.nombre.toUpperCase() }}</td>
-                    <td>{{ item.municipio.nombre.toUpperCase() }}</td>
+                    <td>
+                      {{
+                        item.departamento
+                          ? item.departamento.nombre.toUpperCase()
+                          : ""
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        item.municipio
+                          ? item.municipio.nombre.toUpperCase()
+                          : ""
+                      }}
+                    </td>
                     <td>
                       {{ prestador.migracion_id
                       }}{{ item.codigo.toUpperCase() }}
@@ -1382,10 +1933,14 @@
                             @click="mostrarFormularioReporte(item)"
                           >
                             <v-list-item-title
-                              >Reporte Mensual</v-list-item-title
-                            >
+                              >Reporte Mensual
+                            </v-list-item-title>
                           </v-list-item>
                           <v-list-item
+                            v-if="
+                              is('ROLE_ADMINISTRADOR') ||
+                              item.estado !== 'En proceso'
+                            "
                             @click="mostrarReporteDiligenciado(item)"
                           >
                             <v-list-item-title
@@ -1527,9 +2082,11 @@ export default {
       paso10Valido: true,
       paso11Valido: true,
       paso12Valido: true,
+      paso13Valido: true,
       numeroRules: [
-        (v) => v >= 0 || "Es un campo numérico obligatorio",
-        (v) => /[0-9]/.test(v) || "Es un campo numérico obligatorio",
+        // (v) => v >= 0 || "Es un campo numérico obligatorio",
+        (v) => /^([0-9]){1,7}$/.test(v) || "Es un campo numérico obligatorio",
+        // (v) => v.length <= 7 || "Este campo sólo permite un máximo de 7 dígitos.",
       ],
       textoRules: [
         (v) => !!v || "Es un campo obligatorio",
@@ -1537,6 +2094,7 @@ export default {
           v.length <= 1000 ||
           "Este campo sólo permite un máximo de 1000 caracteres.",
       ],
+      revisionFormulario: false,
       formularioReporteIndex: -1,
       formularioReporte: {
         personas_inscritas_total: 0,
@@ -1599,7 +2157,15 @@ export default {
         pqrs_radicados_total: 0,
         personas_orientadas: 0,
         colocados_40mil: 0,
-        transnacionales: 0,
+        transnacionales: false,
+        hojas_vida_remitidas_exterior_total: 0,
+        hojas_vida_remitidas_exterior_hombres: 0,
+        hojas_vida_remitidas_exterior_mujeres: 0,
+        personas_colocadas_exterior_total: 0,
+        personas_colocadas_exterior_hombres: 0,
+        personas_colocadas_exterior_mujeres: 0,
+        empleadores_registrados_exterior: 0,
+        vacantes_registradas_exterior: 0,
         observaciones: "",
       },
       formularioReporteDefault: {
@@ -1663,7 +2229,15 @@ export default {
         pqrs_radicados_total: 0,
         personas_orientadas: 0,
         colocados_40mil: 0,
-        transnacionales: 0,
+        transnacionales: false,
+        hojas_vida_remitidas_exterior_total: 0,
+        hojas_vida_remitidas_exterior_hombres: 0,
+        hojas_vida_remitidas_exterior_mujeres: 0,
+        personas_colocadas_exterior_total: 0,
+        personas_colocadas_exterior_hombres: 0,
+        personas_colocadas_exterior_mujeres: 0,
+        empleadores_registrados_exterior: 0,
+        vacantes_registradas_exterior: 0,
         observaciones: "",
       },
       puntoAtencionIndex: -1,
@@ -1761,6 +2335,9 @@ export default {
             : this.itemsPerPage)
       );
     },
+    validarTotalColocadosVSTotalEnfoqueDiferencial() {
+      return this.calcularTotalColocadosVSTotalEnfoqueDiferencial();
+    },
     total() {
       return this.puntosAtencion.length;
     },
@@ -1780,6 +2357,9 @@ export default {
     },
     colocadosTotal() {
       return this.obtenerTotalColocados();
+    },
+    totalColocadosEnfoqueDiferencial() {
+      return this.obtenerTotalColocadosEnfoqueDiferencial();
     },
     personasAtendidas() {
       return this.obtenerTotalPersonasAtendidas();
@@ -1807,6 +2387,12 @@ export default {
     },
     remitidasProgramasEmprendimiento() {
       return this.obtenerTotalPersonasRemitidasAEmprendimiento();
+    },
+    hojasVidaRemitidasExterior() {
+      return this.obtenerTotalHojasVidaRemitidasExterior();
+    },
+    personasColocadasExterior() {
+      return this.obtenerTotalPersonasColocadasExterior();
     },
   },
   watch: {
@@ -1860,6 +2446,25 @@ export default {
           ? parseInt(this.formularioReporte.colocados_mujeres)
           : 0);
       return this.formularioReporte.colocados_total;
+    },
+    obtenerTotalColocadosEnfoqueDiferencial() {
+      let total_colocados_enfoque_diferencial =
+        (parseInt(this.formularioReporte.colocados_victimas) > 0
+          ? parseInt(this.formularioReporte.colocados_victimas)
+          : 0) +
+        (parseInt(this.formularioReporte.colocados_jovenes) > 0
+          ? parseInt(this.formularioReporte.colocados_jovenes)
+          : 0) +
+        (parseInt(this.formularioReporte.colocados_discapacidad) > 0
+          ? parseInt(this.formularioReporte.colocados_discapacidad)
+          : 0);
+      return total_colocados_enfoque_diferencial;
+    },
+    calcularTotalColocadosVSTotalEnfoqueDiferencial() {
+      return (
+        this.obtenerTotalColocadosEnfoqueDiferencial() <=
+        this.obtenerTotalColocados()
+      );
     },
     obtenerTotalPersonasAtendidas() {
       this.formularioReporte.personas_atendidas =
@@ -2051,6 +2656,36 @@ export default {
           : 0);
       return this.formularioReporte.remitidas_programas_emprendimiento;
     },
+    obtenerTotalHojasVidaRemitidasExterior() {
+      this.formularioReporte.hojas_vida_remitidas_exterior_total =
+        (parseInt(
+          this.formularioReporte.hojas_vida_remitidas_exterior_hombres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.hojas_vida_remitidas_exterior_hombres
+            )
+          : 0) +
+        (parseInt(
+          this.formularioReporte.hojas_vida_remitidas_exterior_mujeres
+        ) > 0
+          ? parseInt(
+              this.formularioReporte.hojas_vida_remitidas_exterior_mujeres
+            )
+          : 0);
+      return this.formularioReporte.hojas_vida_remitidas_exterior_total;
+    },
+    obtenerTotalPersonasColocadasExterior() {
+      this.formularioReporte.personas_colocadas_exterior_total =
+        (parseInt(this.formularioReporte.personas_colocadas_exterior_hombres) >
+        0
+          ? parseInt(this.formularioReporte.personas_colocadas_exterior_hombres)
+          : 0) +
+        (parseInt(this.formularioReporte.personas_colocadas_exterior_mujeres) >
+        0
+          ? parseInt(this.formularioReporte.personas_colocadas_exterior_mujeres)
+          : 0);
+      return this.formularioReporte.personas_colocadas_exterior_total;
+    },
     cargarListado() {
       puntoAtencion
         .obtenerPuntosAtencion(this.periodo, this.prestador)
@@ -2091,19 +2726,25 @@ export default {
       return color;
     },
     mostrarFormularioReporte(puntoAtencion) {
+      this.revisionFormulario = false;
+      this.formularioReporteIndex = -1;
       this.puntoAtencionIndex = this.puntosAtencion.indexOf(puntoAtencion);
       this.puntoAtencion = Object.assign({}, puntoAtencion);
       this.modalFormularioReporte = true;
     },
     mostrarReporteDiligenciado(puntoAtencion) {
+      this.revisionFormulario = false;
+      this.formularioReporteIndex = -1;
       reporte.obtenerReporte(puntoAtencion, this.periodo).then((response) => {
         if (response.status === "success") {
           // this.procesando = false;
           // this.error = false;
-          this.puntoAtencionIndex = -1;
+          this.puntoAtencionIndex = this.puntosAtencion.indexOf(puntoAtencion);
           this.puntoAtencion = Object.assign({}, puntoAtencion);
+          this.formularioReporteIndex = -1;
           if (response.data) {
             this.formularioReporte = response.data;
+            this.formularioReporteIndex = this.formularioReporte.id;
           }
           this.modalFormularioReporte = true;
         } else {
@@ -2114,7 +2755,9 @@ export default {
       });
     },
     guardarFormularioReporte() {
-      if (this.puntoAtencionIndex > -1) {
+        debugger
+      if (this.formularioReporteIndex === -1) {
+
         reporte
           .guardarReporte(
             this.puntoAtencion,
@@ -2133,19 +2776,32 @@ export default {
             console.log(error);
             this.cerrarFormularioReporte();
           });
-
-        Object.assign(
-          this.puntosAtencion[this.puntoAtencionIndex],
-          this.puntoAtencion
-        );
       } else {
-        this.cerrarFormularioReporte();
+        reporte
+          .actualizarReporte(
+            this.puntoAtencion,
+            this.periodo,
+            this.formularioReporte
+          )
+          .then((response) => {
+            console.log(response.data);
+            Object.assign(
+              this.puntosAtencion[this.puntoAtencionIndex],
+              response.data
+            );
+            this.cerrarFormularioReporte();
+          })
+          .catch((error) => {
+            console.log(error);
+            this.cerrarFormularioReporte();
+          });
       }
     },
     scrollTopFormulario() {
       document.getElementsByClassName("v-dialog--active")[0].scrollTop = 0;
     },
     revisarFormulario() {
+      this.revisionFormulario = true;
       this.scrollTopFormulario();
       this.pasoFormulario = 1;
     },
@@ -2165,3 +2821,7 @@ export default {
   },
 };
 </script>
+<style lang="sass">
+.text-transform-uppercase
+    text-transform: uppercase
+</style>
