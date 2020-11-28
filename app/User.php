@@ -8,6 +8,8 @@ use Illuminate\Notifications\Notifiable;
 use LaravelAndVueJS\Traits\LaravelPermissionToVueJS;
 use Spatie\Permission\Traits\HasRoles;
 
+use App\Models\Reporte;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -40,4 +42,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function reportes()
+    {
+        return $this->morphMany(Reporte::class, 'responsable');
+    }
+
 }

@@ -103,6 +103,6 @@ class Funcionario extends Authenticatable
 
     public function reportes()
     {
-        return $this->hasMany(Reporte::class);
+        return $this->morphMany(Reporte::class, 'responsable');
     }
 }
