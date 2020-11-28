@@ -50,8 +50,15 @@ class ReporteController extends Controller
     public function store(Request $request, PuntoAtencion $puntoAtencion, Periodo $periodo)
     {
         $datos = $request['data'];
-        
-        $datos['funcionario_id'] = Auth::guard('funcionario')->user()->id;
+
+        if(isset(Auth::guard('funcionario')->user()->id)){
+            $datos['responsable_id'] = Auth::guard('funcionario')->user()->id;
+            $datos['responsable_type'] = 'App\Models\Funcionario';
+        } else {
+            $datos['responsable_id'] = Auth::user()->id;;
+            $datos['responsable_type'] = 'App\User';
+        }
+
         $datos['punto_atencion_id'] = $puntoAtencion->id;
         $datos['periodo_id'] = $periodo->id;
 
@@ -78,5 +85,44 @@ class ReporteController extends Controller
             201
         );
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\PuntoAtencion  $puntoAtencion
+     * @param  \App\Models\Periodo  $periodo
+     * @param  \App\Models\Reporte  $reporte
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, PuntoAtencion $puntoAtencion, Periodo $periodo, Reporte $reporte)
+    {
+        $datos = $request['data'];
+
+        $reporte->fill($datos);
+        $reporte->save($datos);
+
+        // Listar el punto de atención con los datos después de la creación
+        $puntosAtencion = PuntoAtencion::where('id', $puntoAtencion->id)
+            ->with('departamento')
+            ->with('municipio')
+            ->with('prestador')
+            ->get();
+
+        $puntosAtencionCollection = [];
+        foreach ($puntosAtencion as $puntoAtencion) {
+            $puntoAtencion['periodo'] = $periodo;
+            $puntosAtencionCollection[] = $puntoAtencion;
+        }
+
+        return response()->json(
+            [
+                'status' => 'success',
+                'data' => PuntosAtencionResource::collection($puntosAtencionCollection)[0]
+            ],
+            201
+        );
+    }
+
 
 }
