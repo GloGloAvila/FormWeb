@@ -100,9 +100,9 @@ class Periodo extends Model
 
       // Evaluar si todos los prestadores presentaron reporte de lo contrario está imcompleto
       if (Auth::guard('funcionario')->check()) {
-        $usuario = Funcionario::find(Auth::guard('funcionario')->user()->id);
+        $usuario = Funcionario::find(Auth::user()->id);
       } else {
-        $usuario = User::find(Auth::user()->id);
+        $usuario = User::find(Auth::guard('web')->user()->id);
       }
 
       if ($usuario->hasrole('ROLE_ADMINISTRADOR')) {
@@ -184,7 +184,7 @@ class Periodo extends Model
     } else {
 
       if ($esEstadoPendiente && $esFechaVencida) {
-        // Si el estado es pendiente y la fecha está vencida, se debe calcular el estado del periodo 
+        // Si el estado es pendiente y la fecha está vencida, se debe calcular el estado del periodo
         $estado = $this->calcularEstado();
         if ($estado !== 'Pendiente' && $estado !== 'En proceso') {
           $this->estado_reporte_id = Opcion::getOpcionXGrupoXValorTexto('estado_reporte', $estado)->id;

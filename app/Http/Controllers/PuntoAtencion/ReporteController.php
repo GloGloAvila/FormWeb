@@ -52,10 +52,10 @@ class ReporteController extends Controller
         $datos = $request['data'];
 
         if(isset(Auth::guard('funcionario')->user()->id)){
-            $datos['responsable_id'] = Auth::guard('funcionario')->user()->id;
+            $datos['responsable_id'] = Auth::user()->id;
             $datos['responsable_type'] = 'App\Models\Funcionario';
         } else {
-            $datos['responsable_id'] = Auth::user()->id;;
+            $datos['responsable_id'] = Auth::guard('web')->user()->id;
             $datos['responsable_type'] = 'App\User';
         }
 

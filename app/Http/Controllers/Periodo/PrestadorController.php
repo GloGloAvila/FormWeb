@@ -26,9 +26,9 @@ class PrestadorController extends Controller
     {
 
         if (Auth::guard('funcionario')->check()) {
-            $usuario = Funcionario::find(Auth::guard('funcionario')->user()->id);
+            $usuario = Funcionario::find(Auth::user()->id);
         } else {
-            $usuario = User::find(Auth::user()->id);
+            $usuario = User::find(Auth::guard('web')->user()->id);
         }
 
         if ($usuario->hasrole('ROLE_ADMINISTRADOR')) {
