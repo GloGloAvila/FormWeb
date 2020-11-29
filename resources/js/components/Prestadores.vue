@@ -81,7 +81,6 @@
                 "
                 :sort-desc="sortDesc"
                 :search="search"
-                loading-text="Cargando... Espere por favor"
                 class="elevation-1"
                 hide-default-footer
               >
@@ -128,7 +127,10 @@
                               >Gestión Puntos de atención</v-list-item-title
                             >
                           </v-list-item>
-                          <v-list-item v-if="is('ROLE_ADMINISTRADOR')" @click="irListadoUsuarios(item)">
+                          <v-list-item
+                            v-if="is('ROLE_ADMINISTRADOR')"
+                            @click="irListadoUsuarios(item)"
+                          >
                             <v-list-item-title
                               >Gestión Usuarios</v-list-item-title
                             >
@@ -139,15 +141,30 @@
                   </tr>
                 </template>
                 <template v-slot:no-data>
-                  <br />
-                  <br />No tiene información registrada.
-                  <br />
-                  <br />
-                  <v-btn color="warning" @click="cargarListado()"
-                    >Recargar</v-btn
-                  >
-                  <br />
-                  <br />
+                  <div v-if="loading">
+                    <v-text-field
+                      color="success"
+                      loading
+                      disabled
+                    ></v-text-field>
+                    <small>
+                      Cargando listado de prestadores, por favor espere...
+                      <br />
+                      <br />
+                    </small>
+                  </div>
+
+                  <div v-if="!loading">
+                    <br />
+                    <br />No tiene información registrada.
+                    <br />
+                    <br />
+                    <v-btn color="warning" @click="cargarListado()"
+                      >Recargar</v-btn
+                    >
+                    <br />
+                    <br />
+                  </div>
                 </template>
               </v-data-table>
 
@@ -239,6 +256,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
@@ -331,7 +349,9 @@ export default {
       this.itemsPerPage = number === "Todo" ? -1 : number;
     },
     cargarListado() {
+      this.loading = true;
       prestador.obtenerPrestadores(this.periodo).then((response) => {
+        this.loading = false;
         if (response.status === "success") {
           this.prestadores = response.data;
           console.log(this.prestadores);

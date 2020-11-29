@@ -164,7 +164,6 @@
                 :sort-by="ordenarPor(sortBy.toLowerCase())"
                 :sort-desc="sortDesc"
                 :search="search"
-                loading-text="Cargando... Espere por favor"
                 class="elevation-1"
                 hide-default-footer
               >
@@ -237,16 +236,30 @@
                 </template>
 
                 <template v-slot:no-data>
-                  <br />
-                  <br />No tiene información registrada.
-                  <br />
-                  <br />
-                  <v-btn color="warning" @click="cargarListado()"
-                    >Recargar</v-btn
-                  >
-                  <br />
-                  <br />
-                </template>
+                  <div v-if="loading">
+                    <v-text-field
+                      color="success"
+                      loading
+                      disabled
+                    ></v-text-field>
+                    <small>
+                      Cargando listado de usuarios, por favor espere...
+                      <br />
+                      <br />
+                    </small>
+                  </div>
+
+                  <div v-if="!loading">
+                    <br />
+                    <br />No tiene información registrada.
+                    <br />
+                    <br />
+                    <v-btn color="warning" @click="cargarListado()"
+                      >Recargar</v-btn
+                    >
+                    <br />
+                    <br />
+                  </div>                </template>
               </v-data-table>
 
               <v-row class="mt-2" align="center" justify="center">
@@ -335,6 +348,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
@@ -461,9 +475,13 @@ export default {
       const funcionarios = funcionario.obtenerFuncionarios(this.prestador);
       const tiposFuncionarios = tipoFuncionario.obtenerTiposFuncionario();
 
+      this.loading = true
+
       Promise.all([funcionarios, tiposFuncionarios]).then((response) => {
         const funcionarios = response[0];
         const tiposFuncionarios = response[1];
+
+        this.loading = false
 
         if (funcionarios.status === "success") {
           this.funcionarios = funcionarios.data;

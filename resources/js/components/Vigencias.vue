@@ -1,16 +1,28 @@
 <template>
   <div>
     <v-app id="inspire">
-      <v-dialog v-model="modalFormularioPeriodo" persistent max-width="50%" style="z-index: 1040">
+      <v-dialog
+        v-model="modalFormularioPeriodo"
+        persistent
+        max-width="50%"
+        style="z-index: 1040"
+      >
         <v-card>
-          <v-card-title class="headline text-uppercase">Control de fechas</v-card-title>
+          <v-card-title class="headline text-uppercase"
+            >Control de fechas</v-card-title
+          >
 
           <v-card-subtitle class="text-justify">
-            <br />Esta opción permite a los prestadores realizar el diligenciamiento del reporte mensual de estadísticas en un rango de fechas determinado.
+            <br />Esta opción permite a los prestadores realizar el
+            diligenciamiento del reporte mensual de estadísticas en un rango de
+            fechas determinado.
             <br />
-            <br />A continuación puede seleccionar el rango de fechas permitido para que los prestadores realicen el reporte de información mensual correspondiente al mes
-            <strong>{{periodo.mes.valor_texto}}</strong> para la vigencia
-            <strong>{{vigencia.nombre}}</strong>.
+            <br />A continuación puede seleccionar el rango de fechas permitido
+            para que los prestadores realicen el reporte de información mensual
+            correspondiente al mes
+            <strong>{{ periodo.mes.valor_texto }}</strong> para la vigencia
+            <strong>{{ vigencia.nombre }}</strong
+            >.
             <br />
             <v-form ref="formularioPeriodo">
               <!-- lazy-validation -->
@@ -63,7 +75,10 @@
                         ></v-text-field>
                       </template>
 
-                      <v-date-picker v-model="periodo.fecha_fin" @input="menuFechaFin = false"></v-date-picker>
+                      <v-date-picker
+                        v-model="periodo.fecha_fin"
+                        @input="menuFechaFin = false"
+                      ></v-date-picker>
                     </v-menu>
                   </v-col>
                 </v-row>
@@ -75,30 +90,44 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red darken-1" @click="cerrarFormularioPeriodo" dark>Cancelar</v-btn>
+            <v-btn color="red darken-1" @click="cerrarFormularioPeriodo" dark
+              >Cancelar</v-btn
+            >
             <v-btn
               color="green darken-1"
               @click="guardarPeriodo"
               dark
               v-if="formularioPeriodoValido"
-            >Guardar</v-btn>
+              >Guardar</v-btn
+            >
             <v-btn color="gray darken-1" disabled v-else>Guardar</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-dialog v-model="modalFormularioVigencia" persistent max-width="50%" style="z-index: 1040">
+      <v-dialog
+        v-model="modalFormularioVigencia"
+        persistent
+        max-width="50%"
+        style="z-index: 1040"
+      >
         <v-card>
-          <v-card-title class="headline text-uppercase">Gestión de vigencias</v-card-title>
+          <v-card-title class="headline text-uppercase"
+            >Gestión de vigencias</v-card-title
+          >
 
           <v-card-subtitle class="text-justify">
             <br />
-            A continuación ingrese el año de la vigencia a {{accion.toLowerCase()}} en formato YYYY. Ejemplo: 1981
+            A continuación ingrese el año de la vigencia a
+            {{ accion.toLowerCase() }} en formato YYYY. Ejemplo: 1981
             <br />
             <v-form v-model="formularioVigenciaValido">
               <v-container>
                 <v-row>
                   <v-col cols="12" md="12">
-                    <v-text-field label="Vigencia" v-model="vigencia.nombre"></v-text-field>
+                    <v-text-field
+                      label="Vigencia"
+                      v-model="vigencia.nombre"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -109,13 +138,16 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red darken-1" @click="cerrarFormularioVigencia" dark>Cancelar</v-btn>
+            <v-btn color="red darken-1" @click="cerrarFormularioVigencia" dark
+              >Cancelar</v-btn
+            >
             <v-btn
               color="green darken-1"
               @click="guardarVigencia"
               dark
               v-if="formularioVigenciaValido"
-            >Guardar</v-btn>
+              >Guardar</v-btn
+            >
             <v-btn color="gray darken-1" disabled v-else>Guardar</v-btn>
           </v-card-actions>
         </v-card>
@@ -132,7 +164,7 @@
             <CCol sm="12">
               <v-data-iterator
                 loading
-                loading-text="Cargando... Espere por favor"
+                loading-text=""
                 :items-per-page.sync="itemsPerPage"
                 :sort-by="sortBy.toLowerCase()"
                 :sort-desc="sortDesc"
@@ -165,10 +197,20 @@
                       ></v-select>
                       <v-spacer></v-spacer>
                       <v-btn-toggle v-model="sortDesc" mandatory v-show="true">
-                        <v-btn large depressed color="blue-grey lighten-1" :value="false">
+                        <v-btn
+                          large
+                          depressed
+                          color="blue-grey lighten-1"
+                          :value="false"
+                        >
                           <v-icon>mdi-arrow-up</v-icon>
                         </v-btn>
-                        <v-btn large depressed color="blue-grey lighten-1" :value="true">
+                        <v-btn
+                          large
+                          depressed
+                          color="blue-grey lighten-1"
+                          :value="true"
+                        >
                           <v-icon>mdi-arrow-down</v-icon>
                         </v-btn>
                       </v-btn-toggle>
@@ -184,6 +226,18 @@
                       </v-btn>
                     </template>
                   </v-toolbar>
+                  <div v-if="loading" class="text-center grey--text">
+                    <v-text-field
+                      color="success"
+                      loading
+                      disabled
+                    ></v-text-field>
+                    <small>
+                      Cargando listado de vigencias y periodos, por favor espere...
+                      <br />
+                      <br />
+                    </small>
+                  </div>
                 </template>
 
                 <template v-slot:default="props">
@@ -197,7 +251,9 @@
                       lg="3"
                     >
                       <v-card>
-                        <v-card-title class="subheading font-weight-bold justify-center">
+                        <v-card-title
+                          class="subheading font-weight-bold justify-center"
+                        >
                           {{ vigencia.nombre }}
                           <v-spacer v-if="is('ROLE_ADMINISTRADOR')"></v-spacer>
                           <v-btn
@@ -212,10 +268,15 @@
                         <v-divider></v-divider>
 
                         <v-list dense>
-                          <v-list-item v-for="(periodo, i) in vigencia.periodos" :key="i">
+                          <v-list-item
+                            v-for="(periodo, i) in vigencia.periodos"
+                            :key="i"
+                          >
                             <v-list-item-content>
                               <v-row>
-                                <v-col cols="6">{{periodo.mes.valor_texto}}</v-col>
+                                <v-col cols="6">{{
+                                  periodo.mes.valor_texto
+                                }}</v-col>
                                 <v-col cols="6">
                                   <v-menu
                                     bottom
@@ -229,23 +290,39 @@
                                         dark
                                         v-bind="attrs"
                                         v-on="on"
-                                      >{{ periodo.estado }}</v-chip>
+                                        >{{ periodo.estado }}</v-chip
+                                      >
                                       <v-chip
                                         v-show="periodo.estado === 'No aplica'"
                                         :color="getColor(periodo.estado)"
                                         dark
-                                      >{{ periodo.estado }}</v-chip>
+                                        >{{ periodo.estado }}</v-chip
+                                      >
                                     </template>
 
                                     <v-list>
                                       <v-list-item
                                         v-if="is('ROLE_ADMINISTRADOR')"
-                                        @click="editarPeriodo(vigencia, periodo)"
+                                        @click="
+                                          editarPeriodo(vigencia, periodo)
+                                        "
                                       >
-                                        <v-list-item-title>Control de Fechas</v-list-item-title>
+                                        <v-list-item-title
+                                          >Control de Fechas</v-list-item-title
+                                        >
                                       </v-list-item>
-                                      <v-list-item @click="irListadoPrestadores(vigencia, periodo)">
-                                        <v-list-item-title>Gestión Prestadores</v-list-item-title>
+                                      <v-list-item
+                                        @click="
+                                          irListadoPrestadores(
+                                            vigencia,
+                                            periodo
+                                          )
+                                        "
+                                      >
+                                        <v-list-item-title
+                                          >Gestión
+                                          Prestadores</v-list-item-title
+                                        >
                                       </v-list-item>
                                     </v-list>
                                   </v-menu>
@@ -272,7 +349,7 @@
                           v-bind="attrs"
                           v-on="on"
                         >
-                          {{ itemsPerPage === -1 ? 'Todo' : itemsPerPage }}
+                          {{ itemsPerPage === -1 ? "Todo" : itemsPerPage }}
                           <v-icon>mdi-chevron-down</v-icon>
                         </v-btn>
                       </template>
@@ -288,17 +365,40 @@
                     </v-menu>
 
                     <v-spacer></v-spacer>
-                    <span
-                      class="mr-4 grey--text"
-                    >Mostrando registros del {{ 1 + (page-1)*itemsPerPage }} al {{ itemsPerPage === -1 ? total : ( total > ((page-1)*itemsPerPage + itemsPerPage) ? ((page-1)*itemsPerPage + itemsPerPage) : total) }} de un total de {{ total }}</span>
+                    <span class="mr-4 grey--text"
+                      >Mostrando registros del
+                      {{ 1 + (page - 1) * itemsPerPage }} al
+                      {{
+                        itemsPerPage === -1
+                          ? total
+                          : total > (page - 1) * itemsPerPage + itemsPerPage
+                          ? (page - 1) * itemsPerPage + itemsPerPage
+                          : total
+                      }}
+                      de un total de {{ total }}</span
+                    >
 
                     <v-spacer></v-spacer>
 
-                    <span class="mr-4 grey--text">Página {{ page }} de {{ numberOfPages }}</span>
-                    <v-btn fab dark color="blue-grey lighten-1" class="mr-1" @click="formerPage">
+                    <span class="mr-4 grey--text"
+                      >Página {{ page }} de {{ numberOfPages }}</span
+                    >
+                    <v-btn
+                      fab
+                      dark
+                      color="blue-grey lighten-1"
+                      class="mr-1"
+                      @click="formerPage"
+                    >
                       <v-icon>mdi-chevron-left</v-icon>
                     </v-btn>
-                    <v-btn fab dark color="blue-grey lighten-1" class="ml-1" @click="nextPage">
+                    <v-btn
+                      fab
+                      dark
+                      color="blue-grey lighten-1"
+                      class="ml-1"
+                      @click="nextPage"
+                    >
                       <v-icon>mdi-chevron-right</v-icon>
                     </v-btn>
                   </v-row>
@@ -326,6 +426,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       itemsPerPageArray: [4, 8, 12, 16, "Todo"],
       search: "",
       filter: {},
@@ -418,15 +519,12 @@ export default {
       this.itemsPerPage = number === "Todo" ? -1 : number;
     },
     cargarListado() {
+      this.loading = true;
       vigencia.obtenerVigencias().then((response) => {
+        this.loading = false;
         if (response.status === "success") {
-          // this.procesando = false;
-          // this.error = false;
           this.vigencias = response.data;
-          // console.log(this.vigencias);
         } else {
-          // this.procesando = false;
-          // this.error = true;
           console.log(response);
         }
       });

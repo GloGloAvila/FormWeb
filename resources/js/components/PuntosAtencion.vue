@@ -1863,7 +1863,6 @@
                 :sort-by="ordenarPor(sortBy.toLowerCase())"
                 :sort-desc="sortDesc"
                 :search="search"
-                loading-text="Cargando... Espere por favor"
                 class="elevation-1"
                 hide-default-footer
               >
@@ -1954,15 +1953,30 @@
                 </template>
 
                 <template v-slot:no-data>
-                  <br />
-                  <br />No tiene información registrada.
-                  <br />
-                  <br />
-                  <v-btn color="warning" @click="cargarListado()"
-                    >Recargar</v-btn
-                  >
-                  <br />
-                  <br />
+                  <div v-if="loading">
+                    <v-text-field
+                      color="success"
+                      loading
+                      disabled
+                    ></v-text-field>
+                    <small>
+                      Cargando listado de puntos de atención, por favor espere...
+                      <br />
+                      <br />
+                    </small>
+                  </div>
+
+                  <div v-if="!loading">
+                    <br />
+                    <br />No tiene información registrada.
+                    <br />
+                    <br />
+                    <v-btn color="warning" @click="cargarListado()"
+                      >Recargar</v-btn
+                    >
+                    <br />
+                    <br />
+                  </div>
                 </template>
               </v-data-table>
 
@@ -2054,6 +2068,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       page: 1,
       pageCount: 0,
       itemsPerPage: 10,
@@ -2687,17 +2702,15 @@ export default {
       return this.formularioReporte.personas_colocadas_exterior_total;
     },
     cargarListado() {
+      this.loading = true;
       puntoAtencion
         .obtenerPuntosAtencion(this.periodo, this.prestador)
         .then((response) => {
+          this.loading = false;
           if (response.status === "success") {
-            // this.procesando = false;
-            // this.error = false;
             this.puntosAtencion = response.data;
             console.log(this.puntosAtencion);
           } else {
-            // this.procesando = false;
-            // this.error = true;
             console.log(response);
           }
         });
@@ -2755,9 +2768,8 @@ export default {
       });
     },
     guardarFormularioReporte() {
-        debugger
+      debugger;
       if (this.formularioReporteIndex === -1) {
-
         reporte
           .guardarReporte(
             this.puntoAtencion,
