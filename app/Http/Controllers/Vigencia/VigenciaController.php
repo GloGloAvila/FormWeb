@@ -61,8 +61,8 @@ class VigenciaController extends Controller
             $periodo->vigencia_id = $vigencia->id;
             $periodo->mes_id = $mes->id;
             $periodo->estado_reporte_id = 20;
-            $periodo->fecha_inicio = $vigencia->nombre . '-' . $mes->descripcion . '-' . '01';
-            $periodo->fecha_fin = $vigencia->nombre . '-' . $mes->descripcion . '-' . '15';
+            $periodo->fecha_inicio = (Periodo::calcularMesSiguiente($mes->descripcion) !== '01' ? $vigencia->nombre : ($vigencia->nombre + 1)) . '-' . Periodo::calcularMesSiguiente($mes->descripcion) . '-' . '01';
+            $periodo->fecha_fin = (Periodo::calcularMesSiguiente($mes->descripcion) !== '01' ? $vigencia->nombre : ($vigencia->nombre + 1)) . '-' . Periodo::calcularMesSiguiente($mes->descripcion) . '-' . '15';
 
             $periodo->save();
         }

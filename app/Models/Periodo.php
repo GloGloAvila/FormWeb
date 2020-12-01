@@ -78,7 +78,7 @@ class Periodo extends Model
 
     public function estadoPendiente()
     {
-        return $this->estadoReporte()->first()->valor_texto === 'Pendiente';
+        return isset($this->estadoReporte()->first()->valor_texto) ? $this->estadoReporte()->first()->valor_texto === 'Pendiente' : false;
     }
 
     public function tieneReporte()
@@ -192,7 +192,7 @@ class Periodo extends Model
                 }
             } else {
                 // Si el estado no es pendiente ni la fecha está vencida, sólo se muestra el estado actual
-                $estado = $this->estadoReporte()->first()->valor_texto;
+                $estado = isset($this->estadoReporte()->first()->valor_texto) ? $this->estadoReporte()->first()->valor_texto : 'Pendiente';
             }
         }
 
