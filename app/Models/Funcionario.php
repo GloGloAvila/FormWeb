@@ -105,4 +105,12 @@ class Funcionario extends Authenticatable
     {
         return $this->morphMany(Reporte::class, 'responsable');
     }
+
+    public function puntosAtencion()
+    {
+      return $this->belongsToMany(PuntoAtencion::class, 'punto_atencion_tiene_funcionarios')
+        ->where('puntos_atencion.activo', 1)
+        ->orderby('puntos_atencion.codigo', 'asc');
+    }
+
 }
