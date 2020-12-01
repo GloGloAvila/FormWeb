@@ -182,9 +182,6 @@
                 <template v-slot:[`header.telefono`]="{ header }">{{
                   header.text.toUpperCase()
                 }}</template>
-                <template v-slot:[`header.celular`]="{ header }">{{
-                  header.text.toUpperCase()
-                }}</template>
                 <template v-slot:[`header.accion`]="{ header }">{{
                   header.text.toUpperCase()
                 }}</template>
@@ -202,13 +199,41 @@
                     <td>
                       {{ item.full_name ? item.full_name.toUpperCase() : "" }}
                     </td>
-                    <td>{{ item.email ? item.email.toUpperCase() : "" }}</td>
                     <td>
-                      {{ item.telefono }}
+                      <v-chip
+                        class="ma-2"
+                        color="indigo darken-3"
+                        outlined
+                        small
+                        v-if="item.email"
+                      >
+                        <v-icon left small> mdi-email </v-icon>
+                        {{ item.email ? item.email.toLowerCase() : "" }}
+                      </v-chip>
+                      <br />
+                      <v-chip
+                        class="ma-2"
+                        color="indigo darken-3"
+                        outlined
+                        small
+                        v-if="item.telefono"
+                      >
+                        <v-icon left small> mdi-phone </v-icon>
+                        {{ item.telefono }}
+                      </v-chip>
+                      <br />
+                      <v-chip
+                        class="ma-2"
+                        color="indigo darken-3"
+                        outlined
+                        small
+                        v-if="item.celular"
+                      >
+                        <v-icon left small> mdi-cellphone-iphone </v-icon>
+                        {{ item.celular }}
+                      </v-chip>
                     </td>
-                    <td>
-                      {{ item.celular }}
-                    </td>
+                    <td></td>
                     <td>
                       <v-menu
                         bottom
@@ -222,12 +247,79 @@
                         </template>
                         <v-list>
                           <v-list-item @click="mostrarFormularioGestion(item)">
-                            <v-list-item-title>Modificar</v-list-item-title>
+                            <v-list-item-title>
+                              <v-btn small text> Modificar </v-btn>
+                            </v-list-item-title>
                           </v-list-item>
                           <v-list-item
                             @click="mostrarConfirmacionBorrado(item)"
                           >
-                            <v-list-item-title>Eliminar</v-list-item-title>
+                            <v-list-item-title>
+                              <v-menu offset-x>
+                                <template
+                                  v-slot:activator="{ subOn, subAttrs }"
+                                >
+                                  <v-menu
+                                    v-model="ModalMenuEliminar"
+                                    :close-on-content-click="false"
+                                    :nudge-width="200"
+                                    v-on="subOn"
+                                    v-bind="subAttrs"
+                                    offset-x
+                                  >
+                                    <template v-slot:activator="{ on, attrs }">
+                                      <v-btn
+                                        text
+                                        small
+                                        v-bind="attrs"
+                                        v-on="on"
+                                      >
+                                        Eliminar
+                                      </v-btn>
+                                    </template>
+                                    <v-card max-width="350">
+                                      <v-list>
+                                        <v-list-item>
+                                          <v-list-item-avatar>
+                                            <v-icon left> mdi-delete </v-icon>
+                                          </v-list-item-avatar>
+
+                                          <v-list-item-content>
+                                            <v-list-item-title
+                                              >Eliminar
+                                              funcionario</v-list-item-title
+                                            >
+                                            <v-list-item-subtitle
+                                              >¿Está seguro de eliminar este
+                                              registro?</v-list-item-subtitle
+                                            >
+                                          </v-list-item-content>
+                                        </v-list-item>
+                                      </v-list>
+
+                                      <v-divider></v-divider>
+
+                                      <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                          text
+                                          @click="ModalMenuEliminar = false"
+                                        >
+                                          No
+                                        </v-btn>
+                                        <v-btn
+                                          color="primary"
+                                          text
+                                          @click="ModalMenuEliminar = false"
+                                        >
+                                          Sí
+                                        </v-btn>
+                                      </v-card-actions>
+                                    </v-card>
+                                  </v-menu>
+                                </template>
+                              </v-menu>
+                            </v-list-item-title>
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -259,7 +351,8 @@
                     >
                     <br />
                     <br />
-                  </div>                </template>
+                  </div>
+                </template>
               </v-data-table>
 
               <v-row class="mt-2" align="center" justify="center">
@@ -361,6 +454,7 @@ export default {
       prestador: {},
       modalFormularioGestion: false,
       botonGuardar: true,
+      ModalMenuEliminar: false,
       numeroRules: [
         (v) => v >= 0 || "Es un campo numérico obligatorio",
         (v) => /[0-9]/.test(v) || "Es un campo numérico obligatorio",
@@ -406,18 +500,13 @@ export default {
           sortable: false,
         },
         {
-          text: "Correo",
+          text: "Contacto",
           value: "email",
           sortable: false,
         },
         {
-          text: "Teléfono",
+          text: "Puntos atención",
           value: "telefono",
-          sortable: false,
-        },
-        {
-          text: "Celular",
-          value: "celular",
           sortable: false,
         },
         {
@@ -475,13 +564,13 @@ export default {
       const funcionarios = funcionario.obtenerFuncionarios(this.prestador);
       const tiposFuncionarios = tipoFuncionario.obtenerTiposFuncionario();
 
-      this.loading = true
+      this.loading = true;
 
       Promise.all([funcionarios, tiposFuncionarios]).then((response) => {
         const funcionarios = response[0];
         const tiposFuncionarios = response[1];
 
-        this.loading = false
+        this.loading = false;
 
         if (funcionarios.status === "success") {
           this.funcionarios = funcionarios.data;

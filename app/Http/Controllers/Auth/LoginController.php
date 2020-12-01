@@ -55,6 +55,7 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+            //Validar si ese usuario tiene prestador y al menos un punto de atención activo
             return redirect()->intended('/');
         }
 

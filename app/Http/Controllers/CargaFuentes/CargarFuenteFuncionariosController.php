@@ -35,23 +35,23 @@ class CargarFuenteFuncionariosController extends RutaFuenteController
 
         if (isset($prestador->id)) {
 
-          $tipoFuncionario = Opcion::getOpcionXGrupoXAbreviatura('tipo_funcionario', 'RL');
-          $correoFuncionario = iconv("Windows-1252", "UTF-8", $data[10]);
+          $tipoFuncionario = Opcion::getOpcionXGrupoXAbreviatura('tipo_funcionario', 'COOR');
+          $correoFuncionario = iconv("Windows-1252", "UTF-8", $data[4]);
 
           //Cargando funcionario tipo representante legal
           $funcionario = Funcionario::where('email', $correoFuncionario)->first();
-          
+
           if (!Funcionario::correoExistente($correoFuncionario) && isset($correoFuncionario) && $correoFuncionario !== 'NULL') {
-            
+
             $funcionario = new Funcionario();
             $funcionario->prestador_id = $prestador->id;
             $funcionario->tipo_funcionario_id = isset($tipoFuncionario->id) ? $tipoFuncionario->id : null;
-            $funcionario->nombre = iconv("Windows-1252", "UTF-8", $data[8]);
-            $funcionario->apellido = iconv("Windows-1252", "UTF-8", $data[9]);
+            $funcionario->nombre = iconv("Windows-1252", "UTF-8", $data[2]);
+            $funcionario->apellido = iconv("Windows-1252", "UTF-8", $data[3]);
             $funcionario->email = $correoFuncionario;
             $funcionario->password = bcrypt('Pa2sword..');
-            $funcionario->telefono = iconv("Windows-1252", "UTF-8", $data[11]);
-            $funcionario->celular = iconv("Windows-1252", "UTF-8", $data[12]);
+            $funcionario->telefono = iconv("Windows-1252", "UTF-8", $data[5]);
+            $funcionario->celular = iconv("Windows-1252", "UTF-8", $data[7]);
 
             $funcionario->save();
 
@@ -68,29 +68,29 @@ class CargarFuenteFuncionariosController extends RutaFuenteController
             );
           }
 
-          $tipoFuncionario = Opcion::getOpcionXGrupoXAbreviatura('tipo_funcionario', 'C');
-          $correoFuncionario = iconv("Windows-1252", "UTF-8", $data[15]);
+          $tipoFuncionario = Opcion::getOpcionXGrupoXAbreviatura('tipo_funcionario', 'RR');
+          $correoFuncionario = iconv("Windows-1252", "UTF-8", $data[9]);
 
           //Cargando funcionario tipo contacto
           $funcionario = Funcionario::where('email', $correoFuncionario)->first();
-          
+
           if (!Funcionario::correoExistente($correoFuncionario) && isset($correoFuncionario) && $correoFuncionario !== 'NULL') {
-            
+
             $funcionario = new Funcionario();
             $funcionario->prestador_id = $prestador->id;
             $funcionario->tipo_funcionario_id = isset($tipoFuncionario->id) ? $tipoFuncionario->id : null;
-            $funcionario->nombre = iconv("Windows-1252", "UTF-8", $data[13]);
-            $funcionario->apellido = iconv("Windows-1252", "UTF-8", $data[14]);
+            $funcionario->nombre = iconv("Windows-1252", "UTF-8", $data[7]);
+            $funcionario->apellido = iconv("Windows-1252", "UTF-8", $data[8]);
             $funcionario->email = $correoFuncionario;
             $funcionario->password = bcrypt('Pa2sword..');
-            $funcionario->telefono = iconv("Windows-1252", "UTF-8", $data[16]);
-            $funcionario->celular = iconv("Windows-1252", "UTF-8", $data[17]);
+            $funcionario->telefono = iconv("Windows-1252", "UTF-8", $data[10]);
+            $funcionario->celular = iconv("Windows-1252", "UTF-8", $data[11]);
 
             $funcionario->save();
 
             $funcionario->syncRoles(Role::findByName('ROLE_PRESTADOR', 'funcionario'));
 
-          } 
+          }
 
           if (isset($puntoAtencion->id) && isset($correoFuncionario) && $correoFuncionario !== 'NULL') {
             PuntoAtencionFuncionario::firstOrCreate(

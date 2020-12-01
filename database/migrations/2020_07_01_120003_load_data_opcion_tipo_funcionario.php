@@ -47,6 +47,19 @@ class LoadDataOpcionTipoFuncionario extends Migration
       $opcion->borrable = Opcion::REGISTRO_NO_BORRABLE;
       $opcion->save();
 
+      $opcion = new Opcion();
+      $opcion->dominio_id = $dominio_id;
+      $opcion->tiene_subopciones = Opcion::TIENE_SUBOPCIONES_FALSE;
+      $opcion->valor_texto = 'Coordinador';
+      $opcion->valor_numerico = 2;
+      $opcion->valor_booleano = Opcion::VALOR_BOOLEANO_FALSE;
+      $opcion->descripcion = 'Coordinador';
+      $opcion->abreviatura = 'COOR';
+      $opcion->orden = 0;
+      $opcion->editable = Opcion::REGISTRO_NO_EDITABLE;
+      $opcion->borrable = Opcion::REGISTRO_NO_BORRABLE;
+      $opcion->save();
+
     }
 
     /**

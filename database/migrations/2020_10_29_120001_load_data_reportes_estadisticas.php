@@ -16,7 +16,7 @@ class LoadDataReportesEstadisticas extends Migration
      */
     public function up()
     {
-      $cargarFuente=new CargarFuenteReportesEstadisticasController();
-      $cargarFuente->cargarFuente('2020-07-04-historico-estadisticas.csv');
+    //   $cargarFuente=new CargarFuenteReportesEstadisticasController();
+    //   $cargarFuente->cargarFuente('2020-07-04-historico-estadisticas.csv');
     }
 }
