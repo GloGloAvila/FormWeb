@@ -123,17 +123,19 @@
                         </template>
                         <v-list>
                           <v-list-item @click="irListadoPuntosAtencion(item)">
-                            <v-list-item-title
-                              >Gestión Puntos de atención</v-list-item-title
-                            >
+                            <v-list-item-title>
+                              <v-btn small text
+                                >Gestión Puntos de atención</v-btn
+                              >
+                            </v-list-item-title>
                           </v-list-item>
                           <v-list-item
                             v-if="is('ROLE_ADMINISTRADOR')"
                             @click="irListadoUsuarios(item)"
                           >
-                            <v-list-item-title
-                              >Gestión Usuarios</v-list-item-title
-                            >
+                            <v-list-item-title>
+                              <v-btn small text>Gestión Usuarios</v-btn>
+                            </v-list-item-title>
                           </v-list-item>
                         </v-list>
                       </v-menu>

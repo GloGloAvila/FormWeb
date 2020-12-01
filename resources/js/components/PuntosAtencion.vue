@@ -1931,8 +1931,8 @@
                             "
                             @click="mostrarFormularioReporte(item)"
                           >
-                            <v-list-item-title
-                              >Reporte Mensual
+                            <v-list-item-title>
+                              <v-btn small text>Reporte Mensual</v-btn>
                             </v-list-item-title>
                           </v-list-item>
                           <v-list-item
@@ -1942,9 +1942,9 @@
                             "
                             @click="mostrarReporteDiligenciado(item)"
                           >
-                            <v-list-item-title
-                              >Ver Reporte Diligenciado</v-list-item-title
-                            >
+                            <v-list-item-title>
+                              <v-btn small text>Ver Reporte Diligenciado</v-btn>
+                            </v-list-item-title>
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -1960,7 +1960,8 @@
                       disabled
                     ></v-text-field>
                     <small>
-                      Cargando listado de puntos de atención, por favor espere...
+                      Cargando listado de puntos de atención, por favor
+                      espere...
                       <br />
                       <br />
                     </small>

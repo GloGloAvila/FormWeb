@@ -233,7 +233,8 @@
                       disabled
                     ></v-text-field>
                     <small>
-                      Cargando listado de vigencias y periodos, por favor espere...
+                      Cargando listado de vigencias y periodos, por favor
+                      espere...
                       <br />
                       <br />
                     </small>
@@ -307,9 +308,11 @@
                                           editarPeriodo(vigencia, periodo)
                                         "
                                       >
-                                        <v-list-item-title
-                                          >Control de Fechas</v-list-item-title
-                                        >
+                                        <v-list-item-title>
+                                          <v-btn small text>
+                                            Control de Fechas
+                                          </v-btn>
+                                        </v-list-item-title>
                                       </v-list-item>
                                       <v-list-item
                                         @click="
@@ -319,10 +322,11 @@
                                           )
                                         "
                                       >
-                                        <v-list-item-title
-                                          >Gestión
-                                          Prestadores</v-list-item-title
-                                        >
+                                        <v-list-item-title>
+                                          <v-btn small text>
+                                            Gestión Prestadores
+                                          </v-btn>
+                                        </v-list-item-title>
                                       </v-list-item>
                                     </v-list>
                                   </v-menu>
