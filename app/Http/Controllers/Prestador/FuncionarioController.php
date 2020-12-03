@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Prestador;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 
 use App\Http\Resources\FuncionarioResource;
@@ -53,6 +54,7 @@ class FuncionarioController extends Controller
         $request['prestador_id'] = $prestador->id;
 
         $funcionario = Funcionario::create($request->all());
+        $funcionario->syncRoles(Role::findByName('ROLE_PRESTADOR', 'funcionario'));
 
         $funcionario = Funcionario::where('id', $funcionario->id)->get();
 
