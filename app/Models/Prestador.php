@@ -135,6 +135,7 @@ class Prestador extends Model
   {
     return $this->hasMany(PuntoAtencion::class)
       ->where('puntos_atencion.activo', 1)
+      ->whereNull('puntos_atencion.deleted_at')
       ->orderby('puntos_atencion.codigo', 'asc');
   }
 
@@ -142,6 +143,7 @@ class Prestador extends Model
   {
     return $this->hasMany(Funcionario::class)
       ->where('funcionarios.activo', 1)
+      ->whereNull('funcionarios.deleted_at')
       ->orderby('funcionarios.apellido', 'asc')
       ->orderby('funcionarios.nombre', 'asc');
   }

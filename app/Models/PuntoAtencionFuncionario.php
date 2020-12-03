@@ -29,7 +29,8 @@ class PuntoAtencionFuncionario extends Model
 
   protected $fillable = [
     'punto_atencion_id',
-    'funcionario_id'
+    'funcionario_id',
+    'activo'
   ];
 
   /**
@@ -43,13 +44,11 @@ class PuntoAtencionFuncionario extends Model
     'deleted_at'
   ];
 
-
   // Función para saber si un registro está activo
   public function estaActivo()
   {
     return $this->activo == PuntoAtencionFuncionario::REGISTRO_ACTIVO;
   }
-
 
   public function puntoAtencion()
   {

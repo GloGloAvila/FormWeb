@@ -102,11 +102,13 @@
 
                 <template v-slot:item="{ item, index }">
                   <tr>
-                    <td>{{ index + 1 + (page - 1) * 10 }}</td>
-                    <td>{{ item.migracion_id }}</td>
+                    <td class="text-center">
+                      {{ index + 1 + (page - 1) * 10 }}
+                    </td>
+                    <td class="text-center">{{ item.migracion_id }}</td>
                     <td>{{ item.nombre.toUpperCase() }}</td>
                     <td>{{ item.tipo_prestador.descripcion.toUpperCase() }}</td>
-                    <td>
+                    <td class="text-center">
                       <v-menu
                         bottom
                         origin="center center"
@@ -292,11 +294,13 @@ export default {
         {
           text: "Consecutivo",
           value: "id",
+          align: "center",
           sortable: false,
         },
         {
           text: "CÓDIGO",
           value: "migracion_id",
+          align: "center",
           sortable: false,
         },
         {
@@ -312,6 +316,7 @@ export default {
         {
           text: "Estado",
           value: "estado",
+          align: "center",
           sortable: false,
         },
       ],

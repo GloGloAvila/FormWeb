@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Log;
 
 use App\Models\TipoFuncionario;
 use App\Models\Prestador;
@@ -108,9 +109,18 @@ class Funcionario extends Authenticatable
 
     public function puntosAtencion()
     {
-      return $this->belongsToMany(PuntoAtencion::class, 'punto_atencion_tiene_funcionarios')
+        return $this->belongsToMany(PuntoAtencion::class, 'punto_atencion_tiene_funcionarios')
         ->where('puntos_atencion.activo', 1)
+        ->where('punto_atencion_tiene_funcionarios.activo', 1)
+        ->whereNull('punto_atencion_tiene_funcionarios.deleted_at')
         ->orderby('puntos_atencion.codigo', 'asc');
+    }
+
+    public function puntosAtencionSinAsociar()
+    {
+        $prestador = $this->prestador()->first();
+        $puntosAtencionIDs = $this->puntosAtencion->pluck('id');
+        return $prestador->puntosAtencion->whereNotIn('id', $puntosAtencionIDs)->toArray();
     }
 
 }

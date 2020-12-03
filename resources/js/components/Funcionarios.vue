@@ -59,6 +59,35 @@
                     ></v-text-field>
                   </v-col>
                 </v-row>
+                <v-row>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-switch
+                      v-model="formularioGestion.activo"
+                      label="Estado"
+                      color="teal lighten-2"
+                      hide-details
+                    ></v-switch>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="6">
+                    <v-alert
+                      text
+                      dense
+                      color="orange darken-3"
+                      v-if="!formularioGestion.activo"
+                    >
+                      <small
+                        >Ha seleccionado: <br />
+                        <strong>No.</strong> El estado del usuario será inactivo.
+                      </small>
+                    </v-alert>
+                    <v-alert text dense color="teal lighten-3" v-else>
+                      <small
+                        >Ha seleccionado: <br />
+                        <strong>Sí.</strong> El estado del usuario será activo.
+                      </small>
+                    </v-alert>
+                  </v-col>
+                </v-row>
               </v-container>
             </v-form>
           </v-card-text>
@@ -188,8 +217,8 @@
 
                 <template v-slot:item="{ item, index }">
                   <tr>
-                    <td>{{ index + 1 + (page - 1) * 10 }}</td>
-                    <td>
+                    <td class="text-center">{{ index + 1 + (page - 1) * 10 }}</td>
+                    <td class="text-center">
                       {{
                         item.tipo_funcionario.valor_texto
                           ? item.tipo_funcionario.valor_texto.toUpperCase()
@@ -199,10 +228,10 @@
                     <td>
                       {{ item.full_name ? item.full_name.toUpperCase() : "" }}
                     </td>
-                    <td>
+                    <td class="text-center">
                       <v-chip
                         class="ma-2"
-                        color="indigo darken-3"
+                        color="deep-purple darken-1"
                         outlined
                         small
                         v-if="item.email"
@@ -213,7 +242,7 @@
                       <br />
                       <v-chip
                         class="ma-2"
-                        color="indigo darken-3"
+                        color="deep-purple darken-1"
                         outlined
                         small
                         v-if="item.telefono"
@@ -224,7 +253,7 @@
                       <br />
                       <v-chip
                         class="ma-2"
-                        color="indigo darken-3"
+                        color="deep-purple darken-1"
                         outlined
                         small
                         v-if="item.celular"
@@ -233,16 +262,111 @@
                         {{ item.celular }}
                       </v-chip>
                     </td>
-                    <td></td>
-                    <td>
+                    <td class="text-center">
+                      <v-menu
+                        bottom
+                        right
+                        transition="scale-transition"
+                        origin="top left"
+                        v-if="item.puntos_atencion_sin_asociar.length"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-chip
+                            small
+                            class="ma-2"
+                            color="blue-grey darken-1"
+                            text-color="white"
+                            v-on="on"
+                          >
+                            <v-avatar left>
+                              <v-icon small> mdi-office-building </v-icon>
+                            </v-avatar>
+                            Asociar punto atención
+                          </v-chip>
+                        </template>
+                        <v-card width="auto">
+                          <v-list
+                            text-color="white"
+                            color="blue-grey lighten-4"
+                          >
+                            <v-list-item>
+                              <v-list-item-avatar>
+                                <v-icon> mdi-office-building </v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title
+                                  >Puntos de atención sin
+                                  asignar</v-list-item-title
+                                >
+                                <v-list-item-subtitle
+                                  >Seleccione el punto de atención a
+                                  asignar</v-list-item-subtitle
+                                >
+                              </v-list-item-content>
+                              <v-list-item-action>
+                                <v-btn icon @click="menu = false">
+                                  <v-icon>mdi-close-circle</v-icon>
+                                </v-btn>
+                              </v-list-item-action>
+                            </v-list-item>
+                          </v-list>
+                          <div
+                            v-for="(
+                              puntoAtencion, index
+                            ) in item.puntos_atencion_sin_asociar"
+                            :key="index"
+                          >
+                            <v-chip
+                              class="ma-2"
+                              close
+                              close-icon="mdi-plus"
+                              @click:close="
+                                asociarPuntoAtencion(item, puntoAtencion)
+                              "
+                              color="blue-grey darken-1"
+                              small
+                              outlined
+                            >
+                              <v-icon left small> mdi-office-building </v-icon>
+                              {{ prestador.migracion_id
+                              }}{{ puntoAtencion.codigo }}
+                              {{ puntoAtencion.nombre }}
+                            </v-chip>
+                            <br />
+                          </div>
+                        </v-card>
+                      </v-menu>
+                      <div
+                        v-for="(puntoAtencion, index) in item.puntos_atencion"
+                        :key="index"
+                      >
+                        <v-chip
+                          class="ma-2"
+                          close
+                          close-icon="mdi-delete"
+                          @click:close="
+                            desasociarPuntoAtencion(item, puntoAtencion)
+                          "
+                          color="blue-grey darken-1"
+                          small
+                          outlined
+                        >
+                          <v-icon left small> mdi-office-building </v-icon>
+                          {{ prestador.migracion_id }}{{ puntoAtencion.codigo }}
+                          {{ puntoAtencion.nombre }}
+                        </v-chip>
+                        <br />
+                      </div>
+                    </td>
+                    <td class="text-center">
                       <v-menu
                         bottom
                         origin="center center"
                         transition="scale-transition"
                       >
                         <template v-slot:activator="{ on, attrs }">
-                          <v-chip color="green" dark v-bind="attrs" v-on="on"
-                            >Gestionar</v-chip
+                          <v-chip :color="item.activo ? 'green' : 'gray'" dark v-bind="attrs" v-on="on"
+                            >{{item.activo ? 'Activo' : 'Inactivo'}}</v-chip
                           >
                         </template>
                         <v-list>
@@ -251,76 +375,61 @@
                               <v-btn small text> Modificar </v-btn>
                             </v-list-item-title>
                           </v-list-item>
-                          <v-list-item
+                          <!-- <v-list-item
                             @click="mostrarConfirmacionBorrado(item)"
                           >
                             <v-list-item-title>
-                              <v-menu offset-x>
-                                <template
-                                  v-slot:activator="{ subOn, subAttrs }"
-                                >
-                                  <v-menu
-                                    v-model="ModalMenuEliminar"
-                                    :close-on-content-click="false"
-                                    :nudge-width="200"
-                                    v-on="subOn"
-                                    v-bind="subAttrs"
-                                    offset-x
-                                  >
-                                    <template v-slot:activator="{ on, attrs }">
-                                      <v-btn
-                                        text
-                                        small
-                                        v-bind="attrs"
-                                        v-on="on"
-                                      >
-                                        Eliminar
-                                      </v-btn>
-                                    </template>
-                                    <v-card max-width="350">
-                                      <v-list>
-                                        <v-list-item>
-                                          <v-list-item-avatar>
-                                            <v-icon left> mdi-delete </v-icon>
-                                          </v-list-item-avatar>
-
-                                          <v-list-item-content>
-                                            <v-list-item-title
-                                              >Eliminar
-                                              funcionario</v-list-item-title
-                                            >
-                                            <v-list-item-subtitle
-                                              >¿Está seguro de eliminar este
-                                              registro?</v-list-item-subtitle
-                                            >
-                                          </v-list-item-content>
-                                        </v-list-item>
-                                      </v-list>
-
-                                      <v-divider></v-divider>
-
-                                      <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn
-                                          text
-                                          @click="ModalMenuEliminar = false"
-                                        >
-                                          No
-                                        </v-btn>
-                                        <v-btn
-                                          color="primary"
-                                          text
-                                          @click="ModalMenuEliminar = false"
-                                        >
-                                          Sí
-                                        </v-btn>
-                                      </v-card-actions>
-                                    </v-card>
-                                  </v-menu>
+                              <v-menu
+                                bottom
+                                right
+                                transition="scale-transition"
+                                origin="top left"
+                              >
+                                <template v-slot:activator="{ on }">
+                                  <v-btn text small v-on="on"> Eliminar </v-btn>
                                 </template>
+                                <v-card max-width="350">
+                                  <v-list>
+                                    <v-list-item>
+                                      <v-list-item-avatar>
+                                        <v-icon left> mdi-delete </v-icon>
+                                      </v-list-item-avatar>
+
+                                      <v-list-item-content>
+                                        <v-list-item-title
+                                          >Eliminar
+                                          funcionario</v-list-item-title
+                                        >
+                                        <v-list-item-subtitle
+                                          >¿Está seguro de eliminar este
+                                          registro?</v-list-item-subtitle
+                                        >
+                                      </v-list-item-content>
+                                    </v-list-item>
+                                  </v-list>
+
+                                  <v-divider></v-divider>
+
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                      text
+                                      @click="ModalMenuEliminar = false"
+                                    >
+                                      No
+                                    </v-btn>
+                                    <v-btn
+                                      color="primary"
+                                      text
+                                      @click="ModalMenuEliminar = false"
+                                    >
+                                      Sí
+                                    </v-btn>
+                                  </v-card-actions>
+                                </v-card>
                               </v-menu>
                             </v-list-item-title>
-                          </v-list-item>
+                          </v-list-item> -->
                         </v-list>
                       </v-menu>
                     </td>
@@ -428,8 +537,9 @@
 </template>
 
 <script>
-import funcionario from "../services/funcionario.js";
+import funcionarioPuntoAtencion from "../services/funcionarioPuntoAtencion.js";
 import tipoFuncionario from "../services/tipoFuncionario.js";
+import funcionario from "../services/funcionario.js";
 
 export default {
   name: "Funcionarios",
@@ -474,6 +584,7 @@ export default {
         email: "",
         telefono: "",
         celular: "",
+        activo: 1,
       },
       formularioGestionDefault: {
         tipo_funcionario_id: 0,
@@ -482,16 +593,19 @@ export default {
         email: "",
         telefono: "",
         celular: "",
+        activo: 1,
       },
       headers: [
         {
           text: "Consecutivo",
           value: "id",
+          align: 'center',
           sortable: false,
         },
         {
           text: "Tipo funcionario",
           value: "tipo_funcionario",
+          align: 'center',
           sortable: false,
         },
         {
@@ -502,16 +616,19 @@ export default {
         {
           text: "Contacto",
           value: "email",
+          align: 'center',
           sortable: false,
         },
         {
-          text: "Puntos atención",
+          text: "Puntos atención asociados",
           value: "telefono",
+          align: 'center',
           sortable: false,
         },
         {
-          text: "Acciones",
+          text: "Estado",
           value: "accion",
+          align: 'center',
           sortable: false,
         },
       ],
@@ -575,18 +692,18 @@ export default {
         if (funcionarios.status === "success") {
           this.funcionarios = funcionarios.data;
           if (this.funcionarios.length) {
-            console.log(this.prestador);
+            console.log(1, this.prestador);
           }
-          console.log(this.funcionarios);
+          console.log(2, this.funcionarios);
         } else {
-          console.log(funcionarios);
+          console.log(3, funcionarios);
         }
 
         if (tiposFuncionarios.status === "success") {
           this.tiposFuncionarios = tiposFuncionarios.data;
-          console.log(this.tiposFuncionarios);
+          console.log(4, this.tiposFuncionarios);
         } else {
-          console.log(tiposFuncionarios);
+          console.log(5, tiposFuncionarios);
         }
       });
     },
@@ -613,6 +730,7 @@ export default {
       funcionario
         .crearFuncionario(this.prestador, this.formularioGestion)
         .then((response) => {
+          this.funcionarios.push(response.data);
           this.resetForm();
           this.cerrarFormularioGestion();
         });
@@ -621,15 +739,39 @@ export default {
       funcionario
         .editarFuncionario(this.prestador, this.formularioGestion)
         .then((response) => {
-          console.log(response);
-          console.log(this.formularioGestion);
           Object.assign(
             this.funcionarios[this.formularioGestionIndex],
-            this.formularioGestion
+            response.data
           );
 
           this.resetForm();
           this.cerrarFormularioGestion();
+        });
+    },
+    asociarPuntoAtencion(funcionario, puntoAtencion) {
+      this.obtenerDatosFormularioGestion(funcionario);
+      funcionarioPuntoAtencion
+        .asociarPuntoAtencion(funcionario, puntoAtencion)
+        .then((response) => {
+          console.log(response);
+          Object.assign(
+            this.funcionarios[this.formularioGestionIndex],
+            response.data
+          );
+          this.resetForm();
+        });
+    },
+    desasociarPuntoAtencion(funcionario, puntoAtencion) {
+      this.obtenerDatosFormularioGestion(funcionario);
+      funcionarioPuntoAtencion
+        .desasociarPuntoAtencion(funcionario, puntoAtencion)
+        .then((response) => {
+          console.log(response);
+          Object.assign(
+            this.funcionarios[this.formularioGestionIndex],
+            response.data
+          );
+          this.resetForm();
         });
     },
     resetForm() {

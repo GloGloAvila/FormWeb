@@ -29,6 +29,9 @@ class FuncionarioResource extends JsonResource
             "telefono" => $this->telefono,
             "celular" => $this->celular,
             "activo" => $this->activo,
+            "full_name" => $this->full_name,
+            "puntos_atencion" => $this->puntosAtencion,
+            "puntos_atencion_sin_asociar" => $this->puntosAtencionSinAsociar(),
         ];
     }
 

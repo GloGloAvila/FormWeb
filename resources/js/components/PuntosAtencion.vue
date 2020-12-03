@@ -1888,27 +1888,29 @@
 
                 <template v-slot:item="{ item, index }">
                   <tr>
-                    <td>{{ index + 1 + (page - 1) * 10 }}</td>
-                    <td>
+                    <td class="text-center">
+                      {{ index + 1 + (page - 1) * 10 }}
+                    </td>
+                    <td class="text-center">
                       {{
                         item.departamento
                           ? item.departamento.nombre.toUpperCase()
                           : ""
                       }}
                     </td>
-                    <td>
+                    <td class="text-center">
                       {{
                         item.municipio
                           ? item.municipio.nombre.toUpperCase()
                           : ""
                       }}
                     </td>
-                    <td>
+                    <td class="text-center">
                       {{ prestador.migracion_id
                       }}{{ item.codigo.toUpperCase() }}
                     </td>
                     <td>{{ item.nombre.toUpperCase() }}</td>
-                    <td>
+                    <td class="text-center">
                       <v-menu
                         bottom
                         origin="center center"
@@ -2299,21 +2301,25 @@ export default {
         {
           text: "Consecutivo",
           value: "id",
+          align: "center",
           sortable: false,
         },
         {
           text: "Departamento",
           value: "departamento_id",
+          align: "center",
           sortable: false,
         },
         {
           text: "Municipio",
           value: "municipio_id",
+          align: "center",
           sortable: false,
         },
         {
           text: "Código",
           value: "codigo",
+          align: "center",
           sortable: false,
         },
         {
@@ -2324,6 +2330,7 @@ export default {
         {
           text: "ESTADO",
           value: "estado",
+          align: "center",
           sortable: false,
         },
       ],

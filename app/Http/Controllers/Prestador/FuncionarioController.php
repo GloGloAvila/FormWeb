@@ -21,15 +21,13 @@ class FuncionarioController extends Controller
     public function index(Prestador  $prestador)
     {
         $funcionarios = $prestador->funcionarios()
-            ->with('tipoFuncionario')
-            ->with('prestador')
             ->orderBy('nombre', 'asc')
             ->get();
 
         return response()->json(
             [
                 'status' => 'success',
-                'data' => $funcionarios
+                'data' => FuncionarioResource::collection($funcionarios)
             ],
             200
         );
