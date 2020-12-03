@@ -19,10 +19,13 @@
               <v-container>
                 <v-row>
                   <v-col cols="6" md="6">
-                    <v-text-field
+                    <v-select
+                      :items="tiposFuncionarios"
                       label="Tipo funcionario"
+                      item-text="valor_texto"
+                      item-value="id"
                       v-model="formularioGestion.tipo_funcionario_id"
-                    ></v-text-field>
+                    ></v-select>
                   </v-col>
                   <v-col cols="6" md="6">
                     <v-text-field
@@ -77,7 +80,8 @@
                     >
                       <small
                         >Ha seleccionado: <br />
-                        <strong>No.</strong> El estado del usuario será inactivo.
+                        <strong>No.</strong> El estado del usuario será
+                        inactivo.
                       </small>
                     </v-alert>
                     <v-alert text dense color="teal lighten-3" v-else>
@@ -217,7 +221,9 @@
 
                 <template v-slot:item="{ item, index }">
                   <tr>
-                    <td class="text-center">{{ index + 1 + (page - 1) * 10 }}</td>
+                    <td class="text-center">
+                      {{ index + 1 + (page - 1) * 10 }}
+                    </td>
                     <td class="text-center">
                       {{
                         item.tipo_funcionario.valor_texto
@@ -365,8 +371,12 @@
                         transition="scale-transition"
                       >
                         <template v-slot:activator="{ on, attrs }">
-                          <v-chip :color="item.activo ? 'green' : 'gray'" dark v-bind="attrs" v-on="on"
-                            >{{item.activo ? 'Activo' : 'Inactivo'}}</v-chip
+                          <v-chip
+                            :color="item.activo ? 'green' : 'gray'"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                            >{{ item.activo ? "Activo" : "Inactivo" }}</v-chip
                           >
                         </template>
                         <v-list>
@@ -599,13 +609,13 @@ export default {
         {
           text: "Consecutivo",
           value: "id",
-          align: 'center',
+          align: "center",
           sortable: false,
         },
         {
           text: "Tipo funcionario",
           value: "tipo_funcionario",
-          align: 'center',
+          align: "center",
           sortable: false,
         },
         {
@@ -616,19 +626,19 @@ export default {
         {
           text: "Contacto",
           value: "email",
-          align: 'center',
+          align: "center",
           sortable: false,
         },
         {
           text: "Puntos atención asociados",
           value: "telefono",
-          align: 'center',
+          align: "center",
           sortable: false,
         },
         {
           text: "Estado",
           value: "accion",
-          align: 'center',
+          align: "center",
           sortable: false,
         },
       ],
