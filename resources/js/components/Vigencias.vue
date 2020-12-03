@@ -315,6 +315,30 @@
                                         </v-list-item-title>
                                       </v-list-item>
                                       <v-list-item
+                                        v-if="is('ROLE_ADMINISTRADOR_UNO')"
+                                        @click="
+                                          generarReporteMensual(vigencia, periodo)
+                                        "
+                                      >
+                                        <v-list-item-title>
+                                          <v-btn small text>
+                                            Reporte mensual
+                                          </v-btn>
+                                        </v-list-item-title>
+                                      </v-list-item>
+                                      <v-list-item
+                                        v-if="is('ROLE_ADMINISTRADOR_UNO')"
+                                        @click="
+                                          generarReportePuntosAtencionPendientes(vigencia, periodo)
+                                        "
+                                      >
+                                        <v-list-item-title>
+                                          <v-btn small text>
+                                            Reporte puntos atención pendientes
+                                          </v-btn>
+                                        </v-list-item-title>
+                                      </v-list-item>
+                                      <v-list-item
                                         @click="
                                           irListadoPrestadores(
                                             vigencia,
@@ -625,6 +649,12 @@ export default {
           console.log(error);
           this.cerrarFormularioPeriodo();
         });
+    },
+    generarReporteMensual(){
+
+    },
+    generarReportePuntosAtencionPendientes(){
+
     },
     cerrarFormularioPeriodo() {
       this.modalFormularioPeriodo = false;

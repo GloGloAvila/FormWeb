@@ -34,7 +34,7 @@ class PuntoAtencionController extends Controller
 
         if ($usuario->hasrole('ROLE_ADMINISTRADOR')) {
             $puntosAtencion = $prestador->puntosAtencion()
-                ->where('activo', 1)
+                ->where('puntos_atencion.activo', 1)
                 ->with('departamento')
                 ->with('municipio')
                 ->with('prestador')
@@ -42,7 +42,7 @@ class PuntoAtencionController extends Controller
                 ->get();
         } else {
             $puntosAtencion = $usuario->puntosAtencion()
-                ->where('activo', 1)
+                ->where('puntos_atencion.activo', 1)
                 ->with('departamento')
                 ->with('municipio')
                 ->with('prestador')
