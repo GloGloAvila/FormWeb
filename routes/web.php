@@ -13,6 +13,7 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::resource('vigencias', 'Vigencia\VigenciaController', ['except' => ['create', 'edit']]);
 
 Route::resource('vigencias.periodos', 'Vigencia\PeriodoController', ['only' => ['update']]);
+Route::get('/vigencias/periodos/{periodo}/reporte/mensual', 'Reporte\ReporteController@exportReporteMensualExcel');
 
 Route::resource('periodos.prestadores', 'Periodo\PrestadorController', ['only' => ['index']])->parameters([
     'periodos' => 'periodo'

@@ -16,10 +16,15 @@ class ReporteMensualExcelResource extends JsonResource
     {
 
         return [
-            //   'punto_atencion_id' => $this->punto_atencion_id,
-            //   'responsable_id' => $this->responsable_id,
-            //   'responsable_type' => $this->responsable_type,
-            //   'periodo_id' => $this->periodo_id,
+            'IDPrestador' => $this->puntoAtencion->prestador->migracion_id,
+            'IDPunto' => $this->puntoAtencion->migracion_id,
+            'anio' => $this->periodo->vigencia->nombre,
+            'mes' => $this->periodo->mes->descripcion,
+            'tipo_agencia' => $this->puntoAtencion->prestador->tipoPrestador->descripcion,
+            'prestador_nombre' => $this->puntoAtencion->prestador->nombre,
+            'departamento_nombre' => $this->puntoAtencion->departamento ? $this->puntoAtencion->departamento->nombre : '',
+            'municipio_nombre' => $this->puntoAtencion->municipio ? $this->puntoAtencion->municipio->nombre : '',
+            'punto_atencion_nombre' => $this->puntoAtencion->nombre,
             'personas_inscritas_total' => $this->personas_inscritas_total,
             'personas_inscritas_hombres' => $this->personas_inscritas_hombres,
             'personas_inscritas_mujeres' => $this->personas_inscritas_mujeres,
@@ -78,21 +83,21 @@ class ReporteMensualExcelResource extends JsonResource
             'personas_colocadas_exterior_mujeres' => $this->personas_colocadas_exterior_mujeres,
             'empleadores_registrados_exterior' => $this->empleadores_registrados_exterior,
             'vacantes_registradas_exterior' => $this->vacantes_registradas_exterior,
-
-            // Variables sin usar
-            // 'personas_orientadas' => $this->personas_orientadas,
-            // 'colocados_40mil' => $this->colocados_40mil,
-            // 'vacantes_registradas_total' => $this->vacantes_registradas_total,
-            // 'vacantes_registradas_contrato_laboral' => $this->vacantes_registradas_contrato_laboral,
-            // 'vacantes_registradas_prestacion' => $this->vacantes_registradas_prestacion,
-            // 'remitidas_gestion_empleo_total' => $this->remitidas_gestion_empleo_total,
-            // 'remitidas_entrevista_orientacion' => $this->remitidas_entrevista_orientacion,
-            // 'remitidas_talleres_orientacion' => $this->remitidas_talleres_orientacion,
-            // 'remitidas_talleres_emprendimiento' => $this->remitidas_talleres_emprendimiento,
-            // 'remitidas_servicios_complementarios' => $this->remitidas_servicios_complementarios,
-            // 'talleres_realizados' => $this->talleres_realizados,
-
+            'punto_atencion_correo' => $this->puntoAtencion->correo_electronico,
+            'punto_atencion_direccion' => $this->puntoAtencion->direccion,
+            'punto_atencion_fecha_registro' => $this->puntoAtencion->fecha_registro,
             'observaciones' => $this->observaciones,
+            // Coordinador
+            'coordinador_nombre' => $this->puntoAtencion->coordinador() ? $this->puntoAtencion->coordinador()->fullName : '',
+            'coordinador_correo' => $this->puntoAtencion->coordinador() ? $this->puntoAtencion->coordinador()->email : '',
+            'coordinador_telefono' => $this->puntoAtencion->coordinador() ? $this->puntoAtencion->coordinador()->telefono : '',
+            'coordinador_celular' => $this->puntoAtencion->coordinador() ? $this->puntoAtencion->coordinador()->celular : '',
+            // Responsable reporte
+            'responsable_nombre' => $this->responsable->name ? $this->responsable->name : $this->responsable->fullName,
+            'responsable_correo' => $this->responsable->email,
+            'responsable_telefono' => $this->responsable->name ? '' : $this->responsable->telefono,
+            'responsable_celular' => $this->responsable->name ? '' : $this->responsable->celular,
+
         ];
     }
 }

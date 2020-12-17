@@ -8,21 +8,39 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use App\Http\Resources\ReporteMensualExcelResource;
 
 use App\Models\Reporte;
+use Illuminate\Support\Facades\Log;
 
 class ReporteMensualExport implements FromCollection, WithHeadings
 {
+
+    protected $periodo;
+
+    function __construct($periodo)
+    {
+        $this->periodo = $periodo;
+    }
 
     /**
      * @return \Illuminate\Support\Collection
      */
     public function collection()
     {
-        return ReporteMensualExcelResource::collection(Reporte::all());
+        $reporte = Reporte::where('periodo_id', $this->periodo->id)->get();
+        return ReporteMensualExcelResource::collection($reporte);
     }
 
     public function headings(): array
     {
         return [
+            'Código prestador',
+            'Código punto atención',
+            'Año',
+            'Mes',
+            'Tipo',
+            'Prestador nombre',
+            'Departamento punto atención',
+            'Municipio punto atención',
+            'Punto atención nombre',
             'Total personas inscritas',
             'Total personas inscritas hombres',
             'Total personas inscritas mujeres',
@@ -81,7 +99,18 @@ class ReporteMensualExport implements FromCollection, WithHeadings
             'Total personas colocadas exterior mujeres',
             'Total empleadores registrados exterior',
             'Total vacantes registradas exterior',
-            'Observaciones'
+            'Punto atencion correo',
+            'Punto atencion dirección',
+            'Punto atencion fecha registro',
+            'Observaciones',
+            'Coordinador nombre',
+            'Coordinador correo',
+            'Coordinador teléfono',
+            'Coordinador celular',
+            'Responsable nombre',
+            'Responsable correo',
+            'Responsable teléfono',
+            'Responsable celular',
         ];
     }
 }

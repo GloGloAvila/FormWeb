@@ -315,10 +315,9 @@
                                         </v-list-item-title>
                                       </v-list-item>
                                       <v-list-item
-                                        v-if="is('ROLE_ADMINISTRADOR_UNO')"
-                                        @click="
-                                          generarReporteMensual(vigencia, periodo)
-                                        "
+                                        v-if="is('ROLE_ADMINISTRADOR')"
+                                        :href="generarReporteMensual(periodo)"
+                                        style="text-decoration:none"
                                       >
                                         <v-list-item-title>
                                           <v-btn small text>
@@ -329,7 +328,10 @@
                                       <v-list-item
                                         v-if="is('ROLE_ADMINISTRADOR_UNO')"
                                         @click="
-                                          generarReportePuntosAtencionPendientes(vigencia, periodo)
+                                          generarReportePuntosAtencionPendientes(
+                                            vigencia,
+                                            periodo
+                                          )
                                         "
                                       >
                                         <v-list-item-title>
@@ -445,6 +447,7 @@ import router from "../router";
 
 import vigencia from "../services/vigencia.js";
 import periodo from "../services/periodo.js";
+import reporte from "../services/reporte.js";
 
 export default {
   name: "Vigencias",
@@ -650,12 +653,10 @@ export default {
           this.cerrarFormularioPeriodo();
         });
     },
-    generarReporteMensual(){
-
+    generarReporteMensual(periodo) {
+      return reporte.obtenerReporteMensual(periodo);
     },
-    generarReportePuntosAtencionPendientes(){
-
-    },
+    generarReportePuntosAtencionPendientes() {},
     cerrarFormularioPeriodo() {
       this.modalFormularioPeriodo = false;
       this.$nextTick(() => {
