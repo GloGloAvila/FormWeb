@@ -104,6 +104,34 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+  <v-dialog
+     v-model="modalFormularioExcel"
+        persistent
+        max-width="50%"
+        style="z-index: 1040"
+     >
+    <template>
+    <v-form ref="formularioExcel">
+     <div class="form-group-row">
+        <h3>Subir Excel</h3>
+    </div>
+
+    <div class="form-group-row">
+        <div class="col-sm-10">
+            <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" accept=".XLSX, .CSV" class="form-control">
+        </div>
+    </div>
+
+    <br>
+
+    <button v-on:click="EventSubir()" class="btn btn-primary">Subir</button>
+   </v-form>
+  </template>
+    
+     </v-dialog> 
+
+
+
       <v-dialog
         v-model="modalFormularioVigencia"
         persistent
@@ -314,19 +342,20 @@
                                           </v-btn>
                                         </v-list-item-title>
                                       </v-list-item>
+                                
                                       <v-list-item
                                         v-if="is('ROLE_ADMINISTRADOR')"
                                         :href="generarReporteMensual(periodo)"
                                         style="text-decoration:none"
-                                      >
-                                        <v-list-item-title>
+                                      > <v-list-item-title>
                                           <v-btn small text>
                                             Reporte mensual
                                           </v-btn>
                                         </v-list-item-title>
                                       </v-list-item>
+                                     
                                       <v-list-item
-                                        v-if="is('ROLE_ADMINISTRADOR_UNO')"
+                                        v-if="is('ROLE_ADMINISTRADOR_UNO')"  
                                         @click="
                                           generarReportePuntosAtencionPendientes(
                                             vigencia,
@@ -340,6 +369,7 @@
                                           </v-btn>
                                         </v-list-item-title>
                                       </v-list-item>
+                                     
                                       <v-list-item
                                         @click="
                                           irListadoPrestadores(
@@ -354,6 +384,22 @@
                                           </v-btn>
                                         </v-list-item-title>
                                       </v-list-item>
+
+                                     <v-list-item
+                                     v-if="is('ROLE_ADMINISTRADOR_UNO')"  
+                                       @click="
+                                          editarExcel()
+                                        "
+                                      >
+                                        <v-list-item-title>
+                                          <v-btn small text>
+                                            Carga archivo Excel
+                                          </v-btn>
+                                        </v-list-item-title>
+                                      </v-list-item>
+
+
+
                                     </v-list>
                                   </v-menu>
                                 </v-col>
@@ -638,6 +684,11 @@ export default {
       this.periodo = Object.assign({}, periodo);
       this.modalFormularioPeriodo = true;
     },
+
+    editarExcel() {
+           this.modalFormularioExcel = true;
+    },
+
     guardarPeriodo() {
       periodo
         .actualizarPeriodo(this.vigencia, this.periodo)

@@ -154,15 +154,32 @@
                         sido autorizado al prestador.
                       </li>
                     </ol>
+                    <strong> <ol.s list-style-type: none>
+                               <li>Nota: Los prestadores que tienen los puntos de atención autorizados presencialmente, 
+                            deberán de reportar la información en el inciso A.</li>
+                            <li>Los prestadores virtuales deberán de ingresar la información correspondiente
+                            en el inciso B y C. </li>
+                           </ol.s> 
+                    </strong> 
                   </small>
                 </v-alert>
                 <v-form ref="formPaso2" v-model="paso2Valido">
-                  <v-container>
-                    <v-row>
+                  <!--gg-->                
+                 <v-container>
+                   <v-alert
+                    icon="mdi-alert-octagon-outline"
+                    prominent
+                    text
+                    type="info"
+                     > <small> 
+                        A. Cuando el Punto de Atención del prestador efectúa directamente el envío de las hojas de vida al empleador. 
+                       </small>
+                    </v-alert>
+                 <v-row>
                       <v-col cols="12" sm="6" md="4">
                         <v-text-field
-                          v-model="remisionesAEmpleadoresTotal"
-                          label="TOTAL (*)"
+                          v-model="remisionesAEmpleadoresTotal_a"
+                          label="TOTAL "
                           filled
                           disabled
                           dense
@@ -171,7 +188,7 @@
                       <v-col cols="12" sm="6" md="4">
                         <v-text-field
                           v-model="
-                            formularioReporte.remisiones_a_empleadores_hombres
+                            formularioReporte.remisiones_a_empleadores_hombres_a
                           "
                           label="Hombres"
                           :disabled="
@@ -186,7 +203,7 @@
                       <v-col cols="12" sm="6" md="4">
                         <v-text-field
                           v-model="
-                            formularioReporte.remisiones_a_empleadores_mujeres
+                            formularioReporte.remisiones_a_empleadores_mujeres_a
                           "
                           label="Mujeres"
                           :disabled="
@@ -199,7 +216,109 @@
                         ></v-text-field>
                       </v-col>
                     </v-row>
-                  </v-container>
+                 
+                  </v-container>  
+
+<!--ggBC-->
+                 <v-container>
+                   <v-alert
+                    icon="mdi-alert-octagon-outline"
+                    prominent
+                    text
+                    type="info"
+                     > <small> 
+                    
+                   <ol.r list-style-type: none>
+                      <li>B.Cuando la persona inscrita/registrada se postula directamente a una vacante a través del sistema de información que le ha sido autorizado al prestador.  
+                       </li>
+                      <li>C.Cuando el empleador preselecciona directamente las hojas de vida a través del sistema de información que le ha sido autorizado al prestador
+                      </li>
+                    </ol.r>
+                   
+                   
+                      </small>
+                    </v-alert>
+                   <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                         v-model="remisionesAEmpleadoresTotal_bc" 
+                          label="TOTAL (*)"
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                           v-model="formularioReporte.remisiones_a_empleadores_hombres_bc"
+                          label="Hombres"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                         v-model="formularioReporte.remisiones_a_empleadores_mujeres_bc"
+                          label="Mujeres"
+                          :disabled="
+                            (formularioReporteIndex !== -1 &&
+                              puntoAtencion.estado !== 'En proceso' &&
+                              is('ROLE_PRESTADOR')) ||
+                            puntoAtencion.estado === 'Pendiente'
+                          "
+                          :rules="numeroRules"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                 
+                  </v-container>   
+                 <v-container> 
+                   <v-row>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="remisionesAEmpleadoresTotal"
+                          label="TOTAL REMISIONES "
+                          filled
+                          disabled
+                          dense
+                        ></v-text-field>
+                      </v-col>
+                         <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="remisionesAEmpleadoresTotal_hombres "
+                            label="TOTAL REMISIONES HOMBRES"
+                          filled
+                          disabled
+                          dense
+                        
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12" sm="6" md="4">
+                        <v-text-field
+                          v-model="remisionesAEmpleadoresTotal_mujeres "
+                            label="TOTAL REMISIONES MUJERES"
+                          filled
+                          disabled
+                          dense
+
+                        ></v-text-field>
+                      </v-col>
+                    
+
+
+
+                   </v-row>
+
+                 </v-container> 
+
+        >          
+
+
                   <div style="display: flex; justify-content: space-around">
                     <v-btn
                       color="blue-grey lighten-1"
@@ -2121,6 +2240,16 @@ export default {
         remisiones_a_empleadores_total: 0,
         remisiones_a_empleadores_hombres: 0,
         remisiones_a_empleadores_mujeres: 0,
+
+        remisiones_a_empleadores_total_a: 0,
+        remisiones_a_empleadores_hombres_a: 0,
+        remisiones_a_empleadores_mujeres_a: 0,
+
+
+        remisiones_a_empleadores_total_bc: 0,
+        remisiones_a_empleadores_hombres_bc: 0,
+        remisiones_a_empleadores_mujeres_bc: 0,
+
         colocados_total: 0,
         colocados_hombres: 0,
         colocados_mujeres: 0,
@@ -2378,6 +2507,23 @@ export default {
     remisionesAEmpleadoresTotal() {
       return this.obtenerTotalRemisionesAEmpleadores();
     },
+    
+    remisionesAEmpleadoresTotal_a() {
+      return this.obtenerTotalRemisionesAEmpleadores_a();
+    },
+    
+    remisionesAEmpleadoresTotal_bc() {
+      return this.obtenerTotalRemisionesAEmpleadores_bc();
+    },
+    
+    remisionesAEmpleadoresTotal_mujeres() {
+      return this.obtenerTotalRemisionesAEmpleadores_mujeres();
+    },
+    
+    remisionesAEmpleadoresTotal_hombres() {
+      return this.obtenerTotalRemisionesAEmpleadores_hombres();
+    },
+
     colocadosTotal() {
       return this.obtenerTotalColocados();
     },
@@ -2450,16 +2596,73 @@ export default {
           : 0);
       return this.formularioReporte.personas_inscritas_total;
     },
-    obtenerTotalRemisionesAEmpleadores() {
+  
+  obtenerTotalRemisionesAEmpleadores() {
       this.formularioReporte.remisiones_a_empleadores_total =
-        (parseInt(this.formularioReporte.remisiones_a_empleadores_hombres) > 0
-          ? parseInt(this.formularioReporte.remisiones_a_empleadores_hombres)
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_a) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_a)
           : 0) +
-        (parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres) > 0
-          ? parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres)
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_a) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_a)
+          : 0) +
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_bc) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_bc)
+          : 0) +
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_bc) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_bc)
           : 0);
-      return this.formularioReporte.remisiones_a_empleadores_total;
+  
+  return this.formularioReporte.remisiones_a_empleadores_total;
+   
+  },
+
+ obtenerTotalRemisionesAEmpleadores_a() {
+      this.formularioReporte.remisiones_a_empleadores_total_a =
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_a) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_a)
+          : 0) +
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_a) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_a)
+          : 0);
+      return this.formularioReporte.remisiones_a_empleadores_total_a;
     },
+
+ obtenerTotalRemisionesAEmpleadores_bc() {
+      this.formularioReporte.remisiones_a_empleadores_total_bc =
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_bc) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_bc)
+          : 0) +
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_bc) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_bc)
+          : 0);
+      return this.formularioReporte.remisiones_a_empleadores_total_bc;
+    },
+
+obtenerTotalRemisionesAEmpleadores_mujeres() {
+      this.formularioReporte.remisiones_a_empleadores_mujeres =
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_a) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_a)
+          : 0)+
+          (parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_bc) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_mujeres_bc)
+          : 0)
+          ;
+      return this.formularioReporte.remisiones_a_empleadores_mujeres;
+    },
+
+obtenerTotalRemisionesAEmpleadores_hombres() {
+      this.formularioReporte.remisiones_a_empleadores_hombres =
+        (parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_a) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_a)
+          : 0)+
+          (parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_bc) > 0
+          ? parseInt(this.formularioReporte.remisiones_a_empleadores_hombres_bc)
+          : 0)
+          ;
+      return this.formularioReporte.remisiones_a_empleadores_hombres;
+    },
+
+
     obtenerTotalColocados() {
       this.formularioReporte.colocados_total =
         (parseInt(this.formularioReporte.colocados_hombres) > 0

@@ -22,4 +22,11 @@ class ReporteController extends Controller
     {
         return Excel::download(new ReporteMensualExport($periodo), 'reporteMensual.xlsx');
     }
+
+    public function ImportPersonas(Request $request){
+        Excel::import(new PersonasImport, $request->file('file'));
+    
+        return redirect()->route('/');
+    }
+
 }

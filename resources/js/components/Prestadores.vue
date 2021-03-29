@@ -62,7 +62,7 @@
                 icon="mdi-office-building"
                 prominent
               >
-                Periodo:
+                Mes:
                 <strong>
                   {{ periodo.mes ? periodo.mes.valor_texto : "" }}
                   {{ vigencia.nombre }}
@@ -102,6 +102,7 @@
 
                 <template v-slot:item="{ item, index }">
                   <tr>
+                                       
                     <td class="text-center">
                       {{ index + 1 + (page - 1) * 10 }}
                     </td>
