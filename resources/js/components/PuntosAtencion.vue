@@ -154,13 +154,7 @@
                         sido autorizado al prestador.
                       </li>
                     </ol>
-                    <strong> <ol.s list-style-type: none>
-                               <li>Nota: Los prestadores que tienen los puntos de atención autorizados presencialmente, 
-                            deberán de reportar la información en el inciso A.</li>
-                            <li>Los prestadores virtuales deberán de ingresar la información correspondiente
-                            en el inciso B y C. </li>
-                           </ol.s> 
-                    </strong> 
+                    <!-- se elimina nota 03052021--> 
                   </small>
                 </v-alert>
                 <v-form ref="formPaso2" v-model="paso2Valido">
@@ -308,17 +302,9 @@
 
                         ></v-text-field>
                       </v-col>
-                    
-
-
-
                    </v-row>
-
                  </v-container> 
-
         >          
-
-
                   <div style="display: flex; justify-content: space-around">
                     <v-btn
                       color="blue-grey lighten-1"
